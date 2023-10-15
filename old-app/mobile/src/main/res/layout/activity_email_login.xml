@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="wrap_content"
+	android:layout_margin="@dimen/p3"
+	android:layout_width="match_parent"
+	android:orientation="vertical">
+
+	<LinearLayout
+		android:id="@+id/logo_container"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:layout_width="match_parent"
+		android:padding="@dimen/p3">
+
+		<ImageView
+			android:layout_gravity="center"
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:src="@drawable/logo_big"/>
+	</LinearLayout>
+
+	<com.thefuntasty.flowlist.view.SourceSansProExtraLightEditText
+		android:focusableInTouchMode="true"
+		android:hint="@string/email"
+		android:id="@+id/login_name"
+		android:inputType="textEmailAddress"
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:padding="@dimen/p2"
+		android:textColor="@color/light_gray"
+		android:textColorHint="@color/light_gray_hint"
+		android:textCursorDrawable="@drawable/edittext_cursor_light_gray"
+		android:textSize="@dimen/s30"/>
+
+	<com.thefuntasty.flowlist.view.SourceSansProExtraLightEditText
+		android:hint="@string/password"
+		android:id="@+id/login_password"
+		android:inputType="textPassword"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="@dimen/p2"
+		android:layout_width="match_parent"
+		android:padding="@dimen/p2"
+		android:textColor="@color/light_gray"
+		android:textColorHint="@color/light_gray_hint"
+		android:textCursorDrawable="@drawable/edittext_cursor_light_gray"
+		android:textSize="@dimen/s30"/>
+
+	<com.thefuntasty.flowlist.view.SourceSansProExtraLightTextView
+		android:background="@drawable/btn_login"
+		android:clickable="true"
+		android:gravity="center"
+		android:id="@+id/login_btn_password"
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:padding="@dimen/p2"
+		android:text="@string/log_in"
+		android:textColor="@color/white"
+		android:textSize="@dimen/s30"/>
+
+</LinearLayout>

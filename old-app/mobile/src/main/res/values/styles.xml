@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- Base application theme. -->
+	<style name="AppTheme" parent="Theme.AppCompat">
+		<item name="actionBarStyle">@style/MyActionBar</item>
+		<item name="actionBarTheme">@style/ActionBarThemeGray</item>
+		<item name="android:windowBackground">@color/white</item>
+		<item name="actionButtonStyle">@style/NoHoverActionButtonStyle</item>
+		<item name="selectableItemBackground">@null</item>
+		<item name="actionBarItemBackground">@null</item>
+		<item name="android:textColorPrimary">@color/dark_gray</item>
+		<item name="android:windowContentOverlay">@android:color/transparent</item>
+
+		<item name="colorPrimary">@color/main_red</item>
+		<item name="colorControlNormal">@color/main_red</item>
+		<item name="colorControlActivated">@color/main_red</item>
+	</style>
+
+	<style name="AppThemeNoBar" parent="AppTheme">
+		<item name="android:windowNoTitle">true</item>
+
+		<item name="colorControlNormal">@color/light_gray_hint</item>
+		<item name="colorControlActivated">@color/light_gray</item>
+	</style>
+
+	<style name="AppThemeTransparentBar" parent="AppTheme">
+		<item name="actionBarStyle">@style/TransparentActionBar</item>
+		<item name="android:windowActionBarOverlay">true</item>
+		<item name="windowActionBarOverlay">true</item>
+		<item name="displayOptions">showHome|useLogo</item>
+	</style>
+
+	<style name="AppThemeRedBar" parent="AppTheme">
+		<item name="actionBarStyle">@style/MyRedActionBar</item>
+		<item name="actionBarTheme">@style/ActionBarThemeWhite</item>
+		<item name="displayOptions">showHome|useLogo</item>
+	</style>
+
+	<style name="ActionBarThemeGray" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+		<!-- THIS is where you can color the arrow! -->
+		<item name="colorControlNormal">@color/drawer_item_color</item>
+	</style>
+
+	<style name="ActionBarThemeWhite" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+		<!-- THIS is where you can color the arrow! -->
+		<item name="colorControlNormal">@color/white</item>
+	</style>
+
+	<!-- ActionBar styles -->
+	<style name="DefaultActionBar" parent="Widget.AppCompat.ActionBar.Solid">
+		<item name="displayOptions">showHome|useLogo</item>
+		<item name="indeterminateProgressStyle">@style/ProgressBarStyle</item>
+	</style>
+
+	<style name="TransparentActionBar" parent="DefaultActionBar">
+		<item name="android:background">@android:color/transparent</item>
+		<item name="background">@android:color/transparent</item>
+		<item name="logo">@drawable/logo</item>
+	</style>
+
+	<style name="ProgressBarStyle" parent="Widget.AppCompat.ProgressBar">
+		<item name="android:layout_margin">@dimen/p2</item>
+		<item name="android:maxHeight">28dp</item>
+	</style>
+
+	<style name="MyActionBar" parent="DefaultActionBar">
+		<item name="background">@drawable/bg_menu_active</item>
+		<item name="logo">@drawable/logo</item>
+	</style>
+
+	<style name="MyRedActionBar" parent="DefaultActionBar">
+		<item name="background">@drawable/bg_actionbar_red</item>
+		<item name="logo">@drawable/logo_small_white</item>
+	</style>
+
+	<style name="NoHoverActionButtonStyle" parent="Widget.AppCompat.ActionButton">
+		<item name="background">@null</item>
+		<item name="android:paddingLeft">12dip</item>
+		<item name="android:paddingRight">12dip</item>
+		<item name="android:minWidth">56dip</item>
+		<item name="android:minHeight">?android:attr/actionBarSize</item>
+	</style>
+</resources>

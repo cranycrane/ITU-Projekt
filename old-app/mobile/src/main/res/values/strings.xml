@@ -1,0 +1,64 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+	<string name="preferences" translatable="false">flow_list</string>
+	<string name="facebook_app_id" translatable="false">556795134441133</string>
+	<string name="ga_tracking_id" translatable="false" tools:ignore="TypographyDashes">UA-59404866-1</string>
+	<string name="locale_language">cs</string>
+	<string name="locale_country">CZ</string>
+	<string name="title_facebook_login">Přihlásit se</string>
+	<string name="drawer_open">Otevřít</string>
+	<string name="drawer_close">Zavřít</string>
+	<string name="empty_username">Zadej e-mailovou adresu</string>
+	<string name="empty_password">Zadej heslo</string>
+	<string
+		name="cannot_log_in_check_name_pass">Přihlášení se nezdařilo. Zkontroluj prosím přihlašovací údaje a internetové připojení.
+	</string>
+	<string
+		name="cannot_log_in_connection_failed">Přihlášení se nezdařilo. Zkontroluj prosím internetové připojení.
+	</string>
+	<string
+		name="cannot_log_in_fb_try_again">Přihlášení přes Facebook selhalo. Zkus to prosím znovu.
+	</string>
+	<string name="invalid_token_log_in_again">Chyba při přihlašování. Zkus to prosím znovu.</string>
+	<string name="user_succesfully_logged_out">Byl jsi odhlášen.</string>
+	<string name="password">Heslo</string>
+	<string name="email">E-mailová adresa</string>
+	<string name="log_in">PŘIHLÁSIT SE</string>
+	<string name="login_email">PŘIHLÁSIT SE PŘES EMAIL</string>
+	<string name="login_facebook">POUŽÍT FACEBOOK</string>
+	<string name="continue_without_logging_in">PŘESKOČIT PŘIHLÁŠENÍ</string>
+	<string name="yesterday">VČERA</string>
+	<string name="today">DNES</string>
+	<string name="notification_title_text">Co ti dnes udělalo radost?</string>
+	<string name="notification_content_text">Vyplň si flow-lístek</string>
+	<string name="fragment_flow_list_interval_button">Doplnit přeskočené dny</string>
+	<string
+		name="fragment_flow_list_interval_text">Ve dnech od %1$s do %2$s sis nevyplnil flow-lístek. Chceš to napravit? Kliknutím na odkaz níže jednoduše doplníš, co tě v minulých dnech potěšilo.
+	</string>
+	<string name="favorite">Oblíbené</string>
+	<string name="logging_in">Přihlašuji …</string>
+	<string name="app_name">FLOW-LIST</string>
+	<string name="delete_record">Smazat záznam</string>
+	<string name="add_record">Přidat záznam</string>
+	<string
+		name="no_records_available">Tento den sis ještě nic nezapsal. Klikni na tužku vpravo nahoře a doplň si, co ti udělalo radost.
+	</string>
+	<string name="save">Uložit</string>
+	<string name="skip">Přeskočit</string>
+	<string name="cancel">Zrušit</string>
+	<string
+		name="skip_dialog_message">Pokud přeskočíš přihlášení, nebudou se ti záznamy ukládat ve webové verzi flow-lístku. Chceš přeskočit?
+	</string>
+	<string name="save_changes">Přeješ si uložit změny?</string>
+	<string name="throw_out">Zahodit</string>
+	<string name="logout">Odhlásit se</string>
+	<string
+		name="really_want_log_out">Když se odhlásíš, nebudou se ti záznamy ukládat ve webové verzi flow-lístku. Opravdu se chceš odhlásit?
+	</string>
+	<string name="erase">Smazat</string>
+	<string name="really_want_erase_record">Opravdu chceš záznam smazat?</string>
+	<string name="notification_action_remind_later">Připomenout za hodinu</string>
+
+	<!-- API -->
+	<string name="synchronization_error_network">Synchronizace neúspěšná. Internetové připojení není dostupné.</string>
+	<string name="synchronization_error_unknown">Synchronizace se nezdařila...</string>
+</resources>

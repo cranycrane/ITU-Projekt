@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="@color/black"
+	android:id="@+id/content"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent"
+	android:orientation="vertical"
+	android:paddingLeft="20dp"
+	android:paddingRight="20dp"
+	android:paddingTop="20dp">
+
+	<ImageView
+		android:id="@+id/pencil"
+		android:layout_alignParentEnd="true"
+		android:layout_alignParentRight="true"
+		android:layout_alignParentTop="true"
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:src="@drawable/ic_pencil_white"/>
+
+	<ImageView
+		android:id="@+id/zazitky"
+		android:layout_alignParentTop="true"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="@dimen/p2"
+		android:layout_marginRight="@dimen/p2"
+		android:layout_marginTop="@dimen/p1"
+		android:layout_toLeftOf="@id/pencil"
+		android:layout_toStartOf="@id/pencil"
+		android:layout_width="wrap_content"
+		android:src="@drawable/napoveda_zazitky"/>
+
+	<LinearLayout
+		android:layout_above="@+id/score_cont"
+		android:layout_below="@id/zazitky"
+		android:layout_height="match_parent"
+		android:layout_marginBottom="@dimen/p6"
+		android:layout_marginTop="@dimen/p6"
+		android:layout_width="match_parent"
+		android:orientation="vertical">
+
+		<ImageView
+			android:layout_height="0dp"
+			android:layout_weight="0.3"
+			android:layout_width="wrap_content"
+			android:src="@drawable/napoveda_text_1"/>
+
+		<ImageView
+			android:layout_height="0dp"
+			android:layout_weight="0.3"
+			android:layout_width="wrap_content"
+			android:src="@drawable/napoveda_text_2"/>
+
+		<ImageView
+			android:layout_height="0dp"
+			android:layout_weight="0.3"
+			android:layout_width="wrap_content"
+			android:src="@drawable/napoveda_text_3"/>
+	</LinearLayout>
+
+	<FrameLayout
+		android:id="@id/score_cont"
+		android:layout_alignParentBottom="true"
+		android:layout_centerHorizontal="true"
+		android:layout_height="158dp"
+		android:layout_width="wrap_content">
+
+		<ImageView
+			android:background="@drawable/napoveda_hodnoceni"
+			android:layout_gravity="center"
+			android:layout_height="158dp"
+			android:layout_width="wrap_content"
+			android:scaleType="centerInside"/>
+	</FrameLayout>
+
+</RelativeLayout>

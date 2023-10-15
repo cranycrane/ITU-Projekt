@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<com.thefuntasty.flowlist.view.SourceSansProRegularTextView
+		android:gravity="bottom|center_horizontal"
+		android:id="@+id/calendar_item_day_text"
+		android:layout_height="0dp"
+		android:layout_weight="0.45"
+		android:layout_width="match_parent"
+		android:paddingBottom="4dp"
+		android:textSize="@dimen/s20"/>
+
+	<com.thefuntasty.flowlist.view.SourceSansProLightTextViewNoSpacing
+		android:gravity="center"
+		android:id="@+id/calendar_item_day_number"
+		android:layout_gravity="center"
+		android:layout_height="0dp"
+		android:layout_weight="0.35"
+		android:layout_width="match_parent"
+		android:textSize="@dimen/s30"/>
+
+	<ImageView
+		android:id="@+id/calendar_item_day_star"
+		android:layout_height="0dp"
+		android:layout_weight="0.25"
+		android:layout_width="match_parent"
+		android:scaleX="0.5"
+		android:scaleY="0.5"
+		android:src="@drawable/ic_star_hover"
+		android:visibility="invisible"/>
+</merge>

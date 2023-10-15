@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:clipChildren="false"
+	android:id="@+id/item_day"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent"
+	android:orientation="vertical">
+
+	<!-- parent not useless because of clipChildren -->
+	<LinearLayout
+		android:clipChildren="true"
+		android:layout_alignParentTop="true"
+		android:layout_height="match_parent"
+		android:layout_width="match_parent"
+		android:orientation="vertical">
+
+		<android.support.v4.widget.SwipeRefreshLayout
+			android:id="@+id/refresh"
+			android:layout_height="match_parent"
+			android:layout_width="match_parent">
+
+			<ScrollView
+				android:fillViewport="true"
+				android:layout_height="match_parent"
+				android:layout_width="match_parent">
+
+				<LinearLayout
+					android:layout_height="wrap_content"
+					android:layout_width="match_parent"
+					android:orientation="vertical">
+
+					<LinearLayout
+						android:id="@+id/flow_list_records_cont"
+						android:layout_height="wrap_content"
+						android:layout_width="match_parent"
+						android:orientation="vertical"/>
+
+					<View
+						android:layout_height="@dimen/records_bottom_offset"
+						android:layout_width="match_parent"/>
+				</LinearLayout>
+			</ScrollView>
+		</android.support.v4.widget.SwipeRefreshLayout>
+	</LinearLayout>
+
+	<com.thefuntasty.flowlist.view.SourceSansProLightTextView
+		android:gravity="center"
+		android:id="@+id/flow_list_no_records"
+		android:layout_centerInParent="true"
+		android:layout_height="match_parent"
+		android:layout_width="match_parent"
+		android:paddingBottom="@dimen/p8"
+		android:paddingLeft="@dimen/p3"
+		android:paddingRight="@dimen/p3"
+		android:text="@string/no_records_available"
+		android:textColor="@color/light_gray"
+		android:textSize="@dimen/s26"/>
+
+	<FrameLayout
+		android:clipChildren="false"
+		android:id="@+id/score_cont"
+		android:layout_alignParentBottom="true"
+		android:layout_centerHorizontal="true"
+		android:layout_height="100dp"
+		android:layout_width="wrap_content">
+
+		<ImageView
+			android:background="@drawable/bg_number"
+			android:id="@+id/score_bg"
+			android:layout_gravity="center"
+			android:layout_height="100dp"
+			android:layout_width="wrap_content"
+			android:scaleType="centerInside"/>
+
+		<ImageView
+			android:background="@drawable/ic_plus_new"
+			android:id="@+id/score_plus"
+			android:layout_gravity="center"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:paddingTop="@dimen/p2"
+			android:scaleType="centerCrop"/>
+
+		<com.thefuntasty.flowlist.view.KonecProkrastinaceTextView
+			android:gravity="center"
+			android:id="@+id/flow_list_score"
+			android:layout_gravity="center"
+			android:layout_height="100dp"
+			android:layout_width="match_parent"
+			android:textColor="@color/white"
+			android:textSize="@dimen/s90"/>
+	</FrameLayout>
+</RelativeLayout>

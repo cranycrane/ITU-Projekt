@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="@color/white"
+	android:layout_height="match_parent"
+	android:layout_margin="0dp"
+	android:layout_width="match_parent"
+	android:padding="0dp">
+
+	<LinearLayout
+		android:layout_gravity="center"
+		android:layout_height="match_parent"
+		android:layout_width="match_parent"
+		android:orientation="vertical">
+
+		<LinearLayout
+			android:id="@+id/logo_big"
+			android:layout_height="0dp"
+			android:layout_weight="1"
+			android:layout_width="match_parent">
+
+			<ImageView
+				android:layout_gravity="center"
+				android:layout_height="wrap_content"
+				android:layout_width="match_parent"
+				android:src="@drawable/logo_big"/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_height="wrap_content"
+			android:layout_margin="@dimen/p3"
+			android:layout_width="match_parent"
+			android:orientation="vertical">
+
+			<com.thefuntasty.flowlist.view.SourceSansProExtraLightTextView
+				android:background="@drawable/login_button"
+				android:clickable="true"
+				android:gravity="center"
+				android:id="@+id/login_btn_password"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/p2"
+				android:layout_width="fill_parent"
+				android:padding="@dimen/p2"
+				android:text="@string/login_email"
+				android:textColor="@color/light_gray"
+				android:textSize="@dimen/s30"/>
+
+			<com.thefuntasty.flowlist.view.SourceSansProExtraLightTextView
+				android:background="@drawable/login_button_fb"
+				android:clickable="true"
+				android:gravity="center"
+				android:id="@+id/login_btn_facebook"
+				android:layout_height="wrap_content"
+				android:layout_width="match_parent"
+				android:padding="@dimen/p2"
+				android:text="@string/login_facebook"
+				android:textColor="@color/fb_blue"
+				android:textSize="@dimen/s30"/>
+		</LinearLayout>
+
+		<View
+			android:background="@color/separator"
+			android:layout_height="1dp"
+			android:layout_width="match_parent"/>
+
+		<com.thefuntasty.flowlist.view.SourceSansProExtraLightTextView
+			android:clickable="true"
+			android:gravity="center"
+			android:id="@+id/skip_login"
+			android:layout_height="80dp"
+			android:layout_width="match_parent"
+			android:text="@string/continue_without_logging_in"
+			android:textColor="@color/light_gray"
+			android:textSize="@dimen/s30"/>
+
+	</LinearLayout>
+</FrameLayout>

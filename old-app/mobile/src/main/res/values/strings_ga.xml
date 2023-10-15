@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="screen_one_record">Doplnění záznamu</string>
+	<string name="screen_email_login">Přihlášení - email</string>
+	<string name="screen_login">Přihlášení</string>
+	<string name="screen_fill_missing">Doplnění vynechaných záznamů</string>
+	<string name="screen_score_picker">Zadávání skóre dne</string>
+	<string name="screen_calendar">Kalendář</string>
+	<string name="screen_flow_list">Flow-List</string>
+	<string name="screen_info">Info</string>
+
+	<string name="click_record_added">Nový záznam</string>
+	<string name="click_score_added">Nové hodnocení dne</string>
+</resources>

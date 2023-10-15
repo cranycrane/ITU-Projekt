@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="@color/main_red"
+	android:layout_gravity="center"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent">
+
+	<net.simonvt.numberpicker.NumberPicker
+		android:id="@+id/numberPicker"
+		android:layout_height="match_parent"
+		android:layout_width="match_parent"/>
+
+	<View
+		android:background="@drawable/bg_mask_red"
+		android:layout_gravity="center"
+		android:layout_height="match_parent"
+		android:layout_width="match_parent"/>
+</FrameLayout>

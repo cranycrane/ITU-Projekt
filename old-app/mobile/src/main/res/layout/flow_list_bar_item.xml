@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.thefuntasty.flowlist.view.SourceSansProLightTextViewNoSpacing
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:gravity="center"
+	android:id="@+id/flow_list_bar_item_text"
+	android:layout_height="@dimen/bar_item_height"
+	android:layout_width="wrap_content"
+	android:padding="@dimen/p2"
+	android:textColor="@color/flow_list_bar_item_text_color"
+	android:textSize="@dimen/s24"/>
