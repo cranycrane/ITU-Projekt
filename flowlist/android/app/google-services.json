@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "657939825553",
+    "project_id": "flow-list",
+    "storage_bucket": "flow-list.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:657939825553:android:e64d526605aa6ab05a5030",
+        "android_client_info": {
+          "package_name": "com.example.flowlist"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3KCac_l8-Ufl-EElX0IsCNOwfL-86Brc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:657939825553:android:db5ef31e1c113fac5a5030",
+        "android_client_info": {
+          "package_name": "com.growjob.flowlist"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3KCac_l8-Ufl-EElX0IsCNOwfL-86Brc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
