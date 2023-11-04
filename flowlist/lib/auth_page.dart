@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'auth_controller.dart';
+import 'calendar_screen.dart';
 
 class AuthPage extends StatefulWidget {
   final AuthController controller;
@@ -75,9 +76,12 @@ class AuthPageState extends State<AuthPage> {
     try {
       await widget.controller
           .signIn(_emailController.text, _passwordController.text);
-      // TODO: přesměrování na další stránku nebo zobrazení zprávy o úspěšném přihlášení
       scaffold
           .showSnackBar(const SnackBar(content: Text('Úspěšně přihlášen!')));
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CalendarPage()),
+      );
     } catch (e) {
       // TODO: zobrazit chybovou zprávu
       scaffold
