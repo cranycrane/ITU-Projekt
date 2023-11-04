@@ -27,7 +27,7 @@ class AuthController {
         throw Exception('Chyba při přihlašování: ${response.body}');
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 }

@@ -19,7 +19,7 @@ class AuthPageState extends State<AuthPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Přihlášení'),
+        title: const Text('Přihlášení'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -28,21 +28,21 @@ class AuthPageState extends State<AuthPage> {
             TextField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'E-mail',
                 hintText: 'zadejte@email.cz',
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: _passwordController,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Heslo',
                 hintText: 'zadejte heslo',
               ),
             ),
-            SizedBox(height: 24.0),
+            const SizedBox(height: 24.0),
             Row(
               children: <Widget>[
                 Expanded(
@@ -50,16 +50,16 @@ class AuthPageState extends State<AuthPage> {
                     onPressed: () {
                       _handleSignIn();
                     },
-                    child: Text('Přihlásit se'),
+                    child: const Text('Přihlásit se'),
                   ),
                 ),
-                SizedBox(width: 16.0),
+                const SizedBox(width: 16.0),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
                       //_handleRegister();
                     },
-                    child: Text('Registrovat se'),
+                    child: const Text('Registrovat se'),
                   ),
                 ),
               ],
@@ -76,7 +76,8 @@ class AuthPageState extends State<AuthPage> {
       await widget.controller
           .signIn(_emailController.text, _passwordController.text);
       // TODO: přesměrování na další stránku nebo zobrazení zprávy o úspěšném přihlášení
-      scaffold.showSnackBar(SnackBar(content: Text('Úspěšně přihlášen!')));
+      scaffold
+          .showSnackBar(const SnackBar(content: Text('Úspěšně přihlášen!')));
     } catch (e) {
       // TODO: zobrazit chybovou zprávu
       scaffold
