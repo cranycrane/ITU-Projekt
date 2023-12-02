@@ -1,9 +1,8 @@
-// Copyright 2019 Aleksander Woźniak
-// SPDX-License-Identifier: Apache-2.0
-
 import 'package:flutter/material.dart';
 import 'record_controller.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'settings_page.dart';
+import 'search_page.dart'; // Předpokládáme, že máte soubor search_page.dart
 
 class CalendarPage extends StatefulWidget {
   @override
@@ -16,56 +15,133 @@ class _CalendarPageState extends State<CalendarPage> {
   DateTime _selectedDay = DateTime.now();
 
   final RecordController _recordController = RecordController();
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    if (index != _selectedIndex) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+
+    switch (index) {
+      case 0:
+        // Kdyby byla domovská stránka na indexu 0
+        // Navigator.of(context).pushReplacementNamed('/home');
+        break;
+      case 1:
+        // Přechod na stránku pro vyhledávání
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchPage()));
+        break;
+      case 2:
+        // Tady byste mohli implementovat přechod na stránku oznámení
+        break;
+      case 3:
+        // Navigace na SettingsPage, pokud uživatel není již na této stránce
+
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsPage()));
+        break;
+      default:
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Kalendář'),
-      ),
       body: Column(
         children: [
-          TableCalendar(
-            firstDay: DateTime.utc(2020, 10, 16),
-            lastDay: DateTime.utc(2030, 3, 14),
-            focusedDay: _focusedDay,
-            calendarFormat: _calendarFormat,
-            selectedDayPredicate: (day) {
-              return isSameDay(_selectedDay, day);
-            },
-            onDaySelected: (selectedDay, focusedDay) {
-              setState(() {
-                _focusedDay = focusedDay;
-                _selectedDay = selectedDay;
-                // zde voláme metodu z controlleru
-              });
-            },
-            onPageChanged: (focusedDay) {
-              _focusedDay = focusedDay;
-            },
-          ),
-          const SizedBox(
-              height: 20), // volitelná mezera mezi kalendářem a textovým polem
-          Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: FutureBuilder<String?>(
-                future: _recordController.getRecordForDay(_selectedDay),
-                builder:
-                    (BuildContext context, AsyncSnapshot<String?> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Text('Došlo k chybě: ${snapshot.error}');
-                  } else {
-                    return TextField(
-                      controller: TextEditingController(text: snapshot.data),
-                      readOnly: true,
-                    );
-                  }
+          Expanded(
+            child: SingleChildScrollView( // Přidáváme SingleChildScrollView
+              child: TableCalendar(
+                firstDay: DateTime.utc(2020, 10, 16),
+                lastDay: DateTime.utc(2030, 3, 14),
+                focusedDay: _focusedDay,
+                calendarFormat: _calendarFormat,
+                selectedDayPredicate: (day) {
+                  return isSameDay(_selectedDay, day);
                 },
-              )),
+                onDaySelected: (selectedDay, focusedDay) {
+                  setState(() {
+                    _focusedDay = focusedDay;
+                    _selectedDay = selectedDay;
+                    // zde voláme metodu z controlleru
+                  });
+                },
+                onPageChanged: (focusedDay) {
+                  _focusedDay = focusedDay;
+                },
+                headerStyle: const HeaderStyle(
+                  formatButtonVisible: false,
+                  titleCentered: true,
+                  titleTextStyle: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold
+                  ),
+                  leftChevronIcon: Icon(Icons.chevron_left, size: 30),
+                  rightChevronIcon: Icon(Icons.chevron_right, size: 30),
+                ),
+                // Další přizpůsobení vzhledu, pokud je to potřeba
+              ),
+            ),
+          ),
+          const SizedBox(height: 20), // volitelná mezera mezi kalendářem a textovým polem
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: FutureBuilder<String?>(
+              future: _recordController.getRecordForDay(_selectedDay),
+              builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Došlo k chybě: ${snapshot.error}');
+                } else {
+                  return TextField(
+                    controller: TextEditingController(text: snapshot.data),
+                    readOnly: true,
+                    // Případné další stylování TextField
+                  );
+                }
+              },
+            ),
+          ),
         ],
       ),
+      bottomNavigationBar: BottomAppBar(
+        shape: CircularNotchedRectangle(),
+        notchMargin: 6.0,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.home, color: _selectedIndex == 0 ? Colors.red : Colors.grey),
+              onPressed: () => _onItemTapped(0),
+            ),
+            IconButton(
+              icon: Icon(Icons.search, color: _selectedIndex == 1 ? Colors.red : Colors.grey),
+              onPressed: () => _onItemTapped(1),
+            ),
+            SizedBox(width: 48), // The empty space in middle of the BottomAppBar
+            IconButton(
+              icon: Icon(Icons.notifications_none, color: _selectedIndex == 2 ? Colors.red : Colors.grey),
+              onPressed: () => _onItemTapped(2),
+            ),
+            IconButton(
+              icon: Icon(Icons.person_outline, color: _selectedIndex == 3 ? Colors.red : Colors.grey),
+              onPressed: () => _onItemTapped(3),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.red,
+        child: const Icon(Icons.add),
+        onPressed: () {
+          // Akce pro FloatingActionButton
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
