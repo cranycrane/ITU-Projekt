@@ -2,6 +2,7 @@ import 'package:flowlist/calendar_screen.dart';
 import 'package:flutter/material.dart';
 import 'auth_page.dart';
 import 'search_page.dart';
+import 'add_note.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -114,6 +115,7 @@ class _SettingsPageState extends State<SettingsPage> {
         backgroundColor: Colors.red,
         child: Icon(Icons.add),
         onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewEntryPage()));
           // Implementace akce pro Floating Action Button
         },
       ),

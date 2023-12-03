@@ -3,6 +3,7 @@ import 'record_controller.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'settings_page.dart';
 import 'search_page.dart'; // Předpokládáme, že máte soubor search_page.dart
+import 'add_note.dart';
 
 class CalendarPage extends StatefulWidget {
   @override
@@ -139,6 +140,7 @@ class _CalendarPageState extends State<CalendarPage> {
         child: const Icon(Icons.add),
         onPressed: () {
           // Akce pro FloatingActionButton
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewEntryPage()));
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

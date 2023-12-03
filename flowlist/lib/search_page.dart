@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'calendar_screen.dart';
 import 'settings_page.dart';
+import 'add_note.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -37,6 +38,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: ListView(
         children: <Widget>[
           Padding(
@@ -99,6 +101,7 @@ class _SearchPageState extends State<SearchPage> {
         backgroundColor: Colors.red,
         child: Icon(Icons.add),
         onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewEntryPage()));
           // Implementace akce pro Floating Action Button
         },
       ),
