@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'calendar_screen.dart'; // Předpokládáme, že máte soubor calendar_screen.dart
-import 'search_page.dart'; // Předpokládáme, že máte soubor search_page.dart
-import 'settings_page.dart'; // Předpokládáme, že máte soubor settings_page.dart
+import 'calendar_screen.dart';
+import 'search_page.dart';
+import 'settings_page.dart';
 
 class NewEntryPage extends StatefulWidget {
   @override
@@ -28,85 +28,94 @@ class _NewEntryPageState extends State<NewEntryPage> {
       _selectedIndex = index;
     });
 
-    // Logika pro navigaci na různé stránky
     switch (index) {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(builder: (context) => CalendarPage()));
         break;
-      // Zde můžete přidat další navigaci pro Search, Notifications atd.
       case 1:
         Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchPage()));
         break;
       case 2:
       case 3:
-         Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsPage()));
-        // Pro tyto indexy není třeba žádná akce, protože jsme již na stránce nastavení
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsPage()));
         break;
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
+    final double bottomInset = MediaQuery.of(context).viewInsets.bottom; // výška klávesnice nebo dalšího dolního obsahu
+    final double screenHeight = MediaQuery.of(context).size.height - statusBarHeight - bottomInset;
+    final double bottomBarHeight = kBottomNavigationBarHeight;
+
+    // Celková výška, kterou je třeba zabrat, aby se obsah nezobrazoval pod klávesnicí
+    final double bodyHeight = screenHeight - bottomBarHeight;
+
+    bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
+
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Padding(
-        padding: EdgeInsets.only(
-        left: 16.0,
-        right: 16.0,
-        top: statusBarHeight + 16.0, // Přidáno horní odsazení o výšku status baru + 16.0
-        bottom: 16.0,
-      ),
-        child: Column(
-          children: <Widget>[
-            TextField(
-              controller: _firstController,
-              decoration: InputDecoration(
-                labelText: 'První položka',
-                border: OutlineInputBorder(),
-                fillColor: Colors.grey[200],
-                filled: true,
-              ),
-              maxLines: 7,
-               keyboardType: TextInputType.multiline, // Umožní klávesnici pro více řádků
+
+      resizeToAvoidBottomInset: true,
+
+      body: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: bodyHeight,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                SizedBox(height: statusBarHeight),
+                TextField(
+                  controller: _firstController,
+                  decoration: InputDecoration(
+                    labelText: 'První položka',
+                    border: OutlineInputBorder(),
+                    fillColor: Colors.grey[200],
+                    filled: true,
+                  ),
+                  maxLines: 7,
+                ),
+                SizedBox(height: 8),
+                TextField(
+                  controller: _secondController,
+                  decoration: InputDecoration(
+                    labelText: 'Druhá položka',
+                    border: OutlineInputBorder(),
+                    fillColor: Colors.grey[200],
+                    filled: true,
+                  ),
+                  maxLines: 7,
+                ),
+                SizedBox(height: 8),
+                TextField(
+                  controller: _thirdController,
+                  decoration: InputDecoration(
+                    labelText: 'Třetí položka',
+                    border: OutlineInputBorder(),
+                    fillColor: Colors.grey[200],
+                    filled: true,
+                  ),
+                  maxLines: 7,
+                  
+                ),
+                SizedBox(height: 24),
+                ElevatedButton(
+                  child: Text('ULOŽIT'),
+                  onPressed: () {
+                    // Akce pro uložení dat
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                    minimumSize: Size(double.infinity, 50),
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: 8),
-            TextField(
-              controller: _secondController,
-              decoration: InputDecoration(
-                labelText: 'Druhá položka',
-                border: OutlineInputBorder(),
-                fillColor: Colors.grey[200],
-                filled: true,
-              ),
-              maxLines: 7,
-               keyboardType: TextInputType.multiline, // Umožní klávesnici pro více řádků
-            ),
-            SizedBox(height: 8),
-            TextField(
-              controller: _thirdController,
-              decoration: InputDecoration(
-                labelText: 'Třetí položka',
-                border: OutlineInputBorder(),
-                fillColor: Colors.grey[200],
-                filled: true,
-              ),
-              maxLines: 7,
-               keyboardType: TextInputType.multiline, // Umožní klávesnici pro více řádků
-            ),
-            SizedBox(height: 24),
-            ElevatedButton(
-              child: Text('ULOŽIT'),
-              onPressed: () {
-                // Akce pro uložení dat
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Colors.red,
-                minimumSize: Size(double.infinity, 50),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
@@ -136,12 +145,17 @@ class _NewEntryPageState extends State<NewEntryPage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton :isKeyboardVisible
+      ? null
+
+      
+      : FloatingActionButton(
         backgroundColor: Colors.red,
         child: Icon(Icons.add),
         onPressed: () {
           // Akce pro FloatingActionButton
         },
+
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
