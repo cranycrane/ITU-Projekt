@@ -4,6 +4,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'settings_page.dart';
 import 'search_page.dart'; // Předpokládáme, že máte soubor search_page.dart
 import 'add_note.dart';
+import 'diary_controller.dart';
 
 class CalendarPage extends StatefulWidget {
   @override
@@ -14,9 +15,43 @@ class _CalendarPageState extends State<CalendarPage> {
   final CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
+  String record1 = '';
+  String record2 = '';
+  String record3 = '';
 
-  final RecordController _recordController = RecordController();
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDay = DateTime.now();
+    loadDiaryEntries(_selectedDay);
+  }
+
+  // Funkce pro načtení záznamů z deníku
+  Future<void> loadDiaryEntries(DateTime selectedDay) async {
+    try {
+      List<Map<String, dynamic>> entries =
+          await diaryController.readEntry(selectedDay);
+
+      setState(() {
+        if (entries.isNotEmpty) {
+          // Předpokládáme, že každý záznam má klíče 'record1', 'record2', 'record3'
+          record1 = entries[0]['record1'] ?? '';
+          record2 = entries[0]['record2'] ?? '';
+          record3 = entries[0]['record3'] ?? '';
+        } else {
+          // Pro prázdný seznam záznamů nastavíme výchozí hodnoty
+          record1 = '';
+          record2 = '';
+          record3 = '';
+        }
+      });
+    } catch (error) {
+      // Zpracování chyby
+      print('Chyba při načítání záznamů: $error');
+    }
+  }
 
   void _onItemTapped(int index) {
     if (index != _selectedIndex) {
@@ -32,7 +67,8 @@ class _CalendarPageState extends State<CalendarPage> {
         break;
       case 1:
         // Přechod na stránku pro vyhledávání
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchPage()));
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => SearchPage()));
         break;
       case 2:
         // Tady byste mohli implementovat přechod na stránku oznámení
@@ -40,7 +76,8 @@ class _CalendarPageState extends State<CalendarPage> {
       case 3:
         // Navigace na SettingsPage, pokud uživatel není již na této stránce
 
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsPage()));
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => SettingsPage()));
         break;
       default:
         break;
@@ -53,7 +90,8 @@ class _CalendarPageState extends State<CalendarPage> {
       body: Column(
         children: [
           Expanded(
-            child: SingleChildScrollView( // Přidáváme SingleChildScrollView
+            child: SingleChildScrollView(
+              // Přidáváme SingleChildScrollView
               child: TableCalendar(
                 firstDay: DateTime.utc(2020, 10, 16),
                 lastDay: DateTime.utc(2030, 3, 14),
@@ -66,7 +104,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   setState(() {
                     _focusedDay = focusedDay;
                     _selectedDay = selectedDay;
-                    // zde voláme metodu z controlleru
+                    loadDiaryEntries(selectedDay);
                   });
                 },
                 onPageChanged: (focusedDay) {
@@ -75,10 +113,8 @@ class _CalendarPageState extends State<CalendarPage> {
                 headerStyle: const HeaderStyle(
                   formatButtonVisible: false,
                   titleCentered: true,
-                  titleTextStyle: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold
-                  ),
+                  titleTextStyle:
+                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   leftChevronIcon: Icon(Icons.chevron_left, size: 30),
                   rightChevronIcon: Icon(Icons.chevron_right, size: 30),
                 ),
@@ -86,26 +122,20 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
             ),
           ),
-          const SizedBox(height: 20), // volitelná mezera mezi kalendářem a textovým polem
+          const SizedBox(
+              height: 20), // volitelná mezera mezi kalendářem a textovým polem
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: FutureBuilder<String?>(
-              future: _recordController.getRecordForDay(_selectedDay),
-              builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Došlo k chybě: ${snapshot.error}');
-                } else {
-                  return TextField(
-                    controller: TextEditingController(text: snapshot.data),
-                    readOnly: true,
-                    // Případné další stylování TextField
-                  );
-                }
-              },
-            ),
+            child: Text(record1),
           ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(record2),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(record3),
+          )
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -116,20 +146,25 @@ class _CalendarPageState extends State<CalendarPage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             IconButton(
-              icon: Icon(Icons.home, color: _selectedIndex == 0 ? Colors.red : Colors.grey),
+              icon: Icon(Icons.home,
+                  color: _selectedIndex == 0 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
-              icon: Icon(Icons.search, color: _selectedIndex == 1 ? Colors.red : Colors.grey),
+              icon: Icon(Icons.search,
+                  color: _selectedIndex == 1 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(1),
             ),
-            SizedBox(width: 48), // The empty space in middle of the BottomAppBar
+            SizedBox(
+                width: 48), // The empty space in middle of the BottomAppBar
             IconButton(
-              icon: Icon(Icons.notifications_none, color: _selectedIndex == 2 ? Colors.red : Colors.grey),
+              icon: Icon(Icons.notifications_none,
+                  color: _selectedIndex == 2 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
-              icon: Icon(Icons.person_outline, color: _selectedIndex == 3 ? Colors.red : Colors.grey),
+              icon: Icon(Icons.person_outline,
+                  color: _selectedIndex == 3 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(3),
             ),
           ],
@@ -140,7 +175,8 @@ class _CalendarPageState extends State<CalendarPage> {
         child: const Icon(Icons.add),
         onPressed: () {
           // Akce pro FloatingActionButton
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewEntryPage()));
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => NewEntryPage()));
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

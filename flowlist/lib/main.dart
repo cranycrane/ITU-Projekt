@@ -11,16 +11,17 @@ import 'deviceUtils.dart';
 import 'storage_service.dart';
 
 void main() async {
-  initializeDateFormatting().then((_) => runApp(MyApp()));
   WidgetsFlutterBinding.ensureInitialized();
+
+  await initializeDateFormatting(); // Inicializace formátování data
 
   // Získání ID zařízení
   String? deviceId = await DeviceUtils.getDeviceId();
-
+  // Ziskej ID uzivatele
+  String userId = await diaryController.getUserId(deviceId);
   // Uložení ID zařízení
-  await StorageService().saveDeviceId(deviceId);
-
-  print('Device ID: $deviceId');
+  await StorageService().saveUserId(userId);
+  print('Device ID: $deviceId UserId: $userId');
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

@@ -2,13 +2,11 @@
 
 namespace App;
 
-function getUserId(string $deviceId, \mysqli $conn): ?string {
-    // Předpokládá se, že `$conn` je platný objekt připojení k databázi
+function getUserId(string $deviceId, \mysqli $conn): string {
     $sql = "SELECT id FROM users WHERE deviceId = ?";
     $stmt = $conn->prepare($sql);
 
     if ($stmt === false) {
-        // Zde byste měli zpracovat chybu
         throw new \Exception('Chyba při přípravě SQL dotazu: ' . $conn->error);
     }
 
@@ -18,12 +16,31 @@ function getUserId(string $deviceId, \mysqli $conn): ?string {
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
 
-        return $user ? $user['id'] : null;
+        if ($user) {
+            return $user['id'];
+        } else {
+            // Uživatel nenalezen, vytvoření nového uživatele
+            $insertSql = "INSERT INTO users (deviceId) VALUES (?)";
+            $insertStmt = $conn->prepare($insertSql);
+
+            if ($insertStmt === false) {
+                throw new \Exception('Chyba při přípravě SQL dotazu pro vložení: ' . $conn->error);
+            }
+
+            $insertStmt->bind_param("s", $deviceId);
+
+            if ($insertStmt->execute()) {
+                // Vrácení ID nově vytvořeného uživatele
+                return $conn->insert_id;
+            } else {
+                throw new \Exception('Chyba při vkládání nového uživatele: ' . $insertStmt->error);
+            }
+        }
     } else {
-        // Zde byste měli zpracovat chybu
         throw new \Exception('Chyba při vykonání SQL dotazu: ' . $stmt->error);
     }
 }
+
 
 function findDay(string $userId, string $date, \mysqli $conn): array {
     
@@ -61,7 +78,7 @@ function findDay(string $userId, string $date, \mysqli $conn): array {
 $servername = "db"; // Adresa serveru, obvykle localhost pro lokální vývoj
 $username = "cranycrane"; // Uživatelské jméno pro MySQL
 $password = "cranycrane"; // Heslo pro MySQL
-$dbname = "tasks"; // Název vaší databáze
+$dbname = "diary"; // Název vaší databáze
 
 // Vytvoření připojení k databázi
 $conn = new \mysqli($servername, $username, $password, $dbname, 3306);

@@ -14,10 +14,11 @@ class DeviceUtils {
         IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
         deviceId = iosInfo.identifierForVendor; // Unikátní ID iOS zařízení
       } else {
-        deviceId = 'UnsupportedPlatform';
+        deviceId = null;
       }
     } catch (e) {
-      deviceId = 'FailedToGetDeviceId';
+      deviceId = null;
+      throw Exception("Couldnt get deviceId");
     }
 
     return deviceId;

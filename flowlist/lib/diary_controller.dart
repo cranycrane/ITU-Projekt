@@ -7,6 +7,31 @@ class DiaryController {
   final String baseUrl = "http://10.0.2.2:8000";
   final storageService = StorageService();
 
+  Future<String> getUserId(String? deviceId) async {
+    final Map<String, dynamic> data = {
+      'deviceId': deviceId,
+    };
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/getUserId.php'),
+      headers: <String, String>{
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: data, // Odesílání dat jako Map
+    );
+
+    print("jsonData: $data");
+    if (response.statusCode == 200) {
+      Map<String, dynamic> result = json.decode(response.body);
+      // Předpokládáme, že userId je String. Pokud je int, použijte toString().
+      String userId = result['userId'];
+      return userId;
+    } else {
+      Map<String, dynamic> result = json.decode(response.body);
+      throw Exception('Failed to get userId: $result');
+    }
+  }
+
   Future<dynamic> createEntry(String record1, String record2, String record3,
       DateTime day, int score) async {
     final response = await http.post(
@@ -14,7 +39,7 @@ class DiaryController {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: json.encode(data),
+      //body: json.encode(data),
     );
 
     if (response.statusCode == 200) {
@@ -35,21 +60,24 @@ class DiaryController {
     }
   }
 
-  Future<String?> readEntry(DateTime selectedDay) async {
-    String? deviceId = await StorageService().getDeviceId();
+  Future<List<Map<String, dynamic>>> readEntry(DateTime selectedDay) async {
+    String? userId = await StorageService().getUserId();
     String date = DateFormat('yyyy-MM-dd').format(selectedDay);
 
-    final response = await http.get(Uri.parse(
-        '$baseUrl/read_entry.php?deviceId=OSM1.180201.037&date=$date'));
+    final response = await http
+        .get(Uri.parse('$baseUrl/read_entry.php?userId=$userId&date=$date'));
 
     if (response.statusCode == 200) {
       print(response.body);
-      List<dynamic> jsonData = json.decode(response.body);
-      if (jsonData.isEmpty) {
-        return "";
-      } else {
-        return jsonData[0]['record1'];
+      List<dynamic> responseData = json.decode(response.body);
+
+      if (responseData.isEmpty) {
+        return [];
       }
+      List<Map<String, dynamic>> entries = List<Map<String, dynamic>>.from(
+          responseData.map((entry) => Map<String, dynamic>.from(entry)));
+
+      return entries;
     } else {
       throw Exception('Failed to read entries');
     }
