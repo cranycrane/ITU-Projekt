@@ -11,12 +11,12 @@ class StorageService {
   StorageService._internal();
 
 // Uložení ID zařízení
-  Future<void> saveDeviceId(String? deviceId) async {
-    await storage.write(key: 'deviceId', value: deviceId);
+  Future<void> saveUserId(String userId) async {
+    await storage.write(key: 'userId', value: userId);
   }
 
   // Načtení ID zařízení
-  Future<String?> getDeviceId() async {
-    return await storage.read(key: 'deviceId');
+  Future<String?> getUserId() async {
+    return await storage.read(key: 'userId');
   }
 }

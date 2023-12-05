@@ -5,16 +5,14 @@ use function App\getUserId;
 
 include './MySQL.php';
 
-if (!isset($_GET['deviceId'])) {
+if (!isset($_GET['userId'])) {
     http_response_code(400);
-    echo json_encode(['error' => 'Missing data']);
+    echo json_encode(['error' => 'Missing userId']);
     return;
 }
 
 // Případné získání Creator_ID z GET požadavku
-$deviceId = $_GET['deviceId'];
-
-$userId = getUserId($deviceId, $conn);
+$userId = $_GET['userId'];
 
 // SQL dotaz pro načtení dat
 if (isset($_GET['date'])) {
@@ -46,13 +44,17 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 $entries = array();
+
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $entries[] = $row;
     }
-} 
+}
 
-echo json_encode($entries);
+// Vracíme prázdné pole, pokud nejsou žádné záznamy, ale vždy ve formátu JSON
+echo json_encode($entries); 
+http_response_code(200);
+
 
 $stmt->close();
 $conn->close();

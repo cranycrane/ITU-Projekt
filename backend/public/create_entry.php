@@ -7,22 +7,19 @@ use function App\getUserId;
 require 'mysql.php';
 
 
-if (!isset($_POST['deviceId'], $_POST['date'], $_POST['record1'], $_POST['record2'], $_POST['record3'], $_POST['score'])) {
+if (!isset($_POST['userId'], $_POST['date'], $_POST['record1'], $_POST['record2'], $_POST['record3'], $_POST['score'])) {
     http_response_code(400);
     echo json_encode(['error' => 'Missing data']);
     return;
 }
 
 // Přijetí POST dat
-$deviceId = $_POST['deviceId'];
+$userId = $_POST['userId'];
 $date = $_POST['date'];
 $record1 = $_POST['record1'];
 $record2 = $_POST['record2'];
 $record3 = $_POST['record3'];
 $score = $_POST['score'];
-
-// get user id
-$userId = getUserId($deviceId, $conn);
 
 // Zkontrolujeme, zda zaznam pro dany den a uzivatele jiz neexistuje
 $result = findDay($userId, $date, $conn);

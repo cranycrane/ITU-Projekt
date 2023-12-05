@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Počítač: db
--- Vytvořeno: Pon 04. pro 2023, 14:41
+-- Vytvořeno: Úte 05. pro 2023, 14:03
 -- Verze serveru: 8.2.0
 -- Verze PHP: 8.2.8
 
@@ -29,13 +29,22 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `diary` (
   `id` int NOT NULL,
-  `record1` int DEFAULT NULL,
-  `record2` int DEFAULT NULL,
-  `record3` int DEFAULT NULL,
+  `record1` text,
+  `record2` text,
+  `record3` text,
   `score` int NOT NULL,
   `date` date NOT NULL,
   `userId` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Vypisuji data pro tabulku `diary`
+--
+
+INSERT INTO `diary` (`id`, `record1`, `record2`, `record3`, `score`, `date`, `userId`) VALUES
+(1, 'ahoj', 'update', 'fkdsjfkldsjgkljfijfig', 7, '2023-12-05', 1),
+(2, 'ahoj', 'druhy zaznam', 'jfkdsjfklsdfjlds neco penis', 7, '2023-12-06', 1),
+(3, 'ahoj', 'druhy zaznammmm', 'jfkdsjfklsdfjlds neco penis', 7, '2023-12-04', 1);
 
 -- --------------------------------------------------------
 
@@ -50,6 +59,13 @@ CREATE TABLE `users` (
   `lastName` int DEFAULT NULL,
   `profileImg` blob
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Vypisuji data pro tabulku `users`
+--
+
+INSERT INTO `users` (`id`, `deviceId`, `firstName`, `lastName`, `profileImg`) VALUES
+(1, 'OSM1.180201.037', NULL, NULL, NULL);
 
 --
 -- Indexy pro exportované tabulky
@@ -76,13 +92,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pro tabulku `diary`
 --
 ALTER TABLE `diary`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pro tabulku `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Omezení pro exportované tabulky
