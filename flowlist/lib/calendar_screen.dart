@@ -237,11 +237,14 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
-        child: const Icon(Icons.add),
+        child: Icon(Icons.add),
         onPressed: () {
           // Akce pro FloatingActionButton
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => NewEntryPage()));
+           Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => NewEntryPage(selectedDay: _selectedDay),
+      ),
+    );
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
