@@ -8,9 +8,9 @@ import 'diary_controller.dart';
 import 'package:intl/intl.dart'; // Přidání pro formátování data
 
 class NewEntryPage extends StatefulWidget {
-  final DateTime selectedDay;
+  final DateTime? selectedDay;
 
-  NewEntryPage({Key? key, required this.selectedDay}) : super(key: key);
+  NewEntryPage({Key? key, this.selectedDay}) : super(key: key);
 
   @override
   _NewEntryPageState createState() => _NewEntryPageState();
@@ -29,7 +29,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
   @override
   void initState() {
     super.initState();
-    selectedDate = widget.selectedDay;
+    selectedDate = widget.selectedDay ?? DateTime.now();
   }
 
   int _selectedIndex = -1; // Index pro navigaci v BottomAppBar

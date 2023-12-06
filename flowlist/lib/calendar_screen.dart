@@ -19,7 +19,7 @@ class CalendarPageState extends State<CalendarPage> {
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
 
-  FlowData? record;
+  late Future<FlowData?> _recordFuture;
 
   String record1 = '';
   String record2 = '';
@@ -32,13 +32,13 @@ class CalendarPageState extends State<CalendarPage> {
   void initState() {
     super.initState();
     _selectedDay = DateTime.now();
-    _loadData(_selectedDay);
+    _recordFuture = _loadData(_selectedDay);
   }
 
   // Funkce pro načtení záznamů z deníku
-  void _loadData(DateTime selectedDay) async {
+  Future<FlowData?> _loadData(DateTime selectedDay) async {
     DiaryEntriesLoader loader = DiaryEntriesLoader(diaryController);
-    record = await loader.loadDiaryEntries(selectedDay);
+    return await loader.loadDiaryEntries(selectedDay);
   }
 
   void _onItemTapped(int index) {
@@ -92,7 +92,7 @@ class CalendarPageState extends State<CalendarPage> {
                   setState(() {
                     _focusedDay = focusedDay;
                     _selectedDay = selectedDay;
-                    _loadData(selectedDay);
+                    _recordFuture = _loadData(selectedDay);
                   });
                 },
                 onPageChanged: (focusedDay) {
@@ -112,18 +112,25 @@ class CalendarPageState extends State<CalendarPage> {
           ),
           const SizedBox(
               height: 20), // volitelná mezera mezi kalendářem a textovým polem
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(record?.record1 ?? ''),
+          FutureBuilder<FlowData?>(
+            future: _recordFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Došlo k chybě při načítání dat');
+              } else {
+                FlowData? record = snapshot.data;
+                return Column(
+                  children: [
+                    Text(record?.record1 ?? ''),
+                    Text(record?.record2 ?? ''),
+                    Text(record?.record3 ?? ''),
+                  ],
+                );
+              }
+            },
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(record?.record2 ?? ''),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(record?.record3 ?? ''),
-          )
         ],
       ),
       bottomNavigationBar: BottomAppBar(
