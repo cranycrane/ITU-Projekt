@@ -101,7 +101,15 @@ class _SearchPageState extends State<SearchPage> {
         backgroundColor: Colors.red,
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewEntryPage()));
+             // Získání aktuálního data
+    DateTime currentDate = DateTime.now();
+
+    // Navigace na NewEntryPage s aktuálním datem
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => NewEntryPage(selectedDay: currentDate),
+      ),
+    );
           // Implementace akce pro Floating Action Button
         },
       ),

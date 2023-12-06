@@ -2,16 +2,30 @@ import 'package:flutter/material.dart';
 import 'calendar_screen.dart';
 import 'search_page.dart';
 import 'settings_page.dart';
+import 'package:intl/intl.dart'; // Přidání pro formátování data
 
 class NewEntryPage extends StatefulWidget {
+  final DateTime selectedDay;
+
+  NewEntryPage({Key? key, required this.selectedDay}) : super(key: key);
+
   @override
   _NewEntryPageState createState() => _NewEntryPageState();
 }
 
 class _NewEntryPageState extends State<NewEntryPage> {
+  late DateTime selectedDate; // Přidáno pro sledování vybraného data
   final TextEditingController _firstController = TextEditingController();
   final TextEditingController _secondController = TextEditingController();
   final TextEditingController _thirdController = TextEditingController();
+  final TextEditingController _ratingController = TextEditingController();
+
+
+  @override
+  void initState() {
+    super.initState();
+    selectedDate = widget.selectedDay;
+  }
 
   int _selectedIndex = -1; // Index pro navigaci v BottomAppBar
 
@@ -20,7 +34,14 @@ class _NewEntryPageState extends State<NewEntryPage> {
     _firstController.dispose();
     _secondController.dispose();
     _thirdController.dispose();
+    _ratingController.dispose();
     super.dispose();
+  }
+
+    void _changeDay(int days) {
+    setState(() {
+      selectedDate = selectedDate.add(Duration(days: days));
+    });
   }
 
   void _onItemTapped(int index) {
@@ -42,31 +63,62 @@ class _NewEntryPageState extends State<NewEntryPage> {
     }
   }
 
+  
+
+  
+
   @override
   Widget build(BuildContext context) {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
-    final double bottomInset = MediaQuery.of(context).viewInsets.bottom; // výška klávesnice nebo dalšího dolního obsahu
-    final double screenHeight = MediaQuery.of(context).size.height - statusBarHeight - bottomInset;
-    final double bottomBarHeight = kBottomNavigationBarHeight;
+   // final double bottomInset = MediaQuery.of(context).viewInsets.bottom; // výška klávesnice nebo dalšího dolního obsahu
+    //final double screenHeight = MediaQuery.of(context).size.height - statusBarHeight - bottomInset;
+    final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    final DateFormat formatter = DateFormat('EEEE d.M.yyyy', 'cs_CZ');
+
+    String formattedDate = formatter.format(selectedDate).toUpperCase();
+    //final double bottomBarHeight = kBottomNavigationBarHeight;
 
     // Celková výška, kterou je třeba zabrat, aby se obsah nezobrazoval pod klávesnicí
-    final double bodyHeight = screenHeight - bottomBarHeight;
+    //final double bodyHeight = screenHeight - bottomBarHeight;
 
     bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
 
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Zarovnání obsahu na obě strany
+          children: [
+            IconButton(
+              icon: Icon(Icons.chevron_left, color: Colors.black), // Icon barva nastavena na černou
+              onPressed: () => _changeDay(-1),
+            ),
+            Text(
+              formattedDate, // Použití pomocné funkce pro zobrazení data
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black), // Text barva nastavena na černou
+            ),
+            IconButton(
+              icon: Icon(Icons.chevron_right, color: Colors.black), // Icon barva nastavena na černou
+              onPressed: () => _changeDay(1),
+            ),
+          ],
+        ),
+        centerTitle: true,
+        elevation: 0, // Odstranění stínu AppBaru
+        backgroundColor: Colors.transparent, // Transparentní AppBar
+      ),
 
+      
       resizeToAvoidBottomInset: true,
 
+
       body: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: bodyHeight,
-          ),
+        physics: keyboardHeight > 0 ? AlwaysScrollableScrollPhysics() : NeverScrollableScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch, // Přidáno pro zarovnání
               children: <Widget>[
                 SizedBox(height: statusBarHeight),
                 TextField(
@@ -77,7 +129,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                     fillColor: Colors.grey[200],
                     filled: true,
                   ),
-                  maxLines: 7,
+                  maxLines: 5,
                 ),
                 SizedBox(height: 8),
                 TextField(
@@ -88,7 +140,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                     fillColor: Colors.grey[200],
                     filled: true,
                   ),
-                  maxLines: 7,
+                  maxLines: 5,
                 ),
                 SizedBox(height: 8),
                 TextField(
@@ -99,25 +151,72 @@ class _NewEntryPageState extends State<NewEntryPage> {
                     fillColor: Colors.grey[200],
                     filled: true,
                   ),
-                  maxLines: 7,
+                  maxLines: 5,
                   
                 ),
-                SizedBox(height: 24),
-                ElevatedButton(
-                  child: Text('ULOŽIT'),
-                  onPressed: () {
-                    // Akce pro uložení dat
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.red,
-                    minimumSize: Size(double.infinity, 50),
-                  ),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Flexible(
+                      child: Text(
+                        'Jak bys ohodnotil svůj den?',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 80, // Nastavení pevné šířky pro textové pole
+                      child: TextField(
+                        controller: _ratingController,
+                        decoration: InputDecoration(
+                          hintText: '/10',
+                          border: OutlineInputBorder(),
+                        ),
+                        keyboardType: TextInputType.number,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16),
+                Row( // Tlačítka vedle sebe s mezerou
+                  children: <Widget>[
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Akce pro smazání dat
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.grey, // Barva tlačítka SMAZAT
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5), // Bez zaoblení
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                        ),
+                        child: Text('SMAZAT'),
+                      ),
+                    ),
+                    SizedBox(width: 8), // Mezera mezi tlačítky
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Akce pro uložení dat
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.red, // Barva tlačítka ULOŽIT
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5), // Bez zaoblení
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                        ),
+                        child: Text('ULOŽIT'),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
         ),
-      ),
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
         notchMargin: 6.0,

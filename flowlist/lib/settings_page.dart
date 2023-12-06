@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'auth_page.dart';
 import 'search_page.dart';
 import 'add_note.dart';
+import 'calendar_screen.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -115,7 +116,15 @@ class _SettingsPageState extends State<SettingsPage> {
         backgroundColor: Colors.red,
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewEntryPage()));
+    // Získání aktuálního data
+
+    // Navigace na NewEntryPage s aktuálním datem
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => NewEntryPage(selectedDay: DateTime.now()
+        ),
+      ),
+    );
           // Implementace akce pro Floating Action Button
         },
       ),
