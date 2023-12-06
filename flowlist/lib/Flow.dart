@@ -8,11 +8,11 @@ class FlowData {
   int score;
 
   FlowData({
-    required this.record1,
-    required this.record2,
-    required this.record3,
+    this.record1 = '',
+    this.record2 = '',
+    this.record3 = '',
     required this.day,
-    required this.score,
+    this.score = -1,
   });
 
   static FlowData fromFields({

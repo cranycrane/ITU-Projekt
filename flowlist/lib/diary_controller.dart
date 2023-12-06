@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'storage_service.dart';
 import 'package:intl/intl.dart';
+import 'flow.dart';
 
 class DiaryController {
   final String baseUrl = "http://10.0.2.2:8000";
@@ -32,14 +33,22 @@ class DiaryController {
     }
   }
 
-  Future<dynamic> createEntry(String record1, String record2, String record3,
-      DateTime day, int score) async {
+  Future<dynamic> createEntry(FlowData record) async {
+    String? userId = await StorageService().getUserId();
+    final Map<String, dynamic> data = {
+      'userId': userId,
+      'date': record.day,
+      'record1': record.record1,
+      'record2': record.record2,
+      'record3': record.record3
+    };
+
     final response = await http.post(
       Uri.parse('$baseUrl/create_entry'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      //body: json.encode(data),
+      body: json.encode(data),
     );
 
     if (response.statusCode == 200) {
