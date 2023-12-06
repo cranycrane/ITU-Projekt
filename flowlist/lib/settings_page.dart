@@ -8,6 +8,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 import 'user_profile.dart';
+import 'calendar_screen.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -261,8 +262,8 @@ class _SettingsPageState extends State<SettingsPage> {
         backgroundColor: Colors.red,
         child: const Icon(Icons.add),
         onPressed: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const NewEntryPage()));
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => NewEntryPage()));
           // Implementace akce pro Floating Action Button
         },
       ),
