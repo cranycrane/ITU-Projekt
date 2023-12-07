@@ -94,50 +94,39 @@ class _NewEntryPageState extends State<NewEntryPage> {
     }
   }
 
-  @override
+
+ @override
   Widget build(BuildContext context) {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
-    // final double bottomInset = MediaQuery.of(context).viewInsets.bottom; // výška klávesnice nebo dalšího dolního obsahu
-    //final double screenHeight = MediaQuery.of(context).size.height - statusBarHeight - bottomInset;
     final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
-    final DateFormat formatter = DateFormat('EEEE d.M.yyyy', 'cs_CZ');
+    final double screenHeight = MediaQuery.of(context).size.height;
 
-    String formattedDate = formatter.format(selectedDate).toUpperCase();
-    //final double bottomBarHeight = kBottomNavigationBarHeight;
-
-    // Celková výška, kterou je třeba zabrat, aby se obsah nezobrazoval pod klávesnicí
-    //final double bodyHeight = screenHeight - bottomBarHeight;
-
-    bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
+    String formattedDate =
+        DateFormat('EEEE d.M.yyyy', 'cs_CZ').format(selectedDate).toUpperCase();
 
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Row(
-          mainAxisAlignment:
-              MainAxisAlignment.spaceBetween, // Zarovnání obsahu na obě strany
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-              icon: Icon(Icons.chevron_left,
-                  color: Colors.black), // Icon barva nastavena na černou
+              icon: Icon(Icons.chevron_left, color: Colors.black),
               onPressed: () => _changeDay(-1),
             ),
             Text(
-              formattedDate, // Použití pomocné funkce pro zobrazení data
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black), // Text barva nastavena na černou
+              formattedDate,
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
             ),
             IconButton(
-              icon: Icon(Icons.chevron_right,
-                  color: Colors.black), // Icon barva nastavena na černou
+              icon: Icon(Icons.chevron_right, color: Colors.black),
               onPressed: () => _changeDay(1),
             ),
           ],
         ),
         centerTitle: true,
-        elevation: 0, // Odstranění stínu AppBaru
-        backgroundColor: Colors.transparent, // Transparentní AppBar
+        elevation: 0,
+        backgroundColor: Colors.transparent,
       ),
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
@@ -315,11 +304,11 @@ class _NewEntryPageState extends State<NewEntryPage> {
           ],
         ),
       ),
-      floatingActionButton: isKeyboardVisible
+      floatingActionButton: keyboardHeight > 0
           ? null
           : FloatingActionButton(
               backgroundColor: Colors.red,
-              child: const Icon(Icons.add),
+              child: Icon(Icons.add),
               onPressed: () {
                 // Akce pro FloatingActionButton
               },
