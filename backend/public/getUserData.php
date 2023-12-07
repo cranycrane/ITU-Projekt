@@ -26,7 +26,7 @@ if ($stmt->execute()) {
     $result = $stmt->get_result();
     if ($user = $result->fetch_assoc()) {
         $imagePath = "./uploads/" . $user['profileImg'];
-        if (file_exists($imagePath)) {
+        if ($user['profileImg'] != null and file_exists($imagePath)) {
             $imageData = base64_encode(file_get_contents($imagePath));
             $user['profileImg'] = 'data:image/jpeg;base64,' . $imageData;
         } else {

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'calendar_screen.dart';
 import 'settings_page.dart';
 import 'add_note.dart';
+import 'flow.dart';
+import 'diary_controller.dart';
+import 'package:intl/intl.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -11,6 +14,40 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   int _selectedIndex = 1; // Index pro vyhledávací stránku
   TextEditingController _searchController = TextEditingController();
+  List<FlowData> _allRecords = []; // List pro uložení všech záznamů
+  List<FlowData> _filteredRecords =
+      []; // Filtr pro zobrazení výsledků vyhledávání
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchAllRecords();
+  }
+
+  void _fetchAllRecords() async {
+    List<FlowData> records = await diaryController.readEntries();
+    setState(() {
+      _allRecords = records;
+    });
+  }
+
+  void _performSearch(String query) async {
+    List<FlowData> filteredRecords = await _filterEntries(query);
+    setState(() {
+      _filteredRecords = filteredRecords;
+    });
+  }
+
+  Future<List<FlowData>> _filterEntries(String query) async {
+    // Získání všech záznamu
+
+    // Filtrování záznamů
+    return _allRecords.where((entry) {
+      return entry.record1.contains(query) ||
+          entry.record2.contains(query) ||
+          entry.record3.contains(query);
+    }).toList();
+  }
 
   void _onItemTapped(int index) {
     if (index != _selectedIndex) {
@@ -20,7 +57,8 @@ class _SearchPageState extends State<SearchPage> {
 
       switch (index) {
         case 0:
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => CalendarPage()));
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => CalendarPage()));
           break;
         case 1:
           // Již jsme na vyhledávací stránce, není potřeba akce
@@ -29,7 +67,8 @@ class _SearchPageState extends State<SearchPage> {
           // Implementace přechodu na stránku s oznámeními, pokud máte
           break;
         case 3:
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => SettingsPage()));
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => SettingsPage()));
           break;
       }
     }
@@ -47,7 +86,9 @@ class _SearchPageState extends State<SearchPage> {
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Vyhledat...',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(30.0), borderSide: BorderSide.none),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    borderSide: BorderSide.none),
                 filled: true,
                 fillColor: Colors.white,
                 prefixIcon: Icon(Icons.search),
@@ -64,10 +105,12 @@ class _SearchPageState extends State<SearchPage> {
               ),
               onChanged: (value) {
                 // Implementace pro vyhledávání záznamů
+                _performSearch(value);
               },
+              onSubmitted: (value) {},
             ),
           ),
-          // Zde by měla být logika pro zobrazení výsledků vyhledávání
+          _buildSearchResults(),
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -78,20 +121,24 @@ class _SearchPageState extends State<SearchPage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             IconButton(
-              icon: Icon(Icons.home, color: _selectedIndex == 0 ? Colors.red : Colors.grey),
+              icon: Icon(Icons.home,
+                  color: _selectedIndex == 0 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
-              icon: Icon(Icons.search, color: _selectedIndex == 1 ? Colors.red : Colors.grey),
+              icon: Icon(Icons.search,
+                  color: _selectedIndex == 1 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(1),
             ),
             SizedBox(width: 48), // Prostor pro Floating Action Button
             IconButton(
-              icon: Icon(Icons.notifications_none, color: _selectedIndex == 2 ? Colors.red : Colors.grey),
+              icon: Icon(Icons.notifications_none,
+                  color: _selectedIndex == 2 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
-              icon: Icon(Icons.person_outline, color: _selectedIndex == 3 ? Colors.red : Colors.grey),
+              icon: Icon(Icons.person_outline,
+                  color: _selectedIndex == 3 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(3),
             ),
           ],
@@ -101,19 +148,43 @@ class _SearchPageState extends State<SearchPage> {
         backgroundColor: Colors.red,
         child: Icon(Icons.add),
         onPressed: () {
-             // Získání aktuálního data
-    DateTime currentDate = DateTime.now();
+          // Získání aktuálního data
+          DateTime currentDate = DateTime.now();
 
-    // Navigace na NewEntryPage s aktuálním datem
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => NewEntryPage(selectedDay: currentDate),
-      ),
-    );
+          // Navigace na NewEntryPage s aktuálním datem
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => NewEntryPage(selectedDay: currentDate),
+            ),
+          );
           // Implementace akce pro Floating Action Button
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
+
+  Widget _buildSearchResults() {
+    if (_searchController.text.isEmpty) {
+      return Center(child: Text("Zadejte hledaný výraz."));
+    }
+    if (_filteredRecords.isEmpty) {
+      return Center(child: Text("Žádné výsledky vyhledávání"));
+    }
+
+    return SingleChildScrollView(
+      child: Column(
+        children: _filteredRecords.map((entry) {
+          return ListTile(
+            title: Text(
+              DateFormat('dd.MM.yyyy').format(entry.day),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle:
+                Text("${entry.record1}\n${entry.record2}\n${entry.record3}"),
+          );
+        }).toList(),
+      ),
     );
   }
 }

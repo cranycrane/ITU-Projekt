@@ -18,7 +18,7 @@ class DiaryEntriesLoader {
             record2: entries[0]['record2'] ?? '',
             record3: entries[0]['record3'] ?? '',
             day: DateFormat('yyyy-MM-dd').parse(entries[0]['date']),
-            score: entries[0]['score'] ?? -1);
+            score: entries[0]['score'] ?? '');
       } else {
         return FlowData(day: selectedDay);
       }

@@ -5,7 +5,7 @@ class FlowData {
   String record2;
   String record3;
   DateTime day;
-  int score;
+  int? score;
 
   FlowData({
     this.record1 = '',
@@ -15,19 +15,13 @@ class FlowData {
     this.score = -1,
   });
 
-  static FlowData fromFields({
-    required String record1,
-    required String record2,
-    required String record3,
-    required DateTime day,
-    required int score,
-  }) {
+  factory FlowData.fromJson(Map<String, dynamic> json) {
     return FlowData(
-      record1: record1,
-      record2: record2,
-      record3: record3,
-      day: day,
-      score: score,
+      record1: json['record1'],
+      record2: json['record2'],
+      record3: json['record3'],
+      score: json['score'],
+      day: DateTime.parse(json['date']),
     );
   }
 

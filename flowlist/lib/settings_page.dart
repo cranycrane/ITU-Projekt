@@ -75,8 +75,7 @@ class _SettingsPageState extends State<SettingsPage> {
           .getUserData(); // Předpokládáme, že getUserName je ve vašem controlleru
       setState(() {
         isLoading = false;
-        _nameController.text =
-            '${user?.firstName ?? 'Jan'} ${user?.lastName ?? 'Novak'}';
+        _nameController.text = '${user?.firstName} ${user?.lastName}';
       });
     } catch (e) {
       // Zpracování případných chyb při získávání jména

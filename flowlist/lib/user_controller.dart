@@ -18,8 +18,8 @@ class UserController {
     if (response.statusCode == 200) {
       Map<String, dynamic> user = json.decode(response.body);
 
-      String firstName = user['firstName'] ?? '';
-      String lastName = user['lastName'] ?? '';
+      String firstName = user['firstName'] ?? 'Jan';
+      String lastName = user['lastName'] ?? 'Novak';
 
       if (user['profileImg'] != null) {
         File? profileImageFile;
@@ -38,6 +38,7 @@ class UserController {
             lastName: lastName,
             profileImage: profileImageFile);
       } else {
+        print(user);
         return UserProfile(
             firstName: firstName, lastName: lastName, profileImage: null);
       }

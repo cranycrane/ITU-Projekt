@@ -10,6 +10,7 @@ require 'mysql.php';
 if (!isset($_POST['userId'], $_POST['date'], $_POST['record1'], $_POST['record2'], $_POST['record3'], $_POST['score'])) {
     http_response_code(400);
     echo json_encode(['error' => 'Missing data']);
+    error_log("Received data: " . print_r($_POST, true), 3, "./log.txt");
     return;
 }
 

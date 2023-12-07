@@ -37,33 +37,44 @@ class DiaryController {
     String? userId = await StorageService().getUserId();
     final Map<String, dynamic> data = {
       'userId': userId,
-      'date': record.day,
+      'date': DateFormat('yyyy-MM-dd').format(record.day),
       'record1': record.record1,
       'record2': record.record2,
-      'record3': record.record3
+      'record3': record.record3,
+      'score': record.score
     };
+    print(data);
+    final request =
+        http.MultipartRequest('POST', Uri.parse('$baseUrl/create_entry.php'));
+    request.fields.addAll({
+      'userId': userId!,
+      'date': DateFormat('yyyy-MM-dd').format(record.day),
+      'record1': record.record1,
+      'record2': record.record2,
+      'record3': record.record3,
+      'score': record.score.toString(),
+    });
 
-    final response = await http.post(
-      Uri.parse('$baseUrl/create_entry'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: json.encode(data),
-    );
+    http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      return json.decode(response.body);
+      return response.statusCode;
     } else {
       throw Exception('Failed to create entry');
     }
   }
 
-  Future<dynamic> readEntries(int creatorId) async {
-    final response = await http
-        .get(Uri.parse('$baseUrl/read_entry.php?creator_id=$creatorId'));
+  Future<List<FlowData>> readEntries() async {
+    String? userId = await StorageService().getUserId();
+
+    final response =
+        await http.get(Uri.parse('$baseUrl/read_entry.php?userId=$userId'));
 
     if (response.statusCode == 200) {
-      return json.decode(response.body);
+      Iterable l = json.decode(response.body);
+      List<FlowData> records =
+          List<FlowData>.from(l.map((model) => FlowData.fromJson(model)));
+      return records;
     } else {
       throw Exception('Failed to read entries');
     }

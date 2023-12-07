@@ -17,7 +17,7 @@ class NewEntryPage extends StatefulWidget {
 }
 
 /*
-TODO: Napojit pridavani zaznamu
+TODO: Hlasku uzivateli po uspesnem pridani
 */
 class _NewEntryPageState extends State<NewEntryPage> {
   late DateTime selectedDate; // Přidáno pro sledování vybraného data
@@ -26,15 +26,17 @@ class _NewEntryPageState extends State<NewEntryPage> {
   final TextEditingController _thirdController = TextEditingController();
   final TextEditingController _ratingController = TextEditingController();
 
+  bool _isDataLoaded = false;
+  late Future<FlowData?> _recordFuture;
+
+  int _selectedIndex = -1; // Index pro navigaci v BottomAppBar
+
   @override
   void initState() {
     super.initState();
     selectedDate = widget.selectedDay ?? DateTime.now();
+    _recordFuture = _loadData(selectedDate);
   }
-
-  int _selectedIndex = -1; // Index pro navigaci v BottomAppBar
-
-  FlowData? record;
 
   @override
   void dispose() {
@@ -45,9 +47,28 @@ class _NewEntryPageState extends State<NewEntryPage> {
     super.dispose();
   }
 
+  // Funkce pro načtení záznamů z deníku
+  Future<FlowData?> _loadData(DateTime selectedDay) async {
+    DiaryEntriesLoader loader = DiaryEntriesLoader(diaryController);
+    return await loader.loadDiaryEntries(selectedDay);
+  }
+
+  Future<bool> createEntry(FlowData record) async {
+    try {
+      // Zde předpokládáme, že `diaryController.createEntry(record)` vrací budoucnost (Future)
+      await diaryController.createEntry(record);
+      return true; // Úspěch
+    } catch (e) {
+      print('Chyba při vytváření záznamu: $e');
+      return false; // Neúspěch
+    }
+  }
+
   void _changeDay(int days) {
     setState(() {
       selectedDate = selectedDate.add(Duration(days: days));
+      _isDataLoaded = false;
+      _recordFuture = _loadData(selectedDate);
     });
   }
 
@@ -125,107 +146,141 @@ class _NewEntryPageState extends State<NewEntryPage> {
             : NeverScrollableScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment:
-                CrossAxisAlignment.stretch, // Přidáno pro zarovnání
-            children: <Widget>[
-              SizedBox(height: statusBarHeight),
-              TextField(
-                controller: _firstController,
-                decoration: InputDecoration(
-                  labelText: 'První položka',
-                  border: const OutlineInputBorder(),
-                  fillColor: Colors.grey[200],
-                  filled: true,
-                ),
-                maxLines: 5,
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _secondController,
-                decoration: InputDecoration(
-                  labelText: 'Druhá položka',
-                  border: const OutlineInputBorder(),
-                  fillColor: Colors.grey[200],
-                  filled: true,
-                ),
-                maxLines: 5,
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _thirdController,
-                decoration: InputDecoration(
-                  labelText: 'Třetí položka',
-                  border: const OutlineInputBorder(),
-                  fillColor: Colors.grey[200],
-                  filled: true,
-                ),
-                maxLines: 5,
-              ),
-              SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Flexible(
-                    child: Text(
-                      'Jak bys ohodnotil svůj den?',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 80, // Nastavení pevné šířky pro textové pole
-                    child: TextField(
-                      controller: _ratingController,
+          child: FutureBuilder<FlowData?>(
+            future: _recordFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Došlo k chybě při načítání dat');
+              } else {
+                // Aktualizace textových polí podle načtených dat
+                if (!_isDataLoaded && snapshot.data != null) {
+                  final data = snapshot.data;
+                  _firstController.text = data?.record1 ?? '';
+                  _secondController.text = data?.record2 ?? '';
+                  _thirdController.text = data?.record3 ?? '';
+                  _ratingController.text =
+                      data?.score == -1 ? '' : data!.score!.toString();
+                  _isDataLoaded = true;
+                }
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment:
+                      CrossAxisAlignment.stretch, // Přidáno pro zarovnání
+                  children: <Widget>[
+                    SizedBox(height: statusBarHeight),
+                    TextField(
+                      controller: _firstController,
                       decoration: InputDecoration(
-                        hintText: '/10',
-                        border: OutlineInputBorder(),
+                        labelText: 'První položka',
+                        border: const OutlineInputBorder(),
+                        fillColor: Colors.grey[200],
+                        filled: true,
                       ),
-                      keyboardType: TextInputType.number,
+                      maxLines: 5,
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              Row(
-                // Tlačítka vedle sebe s mezerou
-                children: <Widget>[
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Akce pro smazání dat
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.grey, // Barva tlačítka SMAZAT
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(5), // Bez zaoblení
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: _secondController,
+                      decoration: InputDecoration(
+                        labelText: 'Druhá položka',
+                        border: const OutlineInputBorder(),
+                        fillColor: Colors.grey[200],
+                        filled: true,
+                      ),
+                      maxLines: 5,
+                    ),
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: _thirdController,
+                      decoration: InputDecoration(
+                        labelText: 'Třetí položka',
+                        border: const OutlineInputBorder(),
+                        fillColor: Colors.grey[200],
+                        filled: true,
+                      ),
+                      maxLines: 5,
+                    ),
+                    SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Flexible(
+                          child: Text(
+                            'Jak bys ohodnotil svůj den?',
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                      ),
-                      child: Text('SMAZAT'),
-                    ),
-                  ),
-                  SizedBox(width: 8), // Mezera mezi tlačítky
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Akce pro uložení dat
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.red, // Barva tlačítka ULOŽIT
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(5), // Bez zaoblení
+                        SizedBox(
+                          width: 80, // Nastavení pevné šířky pro textové pole
+                          child: TextField(
+                            controller: _ratingController,
+                            decoration: InputDecoration(
+                              hintText: '/10',
+                              border: OutlineInputBorder(),
+                            ),
+                            keyboardType: TextInputType.number,
+                          ),
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                      ),
-                      child: Text('ULOŽIT'),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    SizedBox(height: 16),
+                    Row(
+                      // Tlačítka vedle sebe s mezerou
+                      children: <Widget>[
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // Akce pro smazání dat
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.grey, // Barva tlačítka SMAZAT
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(5), // Bez zaoblení
+                              ),
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                            ),
+                            child: Text('SMAZAT'),
+                          ),
+                        ),
+                        SizedBox(width: 8), // Mezera mezi tlačítky
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              FlowData record = FlowData(
+                                  record1: _firstController.text,
+                                  record2: _secondController.text,
+                                  record3: _thirdController.text,
+                                  score: int.tryParse(_ratingController.text),
+                                  day: selectedDate);
+
+                              bool success = await createEntry(record);
+                              String message = success
+                                  ? 'Záznam byl úspěšně přidán'
+                                  : 'Přidání záznamu se nezdařilo';
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(message)));
+
+                              if (success) {
+                                _onItemTapped(0);
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Colors.red, // Barva tlačítka ULOŽIT
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                            ),
+                            child: Text('ULOŽIT'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              }
+            },
           ),
         ),
       ),
