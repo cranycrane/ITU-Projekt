@@ -1,23 +1,30 @@
 import 'package:flutter/material.dart';
-import 'record_controller.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'settings_page.dart';
 import 'search_page.dart'; // Předpokládáme, že máte soubor search_page.dart
 import 'add_note.dart';
 import 'diary_controller.dart';
+import 'diary_entries_loader.dart';
+import 'flow.dart';
 
 class CalendarPage extends StatefulWidget {
+  const CalendarPage({Key? key}) : super(key: key);
+
   @override
-  _CalendarPageState createState() => _CalendarPageState();
+  CalendarPageState createState() => CalendarPageState();
 }
 
-class _CalendarPageState extends State<CalendarPage> {
+class CalendarPageState extends State<CalendarPage> {
   final CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
+
+  late Future<FlowData?> _recordFuture;
+
   String record1 = '';
   String record2 = '';
   String record3 = '';
+  String score = '';
 
   int _selectedIndex = 0;
 
@@ -25,32 +32,13 @@ class _CalendarPageState extends State<CalendarPage> {
   void initState() {
     super.initState();
     _selectedDay = DateTime.now();
-    loadDiaryEntries(_selectedDay);
+    _recordFuture = _loadData(_selectedDay);
   }
 
   // Funkce pro načtení záznamů z deníku
-  Future<void> loadDiaryEntries(DateTime selectedDay) async {
-    try {
-      List<Map<String, dynamic>> entries =
-          await diaryController.readEntry(selectedDay);
-
-      setState(() {
-        if (entries.isNotEmpty) {
-          // Předpokládáme, že každý záznam má klíče 'record1', 'record2', 'record3'
-          record1 = entries[0]['record1'] ?? '';
-          record2 = entries[0]['record2'] ?? '';
-          record3 = entries[0]['record3'] ?? '';
-        } else {
-          // Pro prázdný seznam záznamů nastavíme výchozí hodnoty
-          record1 = '';
-          record2 = '';
-          record3 = '';
-        }
-      });
-    } catch (error) {
-      // Zpracování chyby
-      print('Chyba při načítání záznamů: $error');
-    }
+  Future<FlowData?> _loadData(DateTime selectedDay) async {
+    DiaryEntriesLoader loader = DiaryEntriesLoader(diaryController);
+    return await loader.loadDiaryEntries(selectedDay);
   }
 
   void _onItemTapped(int index) {
@@ -76,8 +64,8 @@ class _CalendarPageState extends State<CalendarPage> {
       case 3:
         // Navigace na SettingsPage, pokud uživatel není již na této stránce
 
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => SettingsPage()));
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const SettingsPage()));
         break;
       default:
         break;
@@ -165,7 +153,7 @@ class _CalendarPageState extends State<CalendarPage> {
                       setState(() {
                         _focusedDay = focusedDay;
                         _selectedDay = selectedDay;
-                        loadDiaryEntries(selectedDay);
+                        _recordFuture = _loadData(selectedDay);
                       });
                     },
                     onPageChanged: (focusedDay) {
@@ -189,22 +177,29 @@ class _CalendarPageState extends State<CalendarPage> {
           ),
           const SizedBox(
               height: 20), // volitelná mezera mezi kalendářem a textovým polem
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(record1),
+          FutureBuilder<FlowData?>(
+            future: _recordFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Došlo k chybě při načítání dat');
+              } else {
+                FlowData? record = snapshot.data;
+                return Column(
+                  children: [
+                    Text(record?.record1 ?? ''),
+                    Text(record?.record2 ?? ''),
+                    Text(record?.record3 ?? ''),
+                  ],
+                );
+              }
+            },
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(record2),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(record3),
-          )
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
+        shape: const CircularNotchedRectangle(),
         notchMargin: 6.0,
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -220,7 +215,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   color: _selectedIndex == 1 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(1),
             ),
-            SizedBox(
+            const SizedBox(
                 width: 48), // The empty space in middle of the BottomAppBar
             IconButton(
               icon: Icon(Icons.notifications_none,
@@ -240,11 +235,11 @@ class _CalendarPageState extends State<CalendarPage> {
         child: Icon(Icons.add),
         onPressed: () {
           // Akce pro FloatingActionButton
-           Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => NewEntryPage(selectedDay: _selectedDay),
-      ),
-    );
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => NewEntryPage(selectedDay: _selectedDay),
+            ),
+          );
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

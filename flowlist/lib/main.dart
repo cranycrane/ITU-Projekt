@@ -3,8 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'firebase_options.dart';
-import 'auth_controller.dart';
-import 'auth_page.dart';
 import 'calendar_screen.dart';
 import 'diary_controller.dart';
 import 'deviceUtils.dart';
@@ -27,13 +25,15 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'FlowList',
       home: CalendarPage(),
     );

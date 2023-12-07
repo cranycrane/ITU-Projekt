@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Počítač: db
--- Vytvořeno: Úte 05. pro 2023, 14:03
+-- Vytvořeno: Čtv 07. pro 2023, 14:27
 -- Verze serveru: 8.2.0
 -- Verze PHP: 8.2.8
 
@@ -44,7 +44,10 @@ CREATE TABLE `diary` (
 INSERT INTO `diary` (`id`, `record1`, `record2`, `record3`, `score`, `date`, `userId`) VALUES
 (1, 'ahoj', 'update', 'fkdsjfkldsjgkljfijfig', 7, '2023-12-05', 1),
 (2, 'ahoj', 'druhy zaznam', 'jfkdsjfklsdfjlds neco penis', 7, '2023-12-06', 1),
-(3, 'ahoj', 'druhy zaznammmm', 'jfkdsjfklsdfjlds neco penis', 7, '2023-12-04', 1);
+(3, 'ahoj', '', '', 7, '2023-12-04', 1),
+(4, 'dsfdsfsdfdsf', '', '', 7, '2023-12-07', 1),
+(5, 'ahoj', 'já jSn', 'Kuba\npenis\n', 7, '2023-12-06', 2),
+(6, 'ahoj já jsem Mates ', '', '', 7, '2023-12-07', 2);
 
 -- --------------------------------------------------------
 
@@ -55,17 +58,19 @@ INSERT INTO `diary` (`id`, `record1`, `record2`, `record3`, `score`, `date`, `us
 CREATE TABLE `users` (
   `id` int NOT NULL,
   `deviceId` text NOT NULL,
-  `firstName` int DEFAULT NULL,
-  `lastName` int DEFAULT NULL,
-  `profileImg` blob
+  `firstName` text,
+  `lastName` text,
+  `profileImg` varchar(255) DEFAULT NULL,
+  `firstSignIn` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Vypisuji data pro tabulku `users`
 --
 
-INSERT INTO `users` (`id`, `deviceId`, `firstName`, `lastName`, `profileImg`) VALUES
-(1, 'OSM1.180201.037', NULL, NULL, NULL);
+INSERT INTO `users` (`id`, `deviceId`, `firstName`, `lastName`, `profileImg`, `firstSignIn`) VALUES
+(1, 'OSM1.180201.037', 'Jakub', 'PerkoPenis', '657070bb82c12image_cropper_1701867697698.jpg', NULL),
+(2, 'PPR1.180610.011', 'Jan', 'penis', '6571c00ea1ff5image_cropper_1701953547378.jpg', NULL);
 
 --
 -- Indexy pro exportované tabulky
@@ -92,13 +97,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pro tabulku `diary`
 --
 ALTER TABLE `diary`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pro tabulku `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Omezení pro exportované tabulky
