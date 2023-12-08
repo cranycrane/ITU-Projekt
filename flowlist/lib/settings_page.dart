@@ -9,6 +9,7 @@ import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 import 'user_profile.dart';
 
+
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
@@ -65,6 +66,49 @@ class _SettingsPageState extends State<SettingsPage> {
       }
     }
   }
+
+  Future<void> _showDeleteAccountDialog() async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // Uživatel musí stisknout tlačítko pro zavření dialogu
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text(
+          'Potvrzení',
+          style: TextStyle(color: Colors.red), // Nastavení barvy nadpisu
+        ),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: const <Widget>[
+              Text('Opravdu si přejete smazat svůj účet? Tato akce je nevratná.'),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text(
+              'Zrušit',
+              style: TextStyle(color: Colors.black), // Nastavení barvy textu
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: Text(
+              'Smazat',
+              style: TextStyle(color: Colors.red), // Nastavení barvy textu pro akci smazání
+            ),
+            onPressed: () {
+              // Zde by měla být logika pro smazání účtu
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
 
   Future<void> _requestPermissions() async {
     await Permission.camera.request();
@@ -124,6 +168,30 @@ class _SettingsPageState extends State<SettingsPage> {
         // Pro tyto indexy není třeba žádná akce, protože jsme již na stránce nastavení
         break;
     }
+  }
+
+  Widget _buildStatisticRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 18,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -215,15 +283,13 @@ class _SettingsPageState extends State<SettingsPage> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 24.0),
               child: ElevatedButton(
-                onPressed: () {
-                  // Implementace odhlášení
-                },
+                onPressed: _showDeleteAccountDialog,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
                   minimumSize: const Size(double.infinity,
                       50), // Nastavení šířky na šířku obrazovky a výšku na 50
                 ),
-                child: const Text('ODHLÁSIT SE'),
+                child: const Text('SMAZAT ÚČET'),
               ),
             ),
             FutureBuilder<Map<String, dynamic>>(
@@ -232,33 +298,42 @@ class _SettingsPageState extends State<SettingsPage> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return CircularProgressIndicator();
                 } else if (snapshot.hasError) {
-                  return Text('Chyba při načítání statistik');
+                  return const Text('Chyba při načítání statistik',
+                      style: TextStyle(
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight: FontWeight.bold,
+                    ),
+                   );
                 } else if (!snapshot.hasData) {
-                  return Text('Žádné statistiky k zobrazení');
+                  return const Text('Žádné statistiky k zobrazení',
+                      style: TextStyle(
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight: FontWeight.bold,
+                     ),
+                   );
                 } else {
                   statistics = snapshot.data;
-                  return Column(
-                    children: <Widget>[
-                      Text(
-                          'Celkem dnů s Flow-lístkem: ${statistics!['totalDays']}'),
-                      Text(
-                          'Celkem vyplněných dnů: ${statistics!['filledDays']}'),
-                      Text(
-                          'Celkem nevyplněných dnů: ${statistics!['unfilledDays']}'),
-                      Text('Celkový počet slov: ${statistics!['totalWords']}'),
-                      Text(
-                          'Průměrný počet slov na záznam: ${statistics!['averageWordsPerEntry']}'),
-                      Text(
-                          'Nejvíce slov v záznamu: ${statistics!['longestEntryLength']}'),
-                      // Další statistiky...
-                    ],
-                  );
-                }
-              },
-            )
-          ],
-        ),
-      ),
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _buildStatisticRow('Celkem dnů s Flow-lístkem:', statistics!['totalDays'].toString()),
+                _buildStatisticRow('Celkem vyplněných dnů:', statistics!['filledDays'].toString()),
+                _buildStatisticRow('Celkem nevyplněných dnů:', statistics!['unfilledDays'].toString()),
+                _buildStatisticRow('Celkový počet slov:', statistics!['totalWords'].toString()),
+                _buildStatisticRow('Průměrný počet slov na záznam:', statistics!['averageWordsPerEntry'].toString()),
+                _buildStatisticRow('Nejvíce slov v záznamu', statistics!['longestEntryLength'].toString()),
+                // Add more statistics as needed
+              ],
+            ),
+          );
+        }
+      },
+    ),
+  ],
+),
+  ),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         notchMargin: 6.0,
