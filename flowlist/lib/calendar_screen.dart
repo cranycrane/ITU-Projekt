@@ -188,7 +188,7 @@ class CalendarPageState extends State<CalendarPage> {
                     return Column(
                       children: [
                         if ((record?.record1 ?? '').isNotEmpty)
-                          Container(
+                          Container( 
                             width: 380,
                             constraints: BoxConstraints(minHeight: 50.0),
                             decoration: BoxDecoration(
