@@ -186,7 +186,7 @@ class CalendarPageState extends State<CalendarPage> {
                   } else {
                     FlowData? record = snapshot.data;
                     return Column(
-                      children: [
+                      children: [ 
                         if ((record?.record1 ?? '').isNotEmpty)
                           Container( 
                             width: 380,
