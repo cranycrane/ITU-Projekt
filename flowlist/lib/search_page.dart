@@ -39,13 +39,20 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<List<FlowData>> _filterEntries(String query) async {
-    // Získání všech záznamu
+    // Převedení hledaného řetězce na malá písmena
+    String lowerCaseQuery = query.toLowerCase();
 
     // Filtrování záznamů
     return _allRecords.where((entry) {
-      return entry.record1.contains(query) ||
-          entry.record2.contains(query) ||
-          entry.record3.contains(query);
+      // Převedení obsahu záznamů na malá písmena pro porovnání
+      bool matchesRecord1 =
+          entry.record1.toLowerCase().contains(lowerCaseQuery);
+      bool matchesRecord2 =
+          entry.record2.toLowerCase().contains(lowerCaseQuery);
+      bool matchesRecord3 =
+          entry.record3.toLowerCase().contains(lowerCaseQuery);
+
+      return matchesRecord1 || matchesRecord2 || matchesRecord3;
     }).toList();
   }
 
