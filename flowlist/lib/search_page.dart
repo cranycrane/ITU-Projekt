@@ -98,10 +98,10 @@ class _SearchPageState extends State<SearchPage> {
                     borderSide: BorderSide.none),
                 filled: true,
                 fillColor: Colors.white,
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: Icon(Icons.search, color: Color(0xFFE50E2B)),
                 suffixIcon: _searchController.text.isNotEmpty
                     ? IconButton(
-                        icon: Icon(Icons.clear),
+                        icon: Icon(Icons.clear, color: Color(0xFFE50E2B)),
                         onPressed: () {
                           setState(() {
                             _searchController.clear();
@@ -128,31 +128,31 @@ class _SearchPageState extends State<SearchPage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             IconButton(
-              icon: Icon(Icons.home,
-                  color: _selectedIndex == 0 ? Colors.red : Colors.grey),
+              icon: Icon(Icons.home, // color: Color(0xFFE50E2B)
+                  color: _selectedIndex == 0 ? Color(0xFFE50E2B) : Colors.grey),
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
               icon: Icon(Icons.search,
-                  color: _selectedIndex == 1 ? Colors.red : Colors.grey),
+                  color: _selectedIndex == 1 ? Color(0xFFE50E2B) : Colors.grey),
               onPressed: () => _onItemTapped(1),
             ),
             SizedBox(width: 48), // Prostor pro Floating Action Button
             IconButton(
               icon: Icon(Icons.notifications_none,
-                  color: _selectedIndex == 2 ? Colors.red : Colors.grey),
+                  color: _selectedIndex == 2 ? Color(0xFFE50E2B) : Colors.grey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
               icon: Icon(Icons.person_outline,
-                  color: _selectedIndex == 3 ? Colors.red : Colors.grey),
+                  color: _selectedIndex == 3 ? Color(0xFFE50E2B) : Colors.grey),
               onPressed: () => _onItemTapped(3),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red,
+        backgroundColor: Color(0xFFE50E2B),
         child: Icon(Icons.add),
         onPressed: () {
           // Získání aktuálního data
@@ -171,27 +171,89 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget _buildSearchResults() {
-    if (_searchController.text.isEmpty) {
-      return Center(child: Text("Zadejte hledaný výraz."));
-    }
-    if (_filteredRecords.isEmpty) {
-      return Center(child: Text("Žádné výsledky vyhledávání"));
-    }
-
-    return SingleChildScrollView(
-      child: Column(
-        children: _filteredRecords.map((entry) {
-          return ListTile(
-            title: Text(
-              DateFormat('dd.MM.yyyy').format(entry.day),
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            subtitle:
-                Text("${entry.record1}\n${entry.record2}\n${entry.record3}"),
-          );
-        }).toList(),
-      ),
-    );
+Widget _buildSearchResults() {
+  if (_searchController.text.isEmpty) {
+    return Center(child: Text("Zadejte hledaný výraz."));
   }
+  if (_filteredRecords.isEmpty) {
+    return Center(child: Text("Žádné výsledky vyhledávání"));
+  }
+
+  String searchQuery = _searchController.text.toLowerCase();
+
+  List<Widget> searchResultsWidgets = [];
+  _filteredRecords.forEach((entry) {
+    // Kontrola, zda některý záznam obsahuje vyhledávané slovo
+    bool containsInRecord1 = entry.record1.toLowerCase().contains(searchQuery);
+    bool containsInRecord2 = entry.record2.toLowerCase().contains(searchQuery);
+    bool containsInRecord3 = entry.record3.toLowerCase().contains(searchQuery);
+
+        if (containsInRecord1 || containsInRecord2 || containsInRecord3) {
+      searchResultsWidgets.add(
+        Card(
+          elevation: 2,
+          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => NewEntryPage(selectedDay: entry.day),
+              ));
+            },
+            child: ListTile(
+              title: Text(
+                DateFormat('dd.MM.yyyy').format(entry.day),
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (containsInRecord1) _highlightSearchTerm(entry.record1, searchQuery),
+                  if (containsInRecord2) _highlightSearchTerm(entry.record2, searchQuery),
+                  if (containsInRecord3) _highlightSearchTerm(entry.record3, searchQuery),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+  });
+
+  return SingleChildScrollView(
+    child: Column(children: searchResultsWidgets),
+  );
 }
+
+
+// Helper method to highlight search term
+Widget _highlightSearchTerm(String text, String searchTerm) {
+  if (searchTerm.isEmpty) {
+    return Text(text);
+  }
+
+  List<TextSpan> spans = [];
+  int start = 0;
+  int indexOfHighlight;
+  do {
+    indexOfHighlight = text.toLowerCase().indexOf(searchTerm.toLowerCase(), start);
+    if (indexOfHighlight < 0) {
+      // Přidání zbývajícího textu, který neobsahuje vyhledávaný výraz
+      spans.add(TextSpan(text: text.substring(start)));
+      break;
+    }
+    if (indexOfHighlight > start) {
+      // Přidání textu před vyhledávaným výrazem
+      spans.add(TextSpan(text: text.substring(start, indexOfHighlight)));
+    }
+    // Přidání zvýrazněného textu s vyhledávaným výrazem
+    spans.add(TextSpan(
+      text: text.substring(indexOfHighlight, indexOfHighlight + searchTerm.length),
+      style: TextStyle(color: Color(0xFFE50E2B)), // Změna barvy textu na červenou color: Color(0xFFE50E2B)
+    ));
+    start = indexOfHighlight + searchTerm.length;
+  } while (start < text.length);
+
+  return RichText(text: TextSpan(style: TextStyle(color: Colors.black), children: spans));
+}
+}
+
