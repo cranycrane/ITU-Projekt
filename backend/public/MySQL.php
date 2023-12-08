@@ -20,14 +20,15 @@ function getUserId(string $deviceId, \mysqli $conn): string {
             return $user['id'];
         } else {
             // Uživatel nenalezen, vytvoření nového uživatele
-            $insertSql = "INSERT INTO users (deviceId) VALUES (?)";
+            $insertSql = "INSERT INTO users (deviceId, firstSignIn) VALUES (?, ?)";
             $insertStmt = $conn->prepare($insertSql);
 
             if ($insertStmt === false) {
                 throw new \Exception('Chyba při přípravě SQL dotazu pro vložení: ' . $conn->error);
             }
-
-            $insertStmt->bind_param("s", $deviceId);
+            $firstSignIn = new \DateTime();
+            $firstSignInFormatted = $firstSignIn->format('Y-m-d');
+            $insertStmt->bind_param("ss", $deviceId, $firstSignInFormatted);
 
             if ($insertStmt->execute()) {
                 // Vrácení ID nově vytvořeného uživatele

@@ -4,7 +4,7 @@
 use function App\findDay;
 use function App\getUserId;
 
-require 'mysql.php';
+require './mysql.php';
 
 
 if (!isset($_POST['userId'], $_POST['date'], $_POST['record1'], $_POST['record2'], $_POST['record3'], $_POST['score'])) {

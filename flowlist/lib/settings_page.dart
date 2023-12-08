@@ -8,7 +8,6 @@ import 'package:image_cropper/image_cropper.dart';
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 import 'user_profile.dart';
-import 'calendar_screen.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -19,6 +18,9 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   UserProfile? user;
+
+  Map<String, dynamic>? statistics;
+
   bool isLoading = true;
 
   int _selectedIndex = 3; // Index pro nastavení stránky
@@ -73,6 +75,7 @@ class _SettingsPageState extends State<SettingsPage> {
     try {
       user = await userController
           .getUserData(); // Předpokládáme, že getUserName je ve vašem controlleru
+
       setState(() {
         isLoading = false;
         _nameController.text = '${user?.firstName} ${user?.lastName}';
@@ -223,6 +226,36 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: const Text('ODHLÁSIT SE'),
               ),
             ),
+            FutureBuilder<Map<String, dynamic>>(
+              future: userController.getStatistics(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Chyba při načítání statistik');
+                } else if (!snapshot.hasData) {
+                  return Text('Žádné statistiky k zobrazení');
+                } else {
+                  statistics = snapshot.data;
+                  return Column(
+                    children: <Widget>[
+                      Text(
+                          'Celkem dnů s Flow-lístkem: ${statistics!['totalDays']}'),
+                      Text(
+                          'Celkem vyplněných dnů: ${statistics!['filledDays']}'),
+                      Text(
+                          'Celkem nevyplněných dnů: ${statistics!['unfilledDays']}'),
+                      Text('Celkový počet slov: ${statistics!['totalWords']}'),
+                      Text(
+                          'Průměrný počet slov na záznam: ${statistics!['averageWordsPerEntry']}'),
+                      Text(
+                          'Nejvíce slov v záznamu: ${statistics!['longestEntryLength']}'),
+                      // Další statistiky...
+                    ],
+                  );
+                }
+              },
+            )
           ],
         ),
       ),

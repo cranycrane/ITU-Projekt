@@ -3,7 +3,7 @@
 
 use function App\getUserId;
 
-include './MySQL.php';
+include './mysql.php';
 
 if (!isset($_GET['userId'])) {
     http_response_code(400);

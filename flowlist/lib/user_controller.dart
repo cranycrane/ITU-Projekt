@@ -97,6 +97,20 @@ class UserController {
           'Chyba při aktualizaci profilového obrázku: ${response.statusCode}');
     }
   }
+
+  Future<Map<String, dynamic>> getStatistics() async {
+    String? userId = await StorageService().getUserId();
+
+    final response = await http.delete(
+      Uri.parse('$baseUrl/getStatistics.php?userId=$userId'),
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Pri mazani zaznamu doslo k chybe');
+    }
+  }
 }
 
 final userController = UserController();

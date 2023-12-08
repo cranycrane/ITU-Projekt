@@ -29,7 +29,7 @@ class DiaryController {
       return userId;
     } else {
       Map<String, dynamic> result = json.decode(response.body);
-      throw Exception('Failed to get userId: $result');
+      throw Exception('Pri identifikaci uzivatele doslo k chybe');
     }
   }
 
@@ -60,7 +60,7 @@ class DiaryController {
     if (response.statusCode == 200) {
       return response.statusCode;
     } else {
-      throw Exception('Failed to create entry');
+      throw Exception('Pri vytvareni zaznamu doslo k chybe');
     }
   }
 
@@ -76,7 +76,7 @@ class DiaryController {
           List<FlowData>.from(l.map((model) => FlowData.fromJson(model)));
       return records;
     } else {
-      throw Exception('Failed to read entries');
+      throw Exception('Pri cteni zaznamu doslo k chybe');
     }
   }
 
@@ -99,7 +99,7 @@ class DiaryController {
 
       return entries;
     } else {
-      throw Exception('Failed to read entries');
+      throw Exception('Pri cteni zaznamu doslo k chybe');
     }
   }
 
@@ -115,19 +115,22 @@ class DiaryController {
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
-      throw Exception('Failed to update entry');
+      throw Exception('Pri aktualizaci zaznamu doslo k chybe');
     }
   }
 
-  Future<dynamic> deleteEntry(int id) async {
+  Future<dynamic> deleteEntry(DateTime date) async {
+    String? userId = await StorageService().getUserId();
+    String formattedDate = DateFormat('yyyy-MM-dd').format(date);
+
     final response = await http.delete(
-      Uri.parse('$baseUrl/delete_entry?id=$id'),
+      Uri.parse('$baseUrl/delete_entry?userId=$userId&date=$formattedDate'),
     );
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
-      throw Exception('Failed to delete entry');
+      throw Exception('Pri mazani zaznamu doslo k chybe');
     }
   }
 }

@@ -1,6 +1,6 @@
 <?php
 // Připojení k databázi
-include './MySQL.php';
+include './mysql.php';
 
 // Přijetí POST dat
 $id = $_POST['id'];

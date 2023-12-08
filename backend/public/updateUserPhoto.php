@@ -1,7 +1,7 @@
 <?php
 
 
-require 'mysql.php';
+require './mysql.php';
 
 
 if (!isset($_POST['userId']) || !isset($_FILES['profileImg'])) {

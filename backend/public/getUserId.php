@@ -4,7 +4,7 @@ namespace App;
 
 use Exception;
 
-require 'mysql.php';
+require './mysql.php';
 
 if (!isset($_POST['deviceId'])) {
     http_response_code(400);
@@ -17,7 +17,7 @@ $deviceId = $_POST['deviceId'];
 try {
     $userId = getUserId($deviceId, $conn);
 }
-catch (Exception) {
+catch (Exception $e) {
     http_response_code(400);
     echo json_encode(['error' => 'Missing deviceId']); 
 }

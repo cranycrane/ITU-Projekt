@@ -35,7 +35,7 @@ CREATE TABLE `diary` (
   `score` int NOT NULL,
   `date` date NOT NULL,
   `userId` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `diary`
@@ -62,7 +62,7 @@ CREATE TABLE `users` (
   `lastName` text,
   `profileImg` varchar(255) DEFAULT NULL,
   `firstSignIn` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `users`

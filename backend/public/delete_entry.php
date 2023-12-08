@@ -3,26 +3,20 @@
 
 use function App\getUserId;
 
-include './MySQL.php';
+include './mysql.php';
+
+if (!isset($_GET['userId'], $_GET['date'])) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Missing dataaa']);
+    error_log("Received data: " . print_r($_POST, true), 3, "./log.txt");
+    return;
+}
 
 // Přijetí ID záznamu
-$id = $_GET['id'] ?? null;
-$deviceId = $_GET['deviceId'] ?? null;
+$userId = $_POST['userId'] ?? null;
+$date = $_POST['date'] ?? null;
 
-if (is_null($id)) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Missing id']);
-    exit;
-}
-else if (is_null($deviceId)) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Missing deviceId']);
-    exit;
-}
-
-$userId = getUserId($deviceId, $conn);
-
-$sql = "DELETE FROM diary WHERE id = ? AND userId = ?";
+$sql = "DELETE FROM diary WHERE userId = ? AND date = ?";
 $stmt = $conn->prepare($sql);
 
 if ($stmt === false) {
@@ -30,7 +24,7 @@ if ($stmt === false) {
     throw new \Exception('Chyba při přípravě SQL dotazu: ' . $conn->error);
 }
 
-$stmt->bind_param("ss", $id, $userId);
+$stmt->bind_param("ss", $userId, $date);
 
 if ($stmt->execute()) {
     $result = $stmt->affected_rows > 0;
