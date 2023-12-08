@@ -76,127 +76,170 @@ class CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(
-            child: SingleChildScrollView( // Přidáváme SingleChildScrollView
-              child: Container(
-                padding: const EdgeInsets.only(top: 30.0), // Adjust the top padding as needed
-                child: SizedBox(
-                  height: 450,
-                  width: 400,
-                  child: TableCalendar(
-                    firstDay: DateTime.utc(2020, 10, 16),
-                    lastDay: DateTime.utc(2030, 3, 14),
-                    locale: 'cs_CZ',
-                    startingDayOfWeek: StartingDayOfWeek.monday,
-                    focusedDay: _focusedDay,
-                    calendarFormat: _calendarFormat,
-                    shouldFillViewport: true,
-                    calendarStyle: CalendarStyle(
-                      defaultDecoration: BoxDecoration(
-                        shape: BoxShape.rectangle, // You can use different shapes like BoxShape.rectangle
-                        color: Color(0xFFEAEAEA), 
-                        borderRadius: BorderRadius.circular(10.0)
-                      ),
-                      defaultTextStyle: TextStyle(
-                        fontSize: 15, // Set the font size as needed
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black, // Set the text color as needed
-                      ),
-                      weekendDecoration: BoxDecoration(
-                        shape: BoxShape.rectangle, // You can use different shapes like BoxShape.rectangle
-                        color: Color(0xFFEAEAEA), 
-                        borderRadius: BorderRadius.circular(10.0) 
-                      ),
-                      weekendTextStyle: TextStyle(
-                        fontSize: 15, // Set the font size as needed
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black, // Set the text color as needed
-                      ),
-                      outsideDecoration: BoxDecoration(
-                        shape: BoxShape.rectangle, // You can use different shapes like BoxShape.rectangle
-                        color: Color(0xFFBBBBBB), 
-                        borderRadius: BorderRadius.circular(10.0)      // Background color of the day cell
-                      ),
-                      outsideTextStyle: TextStyle(
-                        fontSize: 15, // Set the font size as needed
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF6E6E6E), // Set the text color as needed
-                      ),
-                      selectedDecoration: BoxDecoration(
-                        shape: BoxShape.rectangle, // You can use different shapes like BoxShape.rectangle
-                        color: Color(0xFFE50E2B), 
-                        borderRadius: BorderRadius.circular(10.0)
-                      ),
-                      selectedTextStyle: TextStyle(
-                        fontSize: 15, // Set the font size as needed
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white, // Set the text color as needed
-                      ),
-                      todayDecoration: BoxDecoration(
-                        shape: BoxShape.rectangle, // You can use different shapes like BoxShape.rectangle
-                        color: Color(0xFFE2AFB6), 
-                        borderRadius: BorderRadius.circular(10.0)
-                      ),
-                      todayTextStyle: TextStyle(
-                        fontSize: 15, // Set the font size as needed
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black, // Set the text color as needed
-                      ),
-
-                      // You can add more customization options as needed
-                    ),
-                    selectedDayPredicate: (day) {
-                      return isSameDay(_selectedDay, day);
-                    },
-                    onDaySelected: (selectedDay, focusedDay) {
-                      setState(() {
-                        _focusedDay = focusedDay;
-                        _selectedDay = selectedDay;
-                        _recordFuture = _loadData(selectedDay);
-                      });
-                    },
-                    onPageChanged: (focusedDay) {
-                      _focusedDay = focusedDay;
-                    },
-                    headerStyle: const HeaderStyle(
-                      formatButtonVisible: false,
-                      titleCentered: true,
-                      titleTextStyle: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold
-                      ),
-                      leftChevronIcon: Icon(Icons.chevron_left, size: 40),
-                      rightChevronIcon: Icon(Icons.chevron_right, size: 40),
-                    ),
-                    // Další přizpůsobení vzhledu, pokud je to potřeba
-                  ),
-                )
-              )
+          const SizedBox(
+            height: 20,
+          ),
+          SizedBox(
+            height: 450,
+            width: 400,
+            child: TableCalendar(
+              firstDay: DateTime.utc(2020, 10, 16),
+              lastDay: DateTime.utc(2030, 3, 14),
+              locale: 'cs_CZ',
+              startingDayOfWeek: StartingDayOfWeek.monday,
+              focusedDay: _focusedDay,
+              calendarFormat: _calendarFormat,
+              shouldFillViewport: true,
+              calendarStyle: CalendarStyle(
+                defaultDecoration: BoxDecoration(
+                  shape: BoxShape.rectangle, // You can use different shapes like BoxShape.rectangle
+                  color: Color(0xFFEAEAEA), 
+                  borderRadius: BorderRadius.circular(10.0)
+                ),
+                defaultTextStyle: TextStyle(
+                  fontSize: 15, // Set the font size as needed
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black, // Set the text color as needed
+                ),
+                weekendDecoration: BoxDecoration(
+                  shape: BoxShape.rectangle, // You can use different shapes like BoxShape.rectangle
+                  color: Color(0xFFEAEAEA), 
+                  borderRadius: BorderRadius.circular(10.0) 
+                ),
+                weekendTextStyle: TextStyle(
+                  fontSize: 15, // Set the font size as needed
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black, // Set the text color as needed
+                ),
+                outsideDecoration: BoxDecoration(
+                  shape: BoxShape.rectangle, // You can use different shapes like BoxShape.rectangle
+                  color: Color(0xFFBBBBBB), 
+                  borderRadius: BorderRadius.circular(10.0)      // Background color of the day cell
+                ),
+                outsideTextStyle: TextStyle(
+                  fontSize: 15, // Set the font size as needed
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF6E6E6E), // Set the text color as needed
+                ),
+                selectedDecoration: BoxDecoration(
+                  shape: BoxShape.rectangle, // You can use different shapes like BoxShape.rectangle
+                  color: Color(0xFFE50E2B), 
+                  borderRadius: BorderRadius.circular(10.0)
+                ),
+                selectedTextStyle: TextStyle(
+                  fontSize: 15, // Set the font size as needed
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white, // Set the text color as needed
+                ),
+                todayDecoration: BoxDecoration(
+                  shape: BoxShape.rectangle, // You can use different shapes like BoxShape.rectangle
+                  color: Color(0xFFE2AFB6), 
+                  borderRadius: BorderRadius.circular(10.0)
+                ),
+                todayTextStyle: TextStyle(
+                  fontSize: 15, // Set the font size as needed
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black, // Set the text color as needed
+                ),
+              ),
+              selectedDayPredicate: (day) {
+                return isSameDay(_selectedDay, day);
+              },
+              onDaySelected: (selectedDay, focusedDay) {
+                setState(() {
+                  _focusedDay = focusedDay;
+                  _selectedDay = selectedDay;
+                  _recordFuture = _loadData(selectedDay);
+                });
+              },
+              onPageChanged: (focusedDay) {
+                _focusedDay = focusedDay;
+              },
+              headerStyle: const HeaderStyle(
+                formatButtonVisible: false,
+                titleCentered: true,
+                titleTextStyle: TextStyle(
+                  fontSize: 32,
+                    fontWeight: FontWeight.bold
+                ),
+                leftChevronIcon: Icon(Icons.chevron_left, size: 40),
+                rightChevronIcon: Icon(Icons.chevron_right, size: 40),
+              ),
+                  // Další přizpůsobení vzhledu, pokud je to potřeba
             ),
           ),
           const SizedBox(
-              height: 20), // volitelná mezera mezi kalendářem a textovým polem
-          FutureBuilder<FlowData?>(
-            future: _recordFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Text('Došlo k chybě při načítání dat');
-              } else {
-                FlowData? record = snapshot.data;
-                return Column(
-                  children: [
-                    Text(record?.record1 ?? ''),
-                    Text(record?.record2 ?? ''),
-                    Text(record?.record3 ?? ''),
-                  ],
-                );
-              }
-            },
+            height: 4,
           ),
-        ],
+          Expanded(
+            child: SingleChildScrollView(
+              child:FutureBuilder<FlowData?>(
+                future: _recordFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Došlo k chybě při načítání dat');
+                  } else {
+                    FlowData? record = snapshot.data;
+                    return Column(
+                      children: [
+                        if ((record?.record1 ?? '').isNotEmpty)
+                          Container(
+                            width: 380,
+                            constraints: BoxConstraints(minHeight: 50.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Color(0xFFBCBCBC), width: 1.8), // Optional: Add border
+                              borderRadius: BorderRadius.circular(10.0), // Optional: Add border radius
+                            ),
+                            padding: EdgeInsets.all(8.0), // Optional: Add padding
+                            margin: EdgeInsets.all(4.0), // Optional: Add margin
+                            child: Text(
+                              record?.record1 ?? '',
+                              style: TextStyle(color: Color(0xFF5b5b5b)), // Set text color
+                            ),
+                          ),
+                        if ((record?.record2 ?? '').isNotEmpty)
+                          Container(
+                            width: 380,
+                            constraints: BoxConstraints(minHeight: 50.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Color(0xFFBCBCBC), width: 1.8), // Optional: Add border
+                              borderRadius: BorderRadius.circular(10.0), // Optional: Add border radius
+                            ),
+                            padding: EdgeInsets.all(8.0), // Optional: Add padding
+                            margin: EdgeInsets.all(4.0), // Optional: Add margin
+                            child: Text(
+                              record?.record2 ?? '',
+                              style: TextStyle(color: Color(0xFF5b5b5b)), // Set text color
+                            ),
+                          ),
+                        if ((record?.record3 ?? '').isNotEmpty)
+                          Container(
+                            width: 380,
+                            constraints: BoxConstraints(minHeight: 50.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Color(0xFFBCBCBC), width: 1.8), // Optional: Add border
+                              borderRadius: BorderRadius.circular(10.0), // Optional: Add border radius
+                            ),
+                            padding: EdgeInsets.all(8.0), // Optional: Add padding
+                            margin: EdgeInsets.all(4.0), // Optional: Add margin
+                            child: Text(
+                              record?.record3 ?? '',
+                              style: TextStyle(color: Color(0xFF5b5b5b)), // Set text color
+                            ),
+                          ),
+                      ],
+                    );
+                  }
+                },
+              ),
+            )
+          )
+        ]
       ),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
