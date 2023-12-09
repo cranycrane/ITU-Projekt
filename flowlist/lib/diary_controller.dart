@@ -124,12 +124,16 @@ class DiaryController {
     String formattedDate = DateFormat('yyyy-MM-dd').format(date);
 
     final response = await http.delete(
-      Uri.parse('$baseUrl/delete_entry?userId=$userId&date=$formattedDate'),
+      Uri.parse('$baseUrl/delete_entry.php?userId=$userId&date=$formattedDate'),
     );
+
+    print(userId);
+    print(formattedDate);
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
+      print(response.body);
       throw Exception('Pri mazani zaznamu doslo k chybe');
     }
   }

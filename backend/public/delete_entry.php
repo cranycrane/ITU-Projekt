@@ -13,8 +13,8 @@ if (!isset($_GET['userId'], $_GET['date'])) {
 }
 
 // Přijetí ID záznamu
-$userId = $_POST['userId'] ?? null;
-$date = $_POST['date'] ?? null;
+$userId = $_GET['userId'] ?? null;
+$date = $_GET['date'] ?? null;
 
 $sql = "DELETE FROM diary WHERE userId = ? AND date = ?";
 $stmt = $conn->prepare($sql);

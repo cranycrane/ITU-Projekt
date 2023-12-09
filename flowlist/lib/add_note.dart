@@ -27,6 +27,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
   final TextEditingController _ratingController = TextEditingController();
 
   bool _isDataLoaded = false;
+  bool dataFromBackend = true;
   late Future<FlowData?> _recordFuture;
 
   int _selectedIndex = -1; // Index pro navigaci v BottomAppBar
@@ -57,6 +58,17 @@ class _NewEntryPageState extends State<NewEntryPage> {
     try {
       // Zde předpokládáme, že `diaryController.createEntry(record)` vrací budoucnost (Future)
       await diaryController.createEntry(record);
+      return true; // Úspěch
+    } catch (e) {
+      print('Chyba při vytváření záznamu: $e');
+      return false; // Neúspěch
+    }
+  }
+
+  Future<bool> deleteEntry() async {
+    try {
+      // Zde předpokládáme, že `diaryController.createEntry(record)` vrací budoucnost (Future)
+      await diaryController.deleteEntry(selectedDate);
       return true; // Úspěch
     } catch (e) {
       print('Chyba při vytváření záznamu: $e');
@@ -155,6 +167,11 @@ class _NewEntryPageState extends State<NewEntryPage> {
                       _ratingController.text =
                           data?.score == -1 ? '' : data!.score!.toString();
                       _isDataLoaded = true;
+                      if ((data?.record1.isEmpty ?? true) &&
+                          (data?.record2.isEmpty ?? true) &&
+                          (data?.record3.isEmpty ?? true)) {
+                        dataFromBackend = false;
+                      }
                     }
                     return Column(
                       mainAxisSize: MainAxisSize.min,
@@ -228,8 +245,53 @@ class _NewEntryPageState extends State<NewEntryPage> {
                           children: <Widget>[
                             Expanded(
                               child: ElevatedButton(
-                                onPressed: () {
-                                  // Akce pro smazání dat
+                                onPressed: () async {
+                                  // Zobrazení dialogového okna pro potvrzení
+                                  if (!dataFromBackend) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                "Nelze smazat zaznam, ktery nebyl ulozen")));
+                                  }
+                                  final confirmed = await showDialog<bool>(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('Potvrzení'),
+                                            content: const Text(
+                                                'Opravdu chcete záznam smazat?'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context)
+                                                        .pop(false),
+                                                child: const Text('NE'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context)
+                                                        .pop(true),
+                                                child: const Text('ANO'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ) ??
+                                      false; // Pokud se dialog zavře bez výběru, vrátí se false
+
+                                  if (confirmed) {
+                                    // Provádění akce smazání, pokud uživatel potvrdí
+                                    bool success = await deleteEntry();
+                                    String message = success
+                                        ? 'Záznam byl úspěšně smazán'
+                                        : 'Smazání záznamu se nezdařilo';
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text(message)));
+
+                                    if (success) {
+                                      _onItemTapped(0);
+                                    }
+                                  }
                                 },
                                 style: ElevatedButton.styleFrom(
                                   primary: Colors.grey, // Barva tlačítka SMAZAT
@@ -239,9 +301,10 @@ class _NewEntryPageState extends State<NewEntryPage> {
                                   ),
                                   padding: EdgeInsets.symmetric(vertical: 16),
                                 ),
-                                child: Text('SMAZAT'),
+                                child: const Text('SMAZAT'),
                               ),
                             ),
+
                             SizedBox(width: 8), // Mezera mezi tlačítky
                             Expanded(
                               child: ElevatedButton(

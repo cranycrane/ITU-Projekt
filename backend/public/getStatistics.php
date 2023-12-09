@@ -20,7 +20,7 @@ try {
     $totalCount = $countResult->fetch_row()[0];
 
     // Průměrný počet slov na záznam
-    $avgWordsQuery = "SELECT AVG(LENGTH(record1) + LENGTH(record2) + LENGTH(record3) - LENGTH(REPLACE(record1, ' ', '')) - LENGTH(REPLACE(record2, ' ', '')) - LENGTH(REPLACE(record3, ' ', ''))) as avgWords FROM diary WHERE userId = ?";
+    $avgWordsQuery = "SELECT AVG(LENGTH(record1) - LENGTH(REPLACE(record1, ' ', '')) + LENGTH(record2) - LENGTH(REPLACE(record2, ' ', '')) + LENGTH(record3) - LENGTH(REPLACE(record3, ' ', '')) + CASE WHEN record1 <> '' THEN 1 ELSE 0 END + CASE WHEN record2 <> '' THEN 1 ELSE 0 END + CASE WHEN record3 <> '' THEN 1 ELSE 0 END) as avgWords FROM diary WHERE userId = ?";
     $avgWordsStmt = $conn->prepare($avgWordsQuery);
     $avgWordsStmt->bind_param("s", $userId);
     $avgWordsStmt->execute();
@@ -28,20 +28,20 @@ try {
     $avgWords = $avgWordsResult->fetch_assoc()['avgWords'];
 
     // Průměrný počet slov na záznam
-    $totalWordsQuery = "SELECT SUM(LENGTH(record1) + LENGTH(record2) + LENGTH(record3) - LENGTH(REPLACE(record1, ' ', '')) - LENGTH(REPLACE(record2, ' ', '')) - LENGTH(REPLACE(record3, ' ', ''))) as totalWords FROM diary WHERE userId = ?";
+    $totalWordsQuery = "SELECT SUM(LENGTH(record1) - LENGTH(REPLACE(record1, ' ', '')) + LENGTH(record2) - LENGTH(REPLACE(record2, ' ', '')) + LENGTH(record3) - LENGTH(REPLACE(record3, ' ', '')) + CASE WHEN record1 <> '' THEN 1 ELSE 0 END + CASE WHEN record2 <> '' THEN 1 ELSE 0 END + CASE WHEN record3 <> '' THEN 1 ELSE 0 END) as totalWords FROM diary WHERE userId = ?";
     $totalWordsStmt = $conn->prepare($totalWordsQuery);
     $totalWordsStmt->bind_param("s", $userId);
     $totalWordsStmt->execute();
     $totalWordsResult = $totalWordsStmt->get_result();
     $totalWords = $totalWordsResult->fetch_assoc()['totalWords'];
 
-    // Nejdelší záznam
-    $longestEntryQuery = "SELECT MAX(LENGTH(record1) + LENGTH(record2) + LENGTH(record3)) as maxLength FROM diary WHERE userId = ?";
+    // Nejdelší záznam podle počtu slov
+    $longestEntryQuery = "SELECT MAX(LENGTH(record1) - LENGTH(REPLACE(record1, ' ', '')) + LENGTH(record2) - LENGTH(REPLACE(record2, ' ', '')) + LENGTH(record3) - LENGTH(REPLACE(record3, ' ', '')) + CASE WHEN record1 <> '' THEN 1 ELSE 0 END + CASE WHEN record2 <> '' THEN 1 ELSE 0 END + CASE WHEN record3 <> '' THEN 1 ELSE 0 END) as maxWordCount FROM diary WHERE userId = ?";
     $longestEntryStmt = $conn->prepare($longestEntryQuery);
     $longestEntryStmt->bind_param("s", $userId);
     $longestEntryStmt->execute();
     $longestEntryResult = $longestEntryStmt->get_result();
-    $longestEntryLength = $longestEntryResult->fetch_assoc()['maxLength'];
+    $longestEntryWordCount = $longestEntryResult->fetch_assoc()['maxWordCount'];
 
     // Získání data registrace uživatele
     $regDateQuery = "SELECT firstSignIn FROM users WHERE id = ?";
@@ -76,7 +76,7 @@ try {
         'unfilledDays' => $unfilledDaysCount,
         'averageWordsPerEntry' => round($avgWords),
         'totalWords' => round($totalWords),
-        'longestEntryLength' => $longestEntryLength
+        'longestEntryLength' => $longestEntryWordCount
     ];
 
     http_response_code(200);
