@@ -77,6 +77,12 @@ class _NewEntryPageState extends State<NewEntryPage> {
   }
 
   void _changeDay(int days) {
+    final DateTime newDate = selectedDate.add(Duration(days: days));
+
+    // Check if the new date is in the future and if the selected date is not today
+    if (newDate.isAfter(DateTime.now()) && selectedDate != DateTime.now()) {
+      return; // Do nothing if trying to go into the future from a non-today date
+    }
     setState(() {
       selectedDate = selectedDate.add(Duration(days: days));
       _isDataLoaded = false;

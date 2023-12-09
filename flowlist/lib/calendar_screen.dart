@@ -290,6 +290,11 @@ class CalendarPageState extends State<CalendarPage> {
         backgroundColor: Colors.red,
         child: Icon(Icons.add),
         onPressed: () {
+          // Check if the selected day is in the future
+          if (_selectedDay.isAfter(DateTime.now())) {
+            // If it's in the future, set it to today
+            _selectedDay = DateTime.now();
+          }
           // Akce pro FloatingActionButton
           Navigator.of(context).push(
             MaterialPageRoute(
