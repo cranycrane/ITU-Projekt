@@ -294,7 +294,7 @@ class CalendarPageState extends State<CalendarPage> {
           if (_selectedDay.isAfter(DateTime.now())) {
             // If it's in the future, set it to today
             _selectedDay = DateTime.now();
-          }
+          } 
           // Akce pro FloatingActionButton
           Navigator.of(context).push(
             MaterialPageRoute(
