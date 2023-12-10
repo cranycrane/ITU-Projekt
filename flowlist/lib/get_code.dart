@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'search_page.dart';
 import 'add_note.dart';
 import 'psycho_controller.dart';
+import 'messages_page.dart';
 
 class PsychoUserPage extends StatefulWidget {
   const PsychoUserPage({Key? key}) : super(key: key);
@@ -26,11 +27,25 @@ class _PsychoUserPageState extends State<PsychoUserPage> {
   void _getPairingCode() async {
     var userInfo = await psychoController
         .getPairingCode(); // Předpokládáme, že máte tuto funkci
-    setState(() {
-      hasPsychologist = userInfo['hasPsychologist'];
-      pairingCode = userInfo['pairingCode'];
-      isLoading = false;
-    });
+    if (userInfo['hasPsychologist'] == true) {
+      // Pokud má uživatel přiděleného psychologa, přesměrujte ho na stránku zpráv
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (context) => MessagesPage(
+                  toUserId: userInfo['psychoId']
+                      .toString())), // nahraďte správným cílem
+          (Route<dynamic> route) => false,
+        );
+      });
+    } else {
+      // Uložte kód a aktualizujte UI
+      setState(() {
+        hasPsychologist = userInfo['hasPsychologist'];
+        pairingCode = userInfo['pairingCode'];
+        isLoading = false;
+      });
+    }
   }
 
   void _onItemTapped(int index) {
@@ -105,12 +120,8 @@ class _PsychoUserPageState extends State<PsychoUserPage> {
       );
     }
 
-    Widget content;
-    if (hasPsychologist == true) {
-      content = _buildMessagesPage();
-    } else {
-      content = _buildPairingPage(pairingCode);
-    }
+    Widget content = _buildPairingPage(pairingCode);
+
     return Scaffold(
       body: Padding(padding: const EdgeInsets.all(16.0), child: content),
       bottomNavigationBar: BottomAppBar(

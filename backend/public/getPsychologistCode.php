@@ -38,7 +38,7 @@ try {
     if (!empty($row['assignedPsycho'])) {
         // Uživatel již má přiděleného psychologa
         http_response_code(200);
-        echo json_encode(['hasPsychologist' => true]);
+        echo json_encode(['hasPsychologist' => true, "psychoId" => $row['assignedPsycho']]);
         exit;
     }
 
