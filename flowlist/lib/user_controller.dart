@@ -34,13 +34,17 @@ class UserController {
         profileImageFile = File(filePath);
         await profileImageFile.writeAsBytes(imageBytes);
         return UserProfile(
+            userId: int.parse(userId!),
             firstName: firstName,
             lastName: lastName,
-            profileImage: profileImageFile);
+            profileImage: filePath);
       } else {
         print(user);
         return UserProfile(
-            firstName: firstName, lastName: lastName, profileImage: null);
+            userId: int.parse(userId!),
+            firstName: firstName,
+            lastName: lastName,
+            profileImage: null);
       }
     } else {
       throw Exception('Failed to get user name: ${response.body}');

@@ -35,15 +35,7 @@ class DiaryController {
 
   Future<dynamic> createEntry(FlowData record) async {
     String? userId = await StorageService().getUserId();
-    final Map<String, dynamic> data = {
-      'userId': userId,
-      'date': DateFormat('yyyy-MM-dd').format(record.day),
-      'record1': record.record1,
-      'record2': record.record2,
-      'record3': record.record3,
-      'score': record.score
-    };
-    print(data);
+
     final request =
         http.MultipartRequest('POST', Uri.parse('$baseUrl/create_entry.php'));
     request.fields.addAll({
@@ -80,8 +72,12 @@ class DiaryController {
     }
   }
 
-  Future<List<Map<String, dynamic>>> readEntry(DateTime selectedDay) async {
-    String? userId = await StorageService().getUserId();
+  Future<List<Map<String, dynamic>>> readEntry(DateTime selectedDay,
+      [String? userId]) async {
+    if (userId == null) {
+      String? userId = await StorageService().getUserId();
+    }
+
     String date = DateFormat('yyyy-MM-dd').format(selectedDay);
 
     final response = await http

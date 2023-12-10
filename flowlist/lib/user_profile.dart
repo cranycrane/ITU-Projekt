@@ -1,12 +1,33 @@
 import 'dart:io';
 
 class UserProfile {
+  int userId;
   String firstName;
   String lastName;
-  File? profileImage;
+  String? profileImage;
+  File? imageFile;
 
   UserProfile(
-      {required this.firstName,
-      required this.lastName,
-      required this.profileImage});
+      {required this.userId,
+      this.firstName = '',
+      this.lastName = '',
+      this.profileImage});
+
+  File? _getUserPhoto(String? profileImagePath) {}
+
+  factory UserProfile.fromJson(Map<String, dynamic> json) {
+    return UserProfile(
+      userId: json['userId'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      profileImage: json['profileImagePath'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'userId': userId,
+        'firstName': firstName,
+        'lastName': lastName,
+        'profileImage': profileImage,
+      };
 }

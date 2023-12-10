@@ -71,12 +71,12 @@ try {
 
     // Vytvoření výsledkového pole
     $stats = [
-        'totalDays' => $totalDays,
-        'filledDays' => $filledDaysCount,
-        'unfilledDays' => $unfilledDaysCount,
-        'averageWordsPerEntry' => round($avgWords),
-        'totalWords' => round($totalWords),
-        'longestEntryLength' => $longestEntryWordCount
+        'totalDays' => $totalDays ?? 0,
+        'filledDays' => $filledDaysCount ?? 0,
+        'unfilledDays' => $unfilledDaysCount ?? 0,
+        'averageWordsPerEntry' => round($avgWords) ?? 0,
+        'totalWords' => round($totalWords) ?? 0,
+        'longestEntryLength' => $longestEntryWordCount ?? 0
     ];
 
     http_response_code(200);
