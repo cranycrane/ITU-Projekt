@@ -6,6 +6,7 @@ import 'add_note.dart';
 import 'diary_controller.dart';
 import 'diary_entries_loader.dart';
 import 'flow.dart';
+import 'get_code.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({Key? key}) : super(key: key);
@@ -59,6 +60,9 @@ class CalendarPageState extends State<CalendarPage> {
             .push(MaterialPageRoute(builder: (context) => SearchPage()));
         break;
       case 2:
+        // PsychoUserPage
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => PsychoUserPage()));
         // Tady byste mohli implementovat přechod na stránku oznámení
         break;
       case 3:
@@ -294,7 +298,7 @@ class CalendarPageState extends State<CalendarPage> {
           if (_selectedDay.isAfter(DateTime.now())) {
             // If it's in the future, set it to today
             _selectedDay = DateTime.now();
-          } 
+          }
           // Akce pro FloatingActionButton
           Navigator.of(context).push(
             MaterialPageRoute(
