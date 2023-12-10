@@ -8,10 +8,16 @@ class DiaryEntriesLoader {
 
   DiaryEntriesLoader(this.diaryController);
 
-  Future<FlowData> loadDiaryEntries(DateTime selectedDay) async {
+  Future<FlowData> loadDiaryEntries(DateTime selectedDay,
+      [String? userId]) async {
     try {
-      List<Map<String, dynamic>> entries =
-          await diaryController.readEntry(selectedDay);
+      List<Map<String, dynamic>> entries;
+      if (userId != null) {
+        entries = await diaryController.readEntry(selectedDay, userId);
+      } else {
+        entries = await diaryController.readEntry(selectedDay);
+      }
+
       if (entries.isNotEmpty) {
         return FlowData(
             record1: entries[0]['record1'] ?? '',

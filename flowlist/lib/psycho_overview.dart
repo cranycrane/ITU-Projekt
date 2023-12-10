@@ -9,6 +9,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 import 'user_profile.dart';
+import 'calendar_client.dart';
 
 class PsychoOverviewPage extends StatefulWidget {
   @override
@@ -57,46 +58,75 @@ class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 UserProfile user = snapshot.data![index];
-                return Card(
-                  child: ListTile(
-                    leading: FutureBuilder<File?>(
-                      future: psychoController.getUserPhoto(
-                          user), // Tady zavoláte vaši funkci pro získání fotky
-                      builder: (BuildContext context,
-                          AsyncSnapshot<File?> snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return CircleAvatar(
-                            child: CircularProgressIndicator(),
-                            backgroundColor: Colors.grey[200],
-                          );
-                        } else if (snapshot.hasError || snapshot.data == null) {
-                          return CircleAvatar(
-                            child: Icon(Icons.person,
-                                size:
-                                    50), // Zobrazí ikonu osoby, pokud obrázek není dostupný
-                            backgroundColor: Colors.grey[200],
-                          );
-                        } else {
-                          return CircleAvatar(
-                            backgroundImage:
-                                FileImage(snapshot.data!), // Zobrazí obrázek
-                            backgroundColor: Colors.grey[200],
-                          );
-                        }
-                      },
-                    ),
-                    title: Text("${user.firstName} ${user.lastName}"),
-                    subtitle:
-                        Text("Poslední příspěvek: 5.12.2023"), // Dummy data
-                    trailing: ElevatedButton(
-                      onPressed: () {
-                        // Implementace odstranění uživatele
-                      },
-                      child: Text("Odstranit Uživatele"),
-                    ),
-                  ),
-                );
+                return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => CalendarClientPage(
+                              client:
+                                  user), // Název a parametry stránky dle vaší aplikace
+                        ),
+                      );
+                    },
+                    child: Card(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Row(
+                          children: <Widget>[
+                            // Obrázek uživatele
+                            FutureBuilder<File?>(
+                              future: psychoController.getUserPhoto(user),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<File?> snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return CircleAvatar(
+                                    radius: 50.0,
+                                    child: CircularProgressIndicator(),
+                                    backgroundColor: Colors.grey[200],
+                                  );
+                                } else if (snapshot.hasError ||
+                                    snapshot.data == null) {
+                                  return CircleAvatar(
+                                    radius: 50.0,
+                                    child: Icon(Icons.person, size: 100.0),
+                                    backgroundColor: Colors.grey[200],
+                                  );
+                                } else {
+                                  return SizedBox(
+                                    width: 70.0,
+                                    height: 70.0,
+                                    child: ClipOval(
+                                      child: Image.file(
+                                        snapshot.data!,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                            SizedBox(
+                                width:
+                                    16.0), // Vytvoří prostor mezi obrázkem a textem
+                            // Textová část
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    "${user.firstName} ${user.lastName}",
+                                    style: TextStyle(fontSize: 24),
+                                  ),
+                                  Text(
+                                      "Poslední příspěvek: 5.12.2023"), // Dummy data
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ));
               },
             );
           }
