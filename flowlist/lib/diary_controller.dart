@@ -21,14 +21,12 @@ class DiaryController {
       body: data, // Odesílání dat jako Map
     );
 
-    print("jsonData: $data");
     if (response.statusCode == 200) {
       Map<String, dynamic> result = json.decode(response.body);
       // Předpokládáme, že userId je String. Pokud je int, použijte toString().
       String userId = result['userId'];
       return userId;
     } else {
-      Map<String, dynamic> result = json.decode(response.body);
       throw Exception('Pri identifikaci uzivatele doslo k chybe');
     }
   }
@@ -74,9 +72,7 @@ class DiaryController {
 
   Future<List<Map<String, dynamic>>> readEntry(DateTime selectedDay,
       [String? userId]) async {
-    if (userId == null) {
-      String? userId = await StorageService().getUserId();
-    }
+    userId ??= await StorageService().getUserId();
 
     String date = DateFormat('yyyy-MM-dd').format(selectedDay);
 
@@ -84,7 +80,6 @@ class DiaryController {
         .get(Uri.parse('$baseUrl/read_entry.php?userId=$userId&date=$date'));
 
     if (response.statusCode == 200) {
-      print(response.body);
       List<dynamic> responseData = json.decode(response.body);
 
       if (responseData.isEmpty) {
@@ -123,13 +118,9 @@ class DiaryController {
       Uri.parse('$baseUrl/delete_entry.php?userId=$userId&date=$formattedDate'),
     );
 
-    print(userId);
-    print(formattedDate);
-
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
-      print(response.body);
       throw Exception('Pri mazani zaznamu doslo k chybe');
     }
   }
