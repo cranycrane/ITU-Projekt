@@ -5,6 +5,7 @@ import 'add_note.dart';
 import 'flow.dart';
 import 'diary_controller.dart';
 import 'package:intl/intl.dart';
+import 'get_code.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -71,7 +72,8 @@ class _SearchPageState extends State<SearchPage> {
           // Již jsme na vyhledávací stránce, není potřeba akce
           break;
         case 2:
-          // Implementace přechodu na stránku s oznámeními, pokud máte
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => PsychoUserPage()));
           break;
         case 3:
           Navigator.of(context).pushReplacement(

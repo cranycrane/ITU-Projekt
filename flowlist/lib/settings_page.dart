@@ -9,6 +9,7 @@ import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 import 'user_profile.dart';
 import 'psycho_overview.dart';
+import 'get_code.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -168,6 +169,9 @@ class _SettingsPageState extends State<SettingsPage> {
             .push(MaterialPageRoute(builder: (context) => SearchPage()));
         break;
       case 2:
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => PsychoUserPage()));
+        break;
       case 3:
         // Pro tyto indexy není třeba žádná akce, protože jsme již na stránce nastavení
         break;

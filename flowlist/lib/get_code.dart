@@ -4,6 +4,7 @@ import 'search_page.dart';
 import 'add_note.dart';
 import 'psycho_controller.dart';
 import 'messages_page.dart';
+import 'settings_page.dart';
 
 class PsychoUserPage extends StatefulWidget {
   const PsychoUserPage({Key? key}) : super(key: key);
@@ -65,8 +66,10 @@ class _PsychoUserPageState extends State<PsychoUserPage> {
             .push(MaterialPageRoute(builder: (context) => SearchPage()));
         break;
       case 2:
+        break;
       case 3:
-        // Pro tyto indexy není třeba žádná akce, protože jsme již na stránce nastavení
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const SettingsPage()));
         break;
     }
   }

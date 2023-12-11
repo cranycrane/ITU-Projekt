@@ -6,7 +6,7 @@ import 'flow.dart';
 import 'diary_entries_loader.dart';
 import 'diary_controller.dart';
 import 'package:intl/intl.dart'; // Přidání pro formátování data
-
+import 'get_code.dart';
 class NewEntryPage extends StatefulWidget {
   final DateTime? selectedDay;
 
@@ -105,6 +105,9 @@ class _NewEntryPageState extends State<NewEntryPage> {
             .push(MaterialPageRoute(builder: (context) => SearchPage()));
         break;
       case 2:
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => PsychoUserPage()));
+        break;
       case 3:
         Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => const SettingsPage()));
