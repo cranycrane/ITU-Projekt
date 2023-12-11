@@ -67,14 +67,18 @@ class MessagesPageState extends State<MessagesPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        toolbarHeight: 70,
+        toolbarHeight: 85,
         title: Container(
           height: 60,
           padding: const EdgeInsets.all(5.0), // Vnější odsazení pro obdélník
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: Color(0xFFD9D9D9),
             borderRadius:
                 BorderRadius.all(Radius.circular(20.0)), // Zaoblené rohy
+            border: Border.all(
+              color: Color(0xFF61646B), // Color of the outline
+              width: 1.0, // Width of the outline
+            ),
           ),
           child: Row(
             children: <Widget>[
@@ -135,7 +139,7 @@ class MessagesPageState extends State<MessagesPage> {
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          color: Colors.grey,
+          color: Color(0xFF61646B),
           iconSize: 40, // Zvětšení velikosti ikony
           onPressed: () {
             Navigator.pop(context);

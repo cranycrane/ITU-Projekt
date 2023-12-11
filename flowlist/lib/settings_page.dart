@@ -244,7 +244,7 @@ class SettingsPageState extends State<SettingsPage> {
               child: const Icon(Icons.camera_alt), // Ikonka pro výběr obrázku
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             Center(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
