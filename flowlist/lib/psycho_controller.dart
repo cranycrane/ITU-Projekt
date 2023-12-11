@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 class PsychoController {
-  final String baseUrl = "http://10.0.2.2:8000";
+  final String baseUrl = "https://jakub-jerabek.cz/flowlist";
   final storageService = StorageService();
 
   Future<Map<String, dynamic>> getPairingCode() async {

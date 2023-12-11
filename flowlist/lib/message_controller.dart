@@ -5,7 +5,7 @@ import 'message.dart';
 import 'storage_service.dart';
 
 class MessageController {
-  final String baseUrl = "http://10.0.2.2:8000";
+  final String baseUrl = "https://jakub-jerabek.cz/flowlist";
   final StreamController<List<Message>> _messagesStreamController =
       StreamController.broadcast();
 

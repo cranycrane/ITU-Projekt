@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'flow.dart';
 
 class DiaryController {
-  final String baseUrl = "http://10.0.2.2:8000";
+  final String baseUrl = "https://jakub-jerabek.cz/flowlist";
   final storageService = StorageService();
 
   Future<String> getUserId(String? deviceId) async {

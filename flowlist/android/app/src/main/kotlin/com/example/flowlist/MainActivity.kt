@@ -1,4 +1,4 @@
-package com.example.flowlist
+package com.fitVut.flowlist
 
 import io.flutter.embedding.android.FlutterActivity
 

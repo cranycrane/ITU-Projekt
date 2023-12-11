@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-import 'firebase_options.dart';
 import 'calendar_screen.dart';
 import 'diary_controller.dart';
 import 'device_utils.dart';
@@ -19,10 +18,6 @@ void main() async {
   String userId = await diaryController.getUserId(deviceId);
   // Uložení ID zařízení
   await StorageService().saveUserId(userId);
-
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
 
   runApp(const MyApp());
 }
