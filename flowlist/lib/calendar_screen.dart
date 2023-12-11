@@ -78,7 +78,7 @@ class CalendarPageState extends State<CalendarPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(
-              height: 20,
+              height: 16,
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.6,
