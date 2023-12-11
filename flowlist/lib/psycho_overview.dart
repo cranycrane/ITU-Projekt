@@ -18,11 +18,59 @@ class PsychoOverviewPage extends StatefulWidget {
 
 class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
   late Future<List<UserProfile>> pairedUsers;
+  TextEditingController _searchController = TextEditingController(); // Přidáno
+  List<UserProfile> _allUsers = []; // Přidáno
+  List<UserProfile> _filteredUsers = []; // Přidáno
 
-  @override
+ @override
   void initState() {
     super.initState();
-    pairedUsers = _getPairedUsers(); // Předpokládá se, že máte tuto funkci
+    _initializeUsers(); // Upraveno
+  }
+
+  void _initializeUsers() async {
+    _allUsers = await psychoController.getPairedUsers(); // Předpokládá se, že psychoController má tuto funkci
+    setState(() {
+      _filteredUsers = _allUsers;
+    });
+  }
+
+  void _performSearch(String query) {
+    query = query.toLowerCase();
+    List<UserProfile> filteredList = _allUsers.where((user) {
+      // Předpokládá, že UserProfile má vlastnosti firstName a lastName
+      String userName = user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase();
+      return userName.contains(query);
+    }).toList();
+
+    setState(() {
+      _filteredUsers = filteredList;
+    });
+  }
+
+    void _showDeleteConfirmationDialog(UserProfile user) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Odebrat uživatele', style: TextStyle(color: Color(0xFFE50E2B))),
+          content: Text('Chcete opravdu odebrat uživatele ${user.firstName} ${user.lastName}?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Zrušit', style: TextStyle(color: Colors.grey)),
+              onPressed: () => Navigator.of(context).pop(), // Zavře dialogové okno
+            ),
+            TextButton(
+              child: const Text('Odebrat', style: TextStyle(color: Color(0xFFE50E2B))),
+              onPressed: () {
+                // TODO: Logika pro odstranění uživatele
+                Navigator.of(context).pop(); // Zavře dialogové okno po potvrzení
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<List<UserProfile>> _getPairedUsers() async {
@@ -33,106 +81,158 @@ class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Psycholog"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.switch_account),
-            onPressed: () {
-              // Přepnout mód uživatele
-            },
+      resizeToAvoidBottomInset: false,
+      body: Column(
+        children: <Widget>[
+          SizedBox(height: 20), // Přidán SizedBox pro odsazení od vrchu
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Vyhledat...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide: BorderSide.none
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                 prefixIcon: Icon(Icons.search, color: Color(0xFFE50E2B)), // Červená barva pro lupu
+                suffixIcon: _searchController.text.isNotEmpty
+                    ? IconButton(
+                        icon: Icon(Icons.clear, color: Color(0xFFE50E2B)), // Červená barva pro křížek
+                        onPressed: () {
+                          _searchController.clear();
+                          _performSearch('');
+                        },
+                      )
+                    : null,
+              ),
+              onChanged: _performSearch,
+            ),
           ),
-        ],
-      ),
-      body: FutureBuilder<List<UserProfile>>(
-        future: pairedUsers,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text("Chyba při načítání dat"));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text("Žádní přidělení klienti"));
-          } else {
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
+
+          Expanded(
+            child: ListView.builder(
+              itemCount: _filteredUsers.length,
               itemBuilder: (context, index) {
-                UserProfile user = snapshot.data![index];
+                UserProfile user = _filteredUsers[index];
                 return GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => CalendarClientPage(
-                              client:
-                                  user), // Název a parametry stránky dle vaší aplikace
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => CalendarClientPage(client: user),
+                      ),
+                    );
+                  },
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10), // Zaoblené rohy karty
+          ),
+          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              color: Color(0xFFEAEAEA),
+              //color: Colors.white, // Barva pozadí karty
+              borderRadius: BorderRadius.circular(10), // Zaoblené rohy karty
+              border: Border.all(color: Colors.grey.shade300), // Šedý rámeček
+            ),
+            child: Row(
+              children: <Widget>[
+                FutureBuilder<File?>(
+                  future: psychoController.getUserPhoto(user),
+                  builder: (BuildContext context, AsyncSnapshot<File?> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircleAvatar(
+                        radius: 30.0, // Upravte podle vaší potřeby
+                        child: CircularProgressIndicator(),
+                        backgroundColor: Colors.grey[200],
+                      );
+                    } else if (snapshot.hasError || snapshot.data == null) {
+                      return CircleAvatar(
+                        radius: 30.0, // Upravte podle vaší potřeby
+                        child: Icon(Icons.person, size: 50.0), // Upravte velikost podle vaší potřeby
+                        backgroundColor: Colors.grey[200],
+                      );
+                    } else {
+                      return ClipOval(
+                        child: Image.file(
+                          snapshot.data!,
+                          width: 60.0, // Upravte šířku podle vaší potřeby
+                          height: 60.0, // Upravte výšku podle vaší potřeby
+                          fit: BoxFit.cover,
                         ),
                       );
-                    },
-                    child: Card(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Row(
-                          children: <Widget>[
-                            // Obrázek uživatele
-                            FutureBuilder<File?>(
-                              future: psychoController.getUserPhoto(user),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<File?> snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return CircleAvatar(
-                                    radius: 50.0,
-                                    child: CircularProgressIndicator(),
-                                    backgroundColor: Colors.grey[200],
-                                  );
-                                } else if (snapshot.hasError ||
-                                    snapshot.data == null) {
-                                  return CircleAvatar(
-                                    radius: 50.0,
-                                    child: Icon(Icons.person, size: 100.0),
-                                    backgroundColor: Colors.grey[200],
-                                  );
-                                } else {
-                                  return SizedBox(
-                                    width: 70.0,
-                                    height: 70.0,
-                                    child: ClipOval(
-                                      child: Image.file(
-                                        snapshot.data!,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
-                            SizedBox(
-                                width:
-                                    16.0), // Vytvoří prostor mezi obrázkem a textem
-                            // Textová část
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    "${user.firstName} ${user.lastName}",
-                                    style: TextStyle(fontSize: 24),
-                                  ),
-                                  Text(
-                                      "Poslední příspěvek: 5.12.2023"), // Dummy data
-                                ],
-                              ),
-                            ),
-                          ],
+                    }
+                  },
+                ),
+                SizedBox(width: 16.0),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "${user.firstName} ${user.lastName}",
+                        style: TextStyle(fontSize: 18), // Upravte velikost písma podle vaší potřeby
+                      ),
+                      Text(
+                        "Poslední příspěvek: 5.12.2023",
+                        style: TextStyle(
+                          color: Colors.black.withOpacity(0.6),
+                          fontSize: 14, // Upravte velikost písma podle vaší potřeby
                         ),
                       ),
-                    ));
-              },
-            );
-          }
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
+                    ],
+                  ),
+                ),
+                IconButton(
+                    icon: Icon(Icons.delete, color: Color(0xFF6E6E6E)),
+                    onPressed: () => _showDeleteConfirmationDialog(user),
+                            // Přidat logiku pro smazání uživatele
+                ),  
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+     padding: EdgeInsets.only( // Přidání paddingu na spodní část
+      bottom: kBottomNavigationBarHeight + 16, // Výška spodní navigace plus další prostor
+    ),
+  ),
+),
+
+],
+),
+
+      floatingActionButton: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center, // Zarovnání tlačítek do prava
+        children: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              // Akce pro normální tlačítko
+            },
+            style: ElevatedButton.styleFrom(
+              primary: Colors.white,
+              onPrimary: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+                side: BorderSide(color: Colors.red),
+              ),
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
+              child: Text(
+                'MÓD BĚŽNÝ UŽIVATEL',
+                style: TextStyle(color: Colors.red, fontSize: 19.0,),
+              ),
+            ),
+          ),
+          SizedBox(width: 55.0), // Mezera mezi tlačítky
+          
+        FloatingActionButton(
         onPressed: () async {
           // Zobrazení dialogového okna pro zadání párovacího kódu
           String? pairingCode = await showDialog<String>(
@@ -191,8 +291,11 @@ class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
             }
           }
         },
-        child: const Icon(Icons.person_add),
+        backgroundColor: Color(0xFFE50E2B),
+        child: const Icon(Icons.add),
       ),
+    ],
+    ),
     );
   }
 
