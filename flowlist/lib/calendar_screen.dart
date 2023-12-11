@@ -57,12 +57,12 @@ class CalendarPageState extends State<CalendarPage> {
       case 1:
         // Přechod na stránku pro vyhledávání
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => SearchPage()));
+            .push(MaterialPageRoute(builder: (context) => const SearchPage()));
         break;
       case 2:
         // PsychoUserPage
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => PsychoUserPage()));
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const PsychoUserPage()));
         // Tady byste mohli implementovat přechod na stránku oznámení
         break;
       case 3:
@@ -101,9 +101,9 @@ class CalendarPageState extends State<CalendarPage> {
                   defaultDecoration: BoxDecoration(
                       shape: BoxShape
                           .rectangle, // You can use different shapes like BoxShape.rectangle
-                      color: Color(0xFFEAEAEA),
+                      color: const Color(0xFFEAEAEA),
                       borderRadius: BorderRadius.circular(10.0)),
-                  defaultTextStyle: TextStyle(
+                  defaultTextStyle: const TextStyle(
                     fontSize: 15, // Set the font size as needed
                     fontWeight: FontWeight.bold,
                     color: Colors.black, // Set the text color as needed
@@ -111,9 +111,9 @@ class CalendarPageState extends State<CalendarPage> {
                   weekendDecoration: BoxDecoration(
                       shape: BoxShape
                           .rectangle, // You can use different shapes like BoxShape.rectangle
-                      color: Color(0xFFEAEAEA),
+                      color: const Color(0xFFEAEAEA),
                       borderRadius: BorderRadius.circular(10.0)),
-                  weekendTextStyle: TextStyle(
+                  weekendTextStyle: const TextStyle(
                     fontSize: 15, // Set the font size as needed
                     fontWeight: FontWeight.bold,
                     color: Colors.black, // Set the text color as needed
@@ -121,11 +121,11 @@ class CalendarPageState extends State<CalendarPage> {
                   outsideDecoration: BoxDecoration(
                       shape: BoxShape
                           .rectangle, // You can use different shapes like BoxShape.rectangle
-                      color: Color(0xFFBBBBBB),
+                      color: const Color(0xFFBBBBBB),
                       borderRadius: BorderRadius.circular(
                           10.0) // Background color of the day cell
                       ),
-                  outsideTextStyle: TextStyle(
+                  outsideTextStyle: const TextStyle(
                     fontSize: 15, // Set the font size as needed
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF6E6E6E), // Set the text color as needed
@@ -133,9 +133,9 @@ class CalendarPageState extends State<CalendarPage> {
                   selectedDecoration: BoxDecoration(
                       shape: BoxShape
                           .rectangle, // You can use different shapes like BoxShape.rectangle
-                      color: Color(0xFFE50E2B),
+                      color: const Color(0xFFE50E2B),
                       borderRadius: BorderRadius.circular(10.0)),
-                  selectedTextStyle: TextStyle(
+                  selectedTextStyle: const TextStyle(
                     fontSize: 15, // Set the font size as needed
                     fontWeight: FontWeight.bold,
                     color: Colors.white, // Set the text color as needed
@@ -143,9 +143,9 @@ class CalendarPageState extends State<CalendarPage> {
                   todayDecoration: BoxDecoration(
                       shape: BoxShape
                           .rectangle, // You can use different shapes like BoxShape.rectangle
-                      color: Color(0xFFE2AFB6),
+                      color: const Color(0xFFE2AFB6),
                       borderRadius: BorderRadius.circular(10.0)),
-                  todayTextStyle: TextStyle(
+                  todayTextStyle: const TextStyle(
                     fontSize: 15, // Set the font size as needed
                     fontWeight: FontWeight.bold,
                     color: Colors.black, // Set the text color as needed
@@ -168,7 +168,7 @@ class CalendarPageState extends State<CalendarPage> {
                   formatButtonVisible: false,
                   titleCentered: true,
                   titleTextStyle:
-                      TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                      TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                   leftChevronIcon: Icon(Icons.chevron_left, size: 40),
                   rightChevronIcon: Icon(Icons.chevron_right, size: 40),
                 ),
@@ -184,9 +184,9 @@ class CalendarPageState extends State<CalendarPage> {
                 future: _recordFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   } else if (snapshot.hasError) {
-                    return Text('Došlo k chybě při načítání dat');
+                    return const Text('Došlo k chybě při načítání dat');
                   } else {
                     FlowData? record = snapshot.data;
                     return Column(
@@ -194,60 +194,63 @@ class CalendarPageState extends State<CalendarPage> {
                         if ((record?.record1 ?? '').isNotEmpty)
                           Container(
                             width: 380,
-                            constraints: BoxConstraints(minHeight: 50.0),
+                            constraints: const BoxConstraints(minHeight: 50.0),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                  color: Color(0xFFBCBCBC),
+                                  color: const Color(0xFFBCBCBC),
                                   width: 1.8), // Optional: Add border
                               borderRadius: BorderRadius.circular(
                                   10.0), // Optional: Add border radius
                             ),
-                            padding:
-                                EdgeInsets.all(8.0), // Optional: Add padding
-                            margin: EdgeInsets.all(4.0), // Optional: Add margin
+                            padding: const EdgeInsets.all(
+                                8.0), // Optional: Add padding
+                            margin: const EdgeInsets.all(
+                                4.0), // Optional: Add margin
                             child: Text(
                               record?.record1 ?? '',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Color(0xFF5b5b5b)), // Set text color
                             ),
                           ),
                         if ((record?.record2 ?? '').isNotEmpty)
                           Container(
                             width: 380,
-                            constraints: BoxConstraints(minHeight: 50.0),
+                            constraints: const BoxConstraints(minHeight: 50.0),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                  color: Color(0xFFBCBCBC),
+                                  color: const Color(0xFFBCBCBC),
                                   width: 1.8), // Optional: Add border
                               borderRadius: BorderRadius.circular(
                                   10.0), // Optional: Add border radius
                             ),
-                            padding:
-                                EdgeInsets.all(8.0), // Optional: Add padding
-                            margin: EdgeInsets.all(4.0), // Optional: Add margin
+                            padding: const EdgeInsets.all(
+                                8.0), // Optional: Add padding
+                            margin: const EdgeInsets.all(
+                                4.0), // Optional: Add margin
                             child: Text(
                               record?.record2 ?? '',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Color(0xFF5b5b5b)), // Set text color
                             ),
                           ),
                         if ((record?.record3 ?? '').isNotEmpty)
                           Container(
                             width: 380,
-                            constraints: BoxConstraints(minHeight: 50.0),
+                            constraints: const BoxConstraints(minHeight: 50.0),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                  color: Color(0xFFBCBCBC),
+                                  color: const Color(0xFFBCBCBC),
                                   width: 1.8), // Optional: Add border
                               borderRadius: BorderRadius.circular(
                                   10.0), // Optional: Add border radius
                             ),
-                            padding:
-                                EdgeInsets.all(8.0), // Optional: Add padding
-                            margin: EdgeInsets.all(4.0), // Optional: Add margin
+                            padding: const EdgeInsets.all(
+                                8.0), // Optional: Add padding
+                            margin: const EdgeInsets.all(
+                                4.0), // Optional: Add margin
                             child: Text(
                               record?.record3 ?? '',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Color(0xFF5b5b5b)), // Set text color
                             ),
                           ),
@@ -292,7 +295,7 @@ class CalendarPageState extends State<CalendarPage> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () {
           // Check if the selected day is in the future
           if (_selectedDay.isAfter(DateTime.now())) {

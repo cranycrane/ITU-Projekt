@@ -9,8 +9,8 @@ class UserController {
   final String baseUrl = "http://10.0.2.2:8000";
   final storageService = StorageService();
 
-  Future<UserProfile> getUserData() async {
-    String? userId = await StorageService().getUserId();
+  Future<UserProfile> getUserData([String? userId]) async {
+    userId ??= await StorageService().getUserId();
 
     final response =
         await http.get(Uri.parse('$baseUrl/getUserData.php?userId=$userId'));
@@ -39,7 +39,6 @@ class UserController {
             lastName: lastName,
             profileImage: filePath);
       } else {
-        print(user);
         return UserProfile(
             userId: int.parse(userId!),
             firstName: firstName,
@@ -94,11 +93,9 @@ class UserController {
 
     if (response.statusCode == 200) {
       // Zpracování úspěšné odpovědi
-      print('Profilový obrázek byl úspěšně aktualizován.');
     } else {
       // Zpracování chyby
-      print(
-          'Chyba při aktualizaci profilového obrázku: ${response.statusCode}');
+      throw Exception("Chyba pri aktualizaci profiloveho obrazku");
     }
   }
 
@@ -113,6 +110,21 @@ class UserController {
       return json.decode(response.body);
     } else {
       throw Exception('Pri mazani zaznamu doslo k chybe');
+    }
+  }
+
+  Future<bool> deleteAccount() async {
+    String? userId = await StorageService().getUserId();
+    Uri apiUrl = Uri.parse('$baseUrl/deleteAccount.php');
+
+    final response = await http.delete(
+      Uri.parse('$baseUrl/deleteAccount.php?userId=$userId'),
+    );
+    print(userId);
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception('Pri mazani zaznamu doslo k chybe ${response.body}');
     }
   }
 }

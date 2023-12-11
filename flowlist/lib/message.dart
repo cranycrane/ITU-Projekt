@@ -1,6 +1,3 @@
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 class Message {
   final int messageId;
   final int fromUserId;

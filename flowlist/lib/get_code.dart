@@ -10,10 +10,10 @@ class PsychoUserPage extends StatefulWidget {
   const PsychoUserPage({Key? key}) : super(key: key);
 
   @override
-  _PsychoUserPageState createState() => _PsychoUserPageState();
+  PsychoUserPageState createState() => PsychoUserPageState();
 }
 
-class _PsychoUserPageState extends State<PsychoUserPage> {
+class PsychoUserPageState extends State<PsychoUserPage> {
   bool isLoading = true;
   bool? hasPsychologist;
   String? pairingCode;
@@ -30,14 +30,10 @@ class _PsychoUserPageState extends State<PsychoUserPage> {
         .getPairingCode(); // Předpokládáme, že máte tuto funkci
     if (userInfo['hasPsychologist'] == true) {
       // Pokud má uživatel přiděleného psychologa, přesměrujte ho na stránku zpráv
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-              builder: (context) => MessagesPage(
-                  toUserId: userInfo['psychoId']
-                      .toString())), // nahraďte správným cílem
-          (Route<dynamic> route) => false,
-        );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext newContext) =>
+                MessagesPage(toUserId: userInfo['psychoId'].toString())));
       });
     } else {
       // Uložte kód a aktualizujte UI
@@ -63,7 +59,7 @@ class _PsychoUserPageState extends State<PsychoUserPage> {
       // Zde můžete přidat další navigaci pro Search, Notifications atd.
       case 1:
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => SearchPage()));
+            .push(MaterialPageRoute(builder: (context) => const SearchPage()));
         break;
       case 2:
         break;
@@ -74,11 +70,6 @@ class _PsychoUserPageState extends State<PsychoUserPage> {
     }
   }
 
-  Widget _buildMessagesPage() {
-    // Implementace UI pro zprávy s psychologem
-    return Text("ahoj");
-  }
-
   Widget _buildPairingPage(String? code) {
     return Center(
       child: Padding(
@@ -86,25 +77,25 @@ class _PsychoUserPageState extends State<PsychoUserPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min, // Zajišťuje, že obsah je ve středu
           children: <Widget>[
-            Text(
+            const Text(
               'Váš párovací kód:',
               style: TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 8.0), // Vytváří vertikální mezeru
+            const SizedBox(height: 8.0), // Vytváří vertikální mezeru
             Text(
               code ??
                   "N/A", // Zobrazuje kód nebo "N/A", pokud kód není dostupný
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24.0,
-                color: Colors.blue,
+                color: Color(0xFFE50E2B),
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 16.0), // Další vertikální mezera
-            Text(
+            const SizedBox(height: 16.0), // Další vertikální mezera
+            const Text(
               'Tento kód slouží ke spárování se svým psychologem. Jeho sdílením souhlasíte s tím, že osoba, se kterou kód sdílíte, bude moci sledovat vaše záznamy a psát vám zprávy.',
               textAlign: TextAlign.center, // Zarovnává text na střed
               style: TextStyle(fontSize: 16.0),
@@ -162,8 +153,8 @@ class _PsychoUserPageState extends State<PsychoUserPage> {
         backgroundColor: Colors.red,
         child: const Icon(Icons.add),
         onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => NewEntryPage()));
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const NewEntryPage()));
           // Implementace akce pro Floating Action Button
         },
       ),

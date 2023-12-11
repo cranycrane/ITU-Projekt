@@ -10,16 +10,13 @@ import 'get_code.dart';
 class NewEntryPage extends StatefulWidget {
   final DateTime? selectedDay;
 
-  NewEntryPage({Key? key, this.selectedDay}) : super(key: key);
+  const NewEntryPage({Key? key, this.selectedDay}) : super(key: key);
 
   @override
-  _NewEntryPageState createState() => _NewEntryPageState();
+  NewEntryPageState createState() => NewEntryPageState();
 }
 
-/*
-TODO: Hlasku uzivateli po uspesnem pridani
-*/
-class _NewEntryPageState extends State<NewEntryPage> {
+class NewEntryPageState extends State<NewEntryPage> {
   late DateTime selectedDate; // Přidáno pro sledování vybraného data
   final TextEditingController _firstController = TextEditingController();
   final TextEditingController _secondController = TextEditingController();
@@ -60,8 +57,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
       await diaryController.createEntry(record);
       return true; // Úspěch
     } catch (e) {
-      print('Chyba při vytváření záznamu: $e');
-      return false; // Neúspěch
+      throw Exception('Chyba při vytváření záznamu: $e');
     }
   }
 
@@ -71,14 +67,13 @@ class _NewEntryPageState extends State<NewEntryPage> {
       await diaryController.deleteEntry(selectedDate);
       return true; // Úspěch
     } catch (e) {
-      print('Chyba při vytváření záznamu: $e');
-      return false; // Neúspěch
+      throw Exception('Chyba při mazání záznamu: $e');
     }
   }
 
   void _changeDay(int days) {
     final DateTime newDate = selectedDate.add(Duration(days: days));
- 
+
     // Check if the new date is in the future and if the selected date is not today
     if (newDate.isAfter(DateTime.now()) && selectedDate != DateTime.now()) {
       return; // Do nothing if trying to go into the future from a non-today date
@@ -102,7 +97,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
         break;
       case 1:
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => SearchPage()));
+            .push(MaterialPageRoute(builder: (context) => const SearchPage()));
         break;
       case 2:
         Navigator.of(context).push(
@@ -117,7 +112,6 @@ class _NewEntryPageState extends State<NewEntryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double statusBarHeight = MediaQuery.of(context).padding.top;
     final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     final double screenHeight = MediaQuery.of(context).size.height;
 
@@ -131,16 +125,16 @@ class _NewEntryPageState extends State<NewEntryPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-              icon: Icon(Icons.chevron_left, color: Colors.black),
+              icon: const Icon(Icons.chevron_left, color: Colors.black),
               onPressed: () => _changeDay(-1),
             ),
             Text(
               formattedDate,
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.black),
             ),
             IconButton(
-              icon: Icon(Icons.chevron_right, color: Colors.black),
+              icon: const Icon(Icons.chevron_right, color: Colors.black),
               onPressed: () => _changeDay(1),
             ),
           ],
@@ -163,9 +157,9 @@ class _NewEntryPageState extends State<NewEntryPage> {
                 future: _recordFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   } else if (snapshot.hasError) {
-                    return Text('Došlo k chybě při načítání dat');
+                    return const Text('Došlo k chybě při načítání dat');
                   } else {
                     // Aktualizace textových polí podle načtených dat
                     if (!_isDataLoaded && snapshot.data != null) {
@@ -187,7 +181,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                       crossAxisAlignment:
                           CrossAxisAlignment.stretch, // Přidáno pro zarovnání
                       children: <Widget>[
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         TextField(
                           controller: _firstController,
                           decoration: InputDecoration(
@@ -220,11 +214,11 @@ class _NewEntryPageState extends State<NewEntryPage> {
                           ),
                           maxLines: 5,
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Flexible(
+                            const Flexible(
                               child: Text(
                                 'Jak bys ohodnotil svůj den?',
                                 style: TextStyle(fontSize: 16),
@@ -237,7 +231,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                               child: TextField(
                                 textAlign: TextAlign.center,
                                 controller: _ratingController,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   hintText: '/10',
                                   border: OutlineInputBorder(),
                                   contentPadding:
@@ -248,7 +242,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         Row(
                           // Tlačítka vedle sebe s mezerou
                           children: <Widget>[
@@ -258,7 +252,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                                   // Zobrazení dialogového okna pro potvrzení
                                   if (!dataFromBackend) {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
+                                        const SnackBar(
                                             content: Text(
                                                 "Nelze smazat zaznam, ktery nebyl ulozen")));
                                   }
@@ -289,13 +283,22 @@ class _NewEntryPageState extends State<NewEntryPage> {
                                       false; // Pokud se dialog zavře bez výběru, vrátí se false
 
                                   if (confirmed) {
+                                    // Uložení kontextu před asynchronní operací
+                                    final BuildContext savedContext = context;
+
                                     // Provádění akce smazání, pokud uživatel potvrdí
                                     bool success = await deleteEntry();
                                     String message = success
                                         ? 'Záznam byl úspěšně smazán'
                                         : 'Smazání záznamu se nezdařilo';
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text(message)));
+
+                                    // Použití uloženého kontextu
+                                    if (mounted) {
+                                      // Kontrola, zda je stále kontext aktivní
+                                      ScaffoldMessenger.of(savedContext)
+                                          .showSnackBar(
+                                              SnackBar(content: Text(message)));
+                                    }
 
                                     if (success) {
                                       _onItemTapped(0);
@@ -303,21 +306,26 @@ class _NewEntryPageState extends State<NewEntryPage> {
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: Colors.grey, // Barva tlačítka SMAZAT
+                                  backgroundColor:
+                                      Colors.grey, // Barva tlačítka SMAZAT
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(
                                         5), // Bez zaoblení
                                   ),
-                                  padding: EdgeInsets.symmetric(vertical: 16),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
                                 ),
                                 child: const Text('SMAZAT'),
                               ),
                             ),
 
-                            SizedBox(width: 8), // Mezera mezi tlačítky
+                            const SizedBox(width: 8), // Mezera mezi tlačítky
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () async {
+                                  // Uložení kontextu před asynchronní operací
+                                  final BuildContext savedContext = context;
+
                                   FlowData record = FlowData(
                                       record1: _firstController.text,
                                       record2: _secondController.text,
@@ -330,8 +338,13 @@ class _NewEntryPageState extends State<NewEntryPage> {
                                   String message = success
                                       ? 'Záznam byl úspěšně přidán'
                                       : 'Přidání záznamu se nezdařilo';
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text(message)));
+
+                                  // Použití uloženého kontextu a kontrola, zda je widget stále v stromu
+                                  if (mounted) {
+                                    ScaffoldMessenger.of(savedContext)
+                                        .showSnackBar(
+                                            SnackBar(content: Text(message)));
+                                  }
 
                                   if (success) {
                                     _onItemTapped(0);
@@ -340,9 +353,10 @@ class _NewEntryPageState extends State<NewEntryPage> {
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
                                       Colors.red, // Barva tlačítka ULOŽIT
-                                  padding: EdgeInsets.symmetric(vertical: 16),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
                                 ),
-                                child: Text('ULOŽIT'),
+                                child: const Text('ULOŽIT'),
                               ),
                             ),
                           ],
@@ -391,7 +405,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
           ? null
           : FloatingActionButton(
               backgroundColor: Colors.red,
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
               onPressed: () {
                 // Akce pro FloatingActionButton
               },

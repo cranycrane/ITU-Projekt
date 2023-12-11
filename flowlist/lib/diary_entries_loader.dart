@@ -29,8 +29,7 @@ class DiaryEntriesLoader {
         return FlowData(day: selectedDay);
       }
     } catch (error) {
-      print('Chyba při načítání záznamů: $error');
-      throw Exception("error loading entries");
+      throw Exception("error loading entries $error");
     }
   }
 }

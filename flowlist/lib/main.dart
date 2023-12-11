@@ -5,7 +5,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'firebase_options.dart';
 import 'calendar_screen.dart';
 import 'diary_controller.dart';
-import 'deviceUtils.dart';
+import 'device_utils.dart';
 import 'storage_service.dart';
 
 void main() async {
@@ -19,7 +19,6 @@ void main() async {
   String userId = await diaryController.getUserId(deviceId);
   // Uložení ID zařízení
   await StorageService().saveUserId(userId);
-  print('Device ID: $deviceId UserId: $userId');
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

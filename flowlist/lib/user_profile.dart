@@ -13,8 +13,6 @@ class UserProfile {
       this.lastName = '',
       this.profileImage});
 
-  File? _getUserPhoto(String? profileImagePath) {}
-
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
       userId: json['userId'],

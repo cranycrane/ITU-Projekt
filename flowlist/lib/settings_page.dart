@@ -10,15 +10,16 @@ import 'package:permission_handler/permission_handler.dart';
 import 'user_profile.dart';
 import 'psycho_overview.dart';
 import 'get_code.dart';
+import 'main.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
   @override
-  _SettingsPageState createState() => _SettingsPageState();
+  SettingsPageState createState() => SettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class SettingsPageState extends State<SettingsPage> {
   UserProfile? user;
 
   Map<String, dynamic>? statistics;
@@ -52,7 +53,7 @@ class _SettingsPageState extends State<SettingsPage> {
               toolbarColor: const Color.fromARGB(255, 255, 91, 73),
               toolbarWidgetColor: Colors.white,
               initAspectRatio: CropAspectRatioPreset.square,
-              lockAspectRatio: false),
+              lockAspectRatio: true),
           IOSUiSettings(
             title: 'Cropper',
           ),
@@ -79,9 +80,9 @@ class _SettingsPageState extends State<SettingsPage> {
             'Potvrzení',
             style: TextStyle(color: Colors.red), // Nastavení barvy nadpisu
           ),
-          content: SingleChildScrollView(
+          content: const SingleChildScrollView(
             child: ListBody(
-              children: const <Widget>[
+              children: <Widget>[
                 Text(
                     'Opravdu si přejete smazat svůj účet? Tato akce je nevratná.'),
               ],
@@ -98,15 +99,18 @@ class _SettingsPageState extends State<SettingsPage> {
               },
             ),
             TextButton(
-              child: Text(
+              child: const Text(
                 'Smazat',
                 style: TextStyle(
                     color:
                         Colors.red), // Nastavení barvy textu pro akci smazání
               ),
-              onPressed: () {
-                // Zde by měla být logika pro smazání účtu
-                Navigator.of(context).pop();
+              onPressed: () async {
+                bool success = await userController.deleteAccount();
+                if (mounted && success) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const CalendarPage()));
+                }
               },
             ),
           ],
@@ -131,10 +135,7 @@ class _SettingsPageState extends State<SettingsPage> {
       });
     } catch (e) {
       // Zpracování případných chyb při získávání jména
-      print('Chyba při získávání jména uživatele: $e');
-      setState(() {
-        isLoading = false;
-      });
+      throw Exception("Chyba pri ziskavani dat: $e");
     }
   }
 
@@ -148,7 +149,7 @@ class _SettingsPageState extends State<SettingsPage> {
       // Další akce po úspěšné aktualizaci (např. zobrazení zprávy)
     } catch (e) {
       // Zpracování chyby
-      print('Chyba při aktualizaci jména: $e');
+      throw Exception("Chyba pri ziskavani dat: $e");
     }
   }
 
@@ -166,7 +167,7 @@ class _SettingsPageState extends State<SettingsPage> {
       // Zde můžete přidat další navigaci pro Search, Notifications atd.
       case 1:
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => SearchPage()));
+            .push(MaterialPageRoute(builder: (context) => const SearchPage()));
         break;
       case 2:
         Navigator.of(context).push(
@@ -320,7 +321,7 @@ class _SettingsPageState extends State<SettingsPage> {
               future: userController.getStatistics(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 } else if (snapshot.hasError) {
                   return const Text(
                     'Chyba při načítání statistik',
@@ -401,8 +402,8 @@ class _SettingsPageState extends State<SettingsPage> {
         backgroundColor: Colors.red,
         child: const Icon(Icons.add),
         onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => NewEntryPage()));
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const NewEntryPage()));
           // Implementace akce pro Floating Action Button
         },
       ),
