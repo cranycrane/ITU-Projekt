@@ -7,6 +7,7 @@ import 'messages_page.dart';
 import 'settings_page.dart';
 
 class PsychoUserPage extends StatefulWidget {
+  final int _selectedIndex = 2;
   const PsychoUserPage({Key? key}) : super(key: key);
 
   @override
@@ -17,7 +18,6 @@ class PsychoUserPageState extends State<PsychoUserPage> {
   bool isLoading = true;
   bool? hasPsychologist;
   String? pairingCode;
-  int _selectedIndex = 3;
 
   @override
   void initState() {
@@ -46,10 +46,6 @@ class PsychoUserPageState extends State<PsychoUserPage> {
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
     // Logika pro navigaci na různé stránky
     switch (index) {
       case 0:
@@ -65,7 +61,7 @@ class PsychoUserPageState extends State<PsychoUserPage> {
         break;
       case 3:
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const SettingsPage()));
+            MaterialPageRoute(builder: (context) => const SettingsPage()));
         break;
     }
   }
@@ -127,23 +123,23 @@ class PsychoUserPageState extends State<PsychoUserPage> {
           children: <Widget>[
             IconButton(
               icon: Icon(Icons.home,
-                  color: _selectedIndex == 0 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 0 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
               icon: Icon(Icons.search,
-                  color: _selectedIndex == 1 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 1 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(1),
             ),
             const SizedBox(width: 48), // Prostor pro Floating Action Button
             IconButton(
-              icon: Icon(Icons.notifications_none,
-                  color: _selectedIndex == 2 ? Colors.red : Colors.grey),
+              icon: Icon(Icons.message,
+                  color: widget._selectedIndex == 2 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
               icon: Icon(Icons.person_outline,
-                  color: _selectedIndex == 3 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 3 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(3),
             ),
           ],

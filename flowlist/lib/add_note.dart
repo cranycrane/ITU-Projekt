@@ -7,6 +7,7 @@ import 'diary_entries_loader.dart';
 import 'diary_controller.dart';
 import 'package:intl/intl.dart'; // Přidání pro formátování data
 import 'get_code.dart';
+
 class NewEntryPage extends StatefulWidget {
   final DateTime? selectedDay;
 
@@ -101,7 +102,7 @@ class NewEntryPageState extends State<NewEntryPage> {
         break;
       case 2:
         Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => PsychoUserPage()));
+            MaterialPageRoute(builder: (context) => const PsychoUserPage()));
         break;
       case 3:
         Navigator.of(context).push(
@@ -389,7 +390,7 @@ class NewEntryPageState extends State<NewEntryPage> {
             ),
             const SizedBox(width: 48), // Prostor pro Floating Action Button
             IconButton(
-              icon: Icon(Icons.notifications_none,
+              icon: Icon(Icons.message,
                   color: _selectedIndex == 2 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(2),
             ),

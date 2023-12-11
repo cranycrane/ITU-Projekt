@@ -9,6 +9,8 @@ import 'flow.dart';
 import 'get_code.dart';
 
 class CalendarPage extends StatefulWidget {
+  final int _selectedIndex = 0;
+
   const CalendarPage({Key? key}) : super(key: key);
 
   @override
@@ -27,8 +29,6 @@ class CalendarPageState extends State<CalendarPage> {
   String record3 = '';
   String score = '';
 
-  int _selectedIndex = 0;
-
   @override
   void initState() {
     super.initState();
@@ -43,12 +43,6 @@ class CalendarPageState extends State<CalendarPage> {
   }
 
   void _onItemTapped(int index) {
-    if (index != _selectedIndex) {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
-
     switch (index) {
       case 0:
         // Kdyby byla domovská stránka na indexu 0
@@ -270,24 +264,24 @@ class CalendarPageState extends State<CalendarPage> {
           children: <Widget>[
             IconButton(
               icon: Icon(Icons.home,
-                  color: _selectedIndex == 0 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 0 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
               icon: Icon(Icons.search,
-                  color: _selectedIndex == 1 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 1 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(1),
             ),
             const SizedBox(
                 width: 48), // The empty space in middle of the BottomAppBar
             IconButton(
-              icon: Icon(Icons.notifications_none,
-                  color: _selectedIndex == 2 ? Colors.red : Colors.grey),
+              icon: Icon(Icons.message,
+                  color: widget._selectedIndex == 2 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
               icon: Icon(Icons.person_outline,
-                  color: _selectedIndex == 3 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 3 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(3),
             ),
           ],

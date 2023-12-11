@@ -115,12 +115,11 @@ class UserController {
 
   Future<bool> deleteAccount() async {
     String? userId = await StorageService().getUserId();
-    Uri apiUrl = Uri.parse('$baseUrl/deleteAccount.php');
 
     final response = await http.delete(
       Uri.parse('$baseUrl/deleteAccount.php?userId=$userId'),
     );
-    print(userId);
+
     if (response.statusCode == 200) {
       return true;
     } else {

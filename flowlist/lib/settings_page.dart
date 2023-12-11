@@ -10,9 +10,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'user_profile.dart';
 import 'psycho_overview.dart';
 import 'get_code.dart';
-import 'main.dart';
 
 class SettingsPage extends StatefulWidget {
+  final int _selectedIndex = 3;
+
   const SettingsPage({Key? key}) : super(key: key);
 
   @override
@@ -25,8 +26,6 @@ class SettingsPageState extends State<SettingsPage> {
   Map<String, dynamic>? statistics;
 
   bool isLoading = true;
-
-  int _selectedIndex = 3; // Index pro nastavení stránky
 
   bool _isEditingName = false;
   final TextEditingController _nameController = TextEditingController();
@@ -154,10 +153,6 @@ class SettingsPageState extends State<SettingsPage> {
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
     // Logika pro navigaci na různé stránky
     switch (index) {
       case 0:
@@ -171,7 +166,7 @@ class SettingsPageState extends State<SettingsPage> {
         break;
       case 2:
         Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => PsychoUserPage()));
+            MaterialPageRoute(builder: (context) => const PsychoUserPage()));
         break;
       case 3:
         // Pro tyto indexy není třeba žádná akce, protože jsme již na stránce nastavení
@@ -376,23 +371,23 @@ class SettingsPageState extends State<SettingsPage> {
           children: <Widget>[
             IconButton(
               icon: Icon(Icons.home,
-                  color: _selectedIndex == 0 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 0 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
               icon: Icon(Icons.search,
-                  color: _selectedIndex == 1 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 1 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(1),
             ),
             const SizedBox(width: 48), // Prostor pro Floating Action Button
             IconButton(
-              icon: Icon(Icons.notifications_none,
-                  color: _selectedIndex == 2 ? Colors.red : Colors.grey),
+              icon: Icon(Icons.message,
+                  color: widget._selectedIndex == 2 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
               icon: Icon(Icons.person_outline,
-                  color: _selectedIndex == 3 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 3 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(3),
             ),
           ],

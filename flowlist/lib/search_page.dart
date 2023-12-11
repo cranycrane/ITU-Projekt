@@ -8,6 +8,8 @@ import 'package:intl/intl.dart';
 import 'get_code.dart';
 
 class SearchPage extends StatefulWidget {
+  final int _selectedIndex = 1;
+
   const SearchPage({Key? key}) : super(key: key);
 
   @override
@@ -15,7 +17,6 @@ class SearchPage extends StatefulWidget {
 }
 
 class SearchPageState extends State<SearchPage> {
-  int _selectedIndex = 1; // Index pro vyhledávací stránku
   final TextEditingController _searchController = TextEditingController();
   List<FlowData> _allRecords = []; // List pro uložení všech záznamů
   List<FlowData> _filteredRecords =
@@ -60,28 +61,22 @@ class SearchPageState extends State<SearchPage> {
   }
 
   void _onItemTapped(int index) {
-    if (index != _selectedIndex) {
-      setState(() {
-        _selectedIndex = index;
-      });
-
-      switch (index) {
-        case 0:
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const CalendarPage()));
-          break;
-        case 1:
-          // Již jsme na vyhledávací stránce, není potřeba akce
-          break;
-        case 2:
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => PsychoUserPage()));
-          break;
-        case 3:
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const SettingsPage()));
-          break;
-      }
+    switch (index) {
+      case 0:
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const CalendarPage()));
+        break;
+      case 1:
+        // Již jsme na vyhledávací stránce, není potřeba akce
+        break;
+      case 2:
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => PsychoUserPage()));
+        break;
+      case 3:
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const SettingsPage()));
+        break;
     }
   }
 
@@ -133,29 +128,29 @@ class SearchPageState extends State<SearchPage> {
           children: <Widget>[
             IconButton(
               icon: Icon(Icons.home, // color: Color(0xFFE50E2B)
-                  color: _selectedIndex == 0
+                  color: widget._selectedIndex == 0
                       ? const Color(0xFFE50E2B)
                       : Colors.grey),
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
               icon: Icon(Icons.search,
-                  color: _selectedIndex == 1
+                  color: widget._selectedIndex == 1
                       ? const Color(0xFFE50E2B)
                       : Colors.grey),
               onPressed: () => _onItemTapped(1),
             ),
             const SizedBox(width: 48), // Prostor pro Floating Action Button
             IconButton(
-              icon: Icon(Icons.notifications_none,
-                  color: _selectedIndex == 2
+              icon: Icon(Icons.message,
+                  color: widget._selectedIndex == 2
                       ? const Color(0xFFE50E2B)
                       : Colors.grey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
               icon: Icon(Icons.person_outline,
-                  color: _selectedIndex == 3
+                  color: widget._selectedIndex == 3
                       ? const Color(0xFFE50E2B)
                       : Colors.grey),
               onPressed: () => _onItemTapped(3),
