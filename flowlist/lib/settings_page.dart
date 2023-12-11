@@ -52,7 +52,7 @@ class SettingsPageState extends State<SettingsPage> {
               toolbarColor: const Color.fromARGB(255, 255, 91, 73),
               toolbarWidgetColor: Colors.white,
               initAspectRatio: CropAspectRatioPreset.square,
-              lockAspectRatio: false),
+              lockAspectRatio: true),
           IOSUiSettings(
             title: 'Cropper',
           ),
