@@ -1,19 +1,22 @@
-import 'package:flowlist/calendar_screen.dart';
+//import 'package:flowlist/calendar_screen.dart';
 import 'package:flowlist/psycho_controller.dart';
 import 'package:flutter/material.dart';
-import 'search_page.dart';
-import 'add_note.dart';
-import 'user_controller.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:image_cropper/image_cropper.dart';
+//import 'search_page.dart';
+//import 'add_note.dart';
+//import 'user_controller.dart';
+//import 'package:image_picker/image_picker.dart';
+//import 'package:image_cropper/image_cropper.dart';
 import 'dart:io';
-import 'package:permission_handler/permission_handler.dart';
+//import 'package:permission_handler/permission_handler.dart';
 import 'user_profile.dart';
 import 'calendar_client.dart';
+import 'settings_page.dart';
 
 class PsychoOverviewPage extends StatefulWidget {
+  const PsychoOverviewPage({super.key});
+
   @override
-  _PsychoOverviewPageState createState() => _PsychoOverviewPageState();
+ _PsychoOverviewPageState createState() => _PsychoOverviewPageState();
 }
 
 class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
@@ -213,6 +216,8 @@ class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
           ElevatedButton(
             onPressed: () {
               // Akce pro normální tlačítko
+              Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const SettingsPage()));
             },
             style: ElevatedButton.styleFrom(
               primary: Colors.white,
@@ -247,7 +252,6 @@ class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
                   decoration: const InputDecoration(
                     hintText: 'Párovací kód',
                   ),
-                  keyboardType: TextInputType.number,
                 ),
                 actions: <Widget>[
                   TextButton(
