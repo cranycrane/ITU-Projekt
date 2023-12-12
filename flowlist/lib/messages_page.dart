@@ -101,7 +101,7 @@ String formatTimestamp(String timestampStr) {
                     vertical: 3.0), // Vnější odsazení pro obdélník
             decoration: BoxDecoration(
               color: Color(0xFFD9D9D9),
-              borderRadius:
+              borderRadius: 
                   BorderRadius.all(Radius.circular(20.0)), // Zaoblené rohy
               border: Border.all(
                 color: Color(0xFF61646B), // Color of the outline
