@@ -68,6 +68,9 @@ try {
 
     // Výpočet počtu nevyplněných dnů
     $unfilledDaysCount = $totalDays - $filledDaysCount;
+    if ($unfilledDaysCount < 0) {
+        $unfilledDaysCount = 0;
+    }
 
     // Vytvoření výsledkového pole
     $stats = [

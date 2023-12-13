@@ -22,6 +22,8 @@ class CalendarPageState extends State<CalendarPage> {
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
 
+  List<FlowData?> _allRecords = [];
+
   late Future<FlowData?> _recordFuture;
 
   String record1 = '';
@@ -33,13 +35,28 @@ class CalendarPageState extends State<CalendarPage> {
   void initState() {
     super.initState();
     _selectedDay = DateTime.now();
-    _recordFuture = _loadData(_selectedDay);
+    _fetchAllRecords();
+    _recordFuture = _loadDay(_focusedDay);
   }
 
   // Funkce pro načtení záznamů z deníku
-  Future<FlowData?> _loadData(DateTime selectedDay) async {
-    DiaryEntriesLoader loader = DiaryEntriesLoader(diaryController);
-    return await loader.loadDiaryEntries(selectedDay);
+  void _fetchAllRecords() async {
+    List<FlowData> records = await diaryController.readEntries();
+    setState(() {
+      _allRecords = records;
+    });
+  }
+
+  Future<FlowData?> _loadDay(DateTime date) async {
+    var dayRecords = _allRecords
+        .where(
+          (record) => isSameDay(record?.day, date),
+        )
+        .toList();
+
+    var dayRecord = dayRecords.isNotEmpty ? dayRecords.first : null;
+
+    return dayRecord;
   }
 
   void _onItemTapped(int index) {
@@ -80,93 +97,182 @@ class CalendarPageState extends State<CalendarPage> {
             const SizedBox(
               height: 16,
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.6,
-              width: 400,
-              child: TableCalendar(
-                firstDay: DateTime.utc(2020, 10, 16),
-                lastDay: DateTime.utc(2030, 3, 14),
-                locale: 'cs_CZ',
-                startingDayOfWeek: StartingDayOfWeek.monday,
-                focusedDay: _focusedDay,
-                calendarFormat: _calendarFormat,
-                shouldFillViewport: true,
-                calendarStyle: CalendarStyle(
-                  defaultDecoration: BoxDecoration(
-                      shape: BoxShape
-                          .rectangle, // You can use different shapes like BoxShape.rectangle
-                      color: const Color(0xFFEAEAEA),
-                      borderRadius: BorderRadius.circular(10.0)),
-                  defaultTextStyle: const TextStyle(
-                    fontSize: 15, // Set the font size as needed
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black, // Set the text color as needed
+            Center(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.6,
+                width: MediaQuery.of(context).size.width * 0.95,
+                child: TableCalendar(
+                  firstDay: DateTime.utc(2020, 10, 16),
+                  lastDay: DateTime.utc(2030, 3, 14),
+                  locale: 'cs_CZ',
+                  startingDayOfWeek: StartingDayOfWeek.monday,
+                  focusedDay: _focusedDay,
+                  calendarFormat: _calendarFormat,
+                  shouldFillViewport: true,
+                  calendarBuilders: CalendarBuilders(
+                    selectedBuilder: (context, date, events) {
+                      return Container(
+                        margin: EdgeInsets.all(6.0),
+                        decoration: BoxDecoration(
+                          color: const Color(
+                              0xFFE50E2B), // Zde změňte barvu na požadovanou
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '${date.day}',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15),
+                          ),
+                        ),
+                      );
+                    },
+                    markerBuilder: (context, date, events) {
+                      var dayRecords = _allRecords
+                          .where(
+                            (record) => isSameDay(record?.day, date),
+                          )
+                          .toList();
+
+                      var dayRecord =
+                          dayRecords.isNotEmpty ? dayRecords.first : null;
+
+                      // Kontrola, zda je den vybraný a zároveň ve stejném měsíci jako _focusedDay
+                      bool isFocused = isSameDay(_selectedDay, date);
+
+                      if (dayRecord != null && dayRecord.score != null) {
+                        Color scoreColor;
+                        Color textColor = Colors.white;
+
+                        if (isSameDay(_selectedDay, date)) {
+                          scoreColor = Color(0xFFE50E2B);
+                        } else if (isSameDay(date, DateTime.now())) {
+                          scoreColor = Color(0xFFE2AFB6);
+                          textColor = Colors.black;
+                        } else {
+                          scoreColor = Color(0xFF6E6E6E);
+                        }
+
+                        FontWeight fontWeight =
+                            isFocused ? FontWeight.bold : FontWeight.normal;
+
+                        // Získání šířky obrazovky
+                        double screenWidth =
+                            (MediaQuery.of(context).size.width * 0.95);
+                        // Vypočítání šířky jednoho dne
+                        double dayWidth = screenWidth / 7 - 12;
+
+                        // Zobrazit skóre pod dnem
+                        return Positioned(
+                          child: Container(
+                            width: dayWidth,
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: scoreColor,
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(8),
+                                  bottomRight: Radius.circular(8)),
+                            ),
+                            child: Text(
+                              '${dayRecord.score}/10',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: fontWeight,
+                                color: textColor,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                      return null;
+                    },
                   ),
-                  weekendDecoration: BoxDecoration(
-                      shape: BoxShape
-                          .rectangle, // You can use different shapes like BoxShape.rectangle
-                      color: const Color(0xFFEAEAEA),
-                      borderRadius: BorderRadius.circular(10.0)),
-                  weekendTextStyle: const TextStyle(
-                    fontSize: 15, // Set the font size as needed
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black, // Set the text color as needed
+                  calendarStyle: CalendarStyle(
+                    defaultDecoration: BoxDecoration(
+                        shape: BoxShape
+                            .rectangle, // You can use different shapes like BoxShape.rectangle
+                        color: const Color(0xFFEAEAEA),
+                        borderRadius: BorderRadius.circular(10.0)),
+                    defaultTextStyle: const TextStyle(
+                      fontSize: 15, // Set the font size as needed
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black, // Set the text color as needed
+                    ),
+                    weekendDecoration: BoxDecoration(
+                        shape: BoxShape
+                            .rectangle, // You can use different shapes like BoxShape.rectangle
+                        color: const Color(0xFFEAEAEA),
+                        borderRadius: BorderRadius.circular(10.0)),
+                    weekendTextStyle: const TextStyle(
+                      fontSize: 15, // Set the font size as needed
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black, // Set the text color as needed
+                    ),
+                    outsideDecoration: BoxDecoration(
+                        shape: BoxShape
+                            .rectangle, // You can use different shapes like BoxShape.rectangle
+                        color: const Color(0xFFBBBBBB),
+                        borderRadius: BorderRadius.circular(
+                            10.0) // Background color of the day cell
+                        ),
+                    outsideTextStyle: const TextStyle(
+                      fontSize: 15, // Set the font size as needed
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF6E6E6E), // Set the text color as needed
+                    ),
+                    selectedDecoration: BoxDecoration(
+                        shape: BoxShape
+                            .rectangle, // You can use different shapes like BoxShape.rectangle
+                        color: const Color(0xFFE50E2B),
+                        borderRadius: BorderRadius.circular(10.0)),
+                    selectedTextStyle: const TextStyle(
+                      fontSize: 15, // Set the font size as needed
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white, // Set the text color as needed
+                    ),
+                    todayDecoration: BoxDecoration(
+                        shape: BoxShape
+                            .rectangle, // You can use different shapes like BoxShape.rectangle
+                        color: const Color(0xFFE2AFB6),
+                        borderRadius: BorderRadius.circular(10.0)),
+                    todayTextStyle: const TextStyle(
+                      fontSize: 15, // Set the font size as needed
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black, // Set the text color as needed
+                    ),
                   ),
-                  outsideDecoration: BoxDecoration(
-                      shape: BoxShape
-                          .rectangle, // You can use different shapes like BoxShape.rectangle
-                      color: const Color(0xFFBBBBBB),
-                      borderRadius: BorderRadius.circular(
-                          10.0) // Background color of the day cell
-                      ),
-                  outsideTextStyle: const TextStyle(
-                    fontSize: 15, // Set the font size as needed
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF6E6E6E), // Set the text color as needed
-                  ),
-                  selectedDecoration: BoxDecoration(
-                      shape: BoxShape
-                          .rectangle, // You can use different shapes like BoxShape.rectangle
-                      color: const Color(0xFFE50E2B),
-                      borderRadius: BorderRadius.circular(10.0)),
-                  selectedTextStyle: const TextStyle(
-                    fontSize: 15, // Set the font size as needed
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white, // Set the text color as needed
-                  ),
-                  todayDecoration: BoxDecoration(
-                      shape: BoxShape
-                          .rectangle, // You can use different shapes like BoxShape.rectangle
-                      color: const Color(0xFFE2AFB6),
-                      borderRadius: BorderRadius.circular(10.0)),
-                  todayTextStyle: const TextStyle(
-                    fontSize: 15, // Set the font size as needed
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black, // Set the text color as needed
-                  ),
-                ),
-                selectedDayPredicate: (day) {
-                  return isSameDay(_selectedDay, day);
-                },
-                onDaySelected: (selectedDay, focusedDay) {
-                  setState(() {
+                  selectedDayPredicate: (day) {
+                    return isSameDay(_selectedDay, day);
+                  },
+                  onDaySelected: (selectedDay, focusedDay) {
+                    if (selectedDay.isAfter(DateTime.now())) {
+                      // Pokud je vybraný den v budoucnosti, nedělejte nic (nebo zobrazte chybovou zprávu)
+                      return;
+                    }
+
+                    setState(() {
+                      _focusedDay = focusedDay;
+                      _selectedDay = selectedDay;
+                      _recordFuture = _loadDay(selectedDay);
+                    });
+                  },
+
+                  onPageChanged: (focusedDay) {
                     _focusedDay = focusedDay;
-                    _selectedDay = selectedDay;
-                    _recordFuture = _loadData(selectedDay);
-                  });
-                },
-                onPageChanged: (focusedDay) {
-                  _focusedDay = focusedDay;
-                },
-                headerStyle: const HeaderStyle(
-                  formatButtonVisible: false,
-                  titleCentered: true,
-                  titleTextStyle:
-                      TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-                  leftChevronIcon: Icon(Icons.chevron_left, size: 40),
-                  rightChevronIcon: Icon(Icons.chevron_right, size: 40),
+                  },
+                  headerStyle: const HeaderStyle(
+                    formatButtonVisible: false,
+                    titleCentered: true,
+                    titleTextStyle:
+                        TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                    leftChevronIcon: Icon(Icons.chevron_left, size: 40),
+                    rightChevronIcon: Icon(Icons.chevron_right, size: 40),
+                  ),
+                  // Další přizpůsobení vzhledu, pokud je to potřeba
                 ),
-                // Další přizpůsobení vzhledu, pokud je to potřeba
               ),
             ),
             const SizedBox(
@@ -263,11 +369,13 @@ class CalendarPageState extends State<CalendarPage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             IconButton(
+              iconSize: 35,
               icon: Icon(Icons.home,
                   color: widget._selectedIndex == 0 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
+              iconSize: 35,
               icon: Icon(Icons.search,
                   color: widget._selectedIndex == 1 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(1),
@@ -275,11 +383,13 @@ class CalendarPageState extends State<CalendarPage> {
             const SizedBox(
                 width: 48), // The empty space in middle of the BottomAppBar
             IconButton(
+              iconSize: 35,
               icon: Icon(Icons.message,
                   color: widget._selectedIndex == 2 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
+              iconSize: 35,
               icon: Icon(Icons.person_outline,
                   color: widget._selectedIndex == 3 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(3),
@@ -289,7 +399,7 @@ class CalendarPageState extends State<CalendarPage> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
-        child: const Icon(Icons.add),
+        child: const Icon(size: 35, Icons.add),
         onPressed: () {
           // Check if the selected day is in the future
           if (_selectedDay.isAfter(DateTime.now())) {

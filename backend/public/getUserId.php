@@ -23,4 +23,4 @@ catch (Exception $e) {
 }
 
 http_response_code(200);
-echo json_encode(['userId' => $userId]);
+echo json_encode($userId);

@@ -6,6 +6,7 @@ import 'calendar_screen.dart';
 import 'diary_controller.dart';
 import 'device_utils.dart';
 import 'storage_service.dart';
+import 'welcome_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,21 +16,32 @@ void main() async {
   // Získání ID zařízení
   String? deviceId = await DeviceUtils.getDeviceId();
   // Ziskej ID uzivatele
-  String userId = await diaryController.getUserId(deviceId);
+  Map<String, dynamic> userInfo = await diaryController.getUserId(deviceId);
+  bool firstLogin = userInfo['firstLogin'];
   // Uložení ID zařízení
-  await StorageService().saveUserId(userId);
+  await StorageService().saveUserId(userInfo['userId'].toString());
 
-  runApp(const MyApp());
+  runApp(MyApp(
+    firstLogin: firstLogin,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final bool firstLogin;
+  const MyApp({Key? key, required this.firstLogin}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'FlowList',
-      home: CalendarPage(),
-    );
+    if (firstLogin) {
+      return const MaterialApp(
+        title: 'FlowList',
+        home: WelcomePage(),
+      );
+    } else {
+      return const MaterialApp(
+        title: 'FlowList',
+        home: CalendarPage(),
+      );
+    }
   }
 }

@@ -49,6 +49,8 @@ try {
 
     $unAssign = "UPDATE users SET assignedPsycho = NULL WHERE assignedPsycho = ?";
 
+    $stmt = $conn->prepare($unAssign);
+
     $stmt->bind_param("i", $userId);
 
     if ($stmt->execute()) {

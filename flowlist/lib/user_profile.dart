@@ -16,8 +16,8 @@ class UserProfile {
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
       userId: json['userId'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
+      firstName: json['firstName'] ?? 'Jan',
+      lastName: json['lastName'] ?? 'Novák',
       profileImage: json['profileImagePath'],
     );
   }

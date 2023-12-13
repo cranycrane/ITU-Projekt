@@ -2,7 +2,7 @@
 
 namespace App;
 
-function getUserId(string $deviceId, \mysqli $conn): string {
+function getUserId(string $deviceId, \mysqli $conn): array {
     $sql = "SELECT id FROM users WHERE deviceId = ?";
     $stmt = $conn->prepare($sql);
 
@@ -17,7 +17,7 @@ function getUserId(string $deviceId, \mysqli $conn): string {
         $user = $result->fetch_assoc();
 
         if ($user) {
-            return $user['id'];
+            return ['userId' => $user['id'], 'firstLogin' => false];
         } else {
             // Uživatel nenalezen, vytvoření nového uživatele
             $insertSql = "INSERT INTO users (deviceId, firstSignIn) VALUES (?, ?)";
@@ -32,7 +32,7 @@ function getUserId(string $deviceId, \mysqli $conn): string {
 
             if ($insertStmt->execute()) {
                 // Vrácení ID nově vytvořeného uživatele
-                return $conn->insert_id;
+                return ['userId' => $conn->insert_id, 'firstLogin' => true];
             } else {
                 throw new \Exception('Chyba při vkládání nového uživatele: ' . $insertStmt->error);
             }

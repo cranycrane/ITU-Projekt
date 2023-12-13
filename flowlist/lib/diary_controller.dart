@@ -8,7 +8,7 @@ class DiaryController {
   final String baseUrl = "https://jakub-jerabek.cz/flowlist";
   final storageService = StorageService();
 
-  Future<String> getUserId(String? deviceId) async {
+  Future<Map<String, dynamic>> getUserId(String? deviceId) async {
     final Map<String, dynamic> data = {
       'deviceId': deviceId,
     };
@@ -24,8 +24,7 @@ class DiaryController {
     if (response.statusCode == 200) {
       Map<String, dynamic> result = json.decode(response.body);
       // Předpokládáme, že userId je String. Pokud je int, použijte toString().
-      String userId = result['userId'];
-      return userId;
+      return result;
     } else {
       throw Exception('Pri identifikaci uzivatele doslo k chybe');
     }
@@ -54,8 +53,8 @@ class DiaryController {
     }
   }
 
-  Future<List<FlowData>> readEntries() async {
-    String? userId = await StorageService().getUserId();
+  Future<List<FlowData>> readEntries([String? userId]) async {
+    userId ??= await StorageService().getUserId();
 
     final response =
         await http.get(Uri.parse('$baseUrl/read_entry.php?userId=$userId'));
