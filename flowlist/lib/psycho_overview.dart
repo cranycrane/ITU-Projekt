@@ -16,12 +16,13 @@ class PsychoOverviewPage extends StatefulWidget {
   const PsychoOverviewPage({super.key});
 
   @override
-  _PsychoOverviewPageState createState() => _PsychoOverviewPageState();
+  PsychoOverviewPageState createState() => PsychoOverviewPageState();
 }
 
-class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
+class PsychoOverviewPageState extends State<PsychoOverviewPage> {
   late Future<List<UserProfile>> pairedUsers;
-  TextEditingController _searchController = TextEditingController(); // Přidáno
+  final TextEditingController _searchController =
+      TextEditingController(); // Přidáno
   List<UserProfile> _allUsers = []; // Přidáno
   List<UserProfile> _filteredUsers = []; // Přidáno
 
@@ -44,7 +45,7 @@ class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
     List<UserProfile> filteredList = _allUsers.where((user) {
       // Předpokládá, že UserProfile má vlastnosti firstName a lastName
       String userName =
-          user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase();
+          '${user.firstName.toLowerCase()} ${user.lastName.toLowerCase()}';
       return userName.contains(query);
     }).toList();
 
@@ -72,7 +73,7 @@ class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
               child: const Text('Odebrat',
                   style: TextStyle(color: Color(0xFFE50E2B))),
               onPressed: () {
-                // TODO: Logika pro odstranění uživatele
+                // Logika pro odstranění uživatele
                 Navigator.of(context)
                     .pop(); // Zavře dialogové okno po potvrzení
               },
@@ -94,7 +95,7 @@ class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
       resizeToAvoidBottomInset: false,
       body: Column(
         children: <Widget>[
-          SizedBox(height: 20), // Přidán SizedBox pro odsazení od vrchu
+          const SizedBox(height: 20), // Přidán SizedBox pro odsazení od vrchu
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
@@ -106,11 +107,11 @@ class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
                     borderSide: BorderSide.none),
                 filled: true,
                 fillColor: Colors.white,
-                prefixIcon: Icon(Icons.search,
+                prefixIcon: const Icon(Icons.search,
                     color: Color(0xFFE50E2B)), // Červená barva pro lupu
                 suffixIcon: _searchController.text.isNotEmpty
                     ? IconButton(
-                        icon: Icon(Icons.clear,
+                        icon: const Icon(Icons.clear,
                             color:
                                 Color(0xFFE50E2B)), // Červená barva pro křížek
                         onPressed: () {
@@ -142,11 +143,12 @@ class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
                       borderRadius:
                           BorderRadius.circular(10), // Zaoblené rohy karty
                     ),
-                    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: Container(
-                      padding: EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
-                        color: Color(0xFFEAEAEA),
+                        color: const Color(0xFFEAEAEA),
                         //color: Colors.white, // Barva pozadí karty
                         borderRadius:
                             BorderRadius.circular(10), // Zaoblené rohy karty
@@ -162,22 +164,21 @@ class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
                                 return CircleAvatar(
-                                  radius: 30.0, // Upravte podle vaší potřeby
-                                  child: CircularProgressIndicator(),
-                                  backgroundColor: Colors.grey[200],
+                                  radius: 30.0,
+                                  backgroundColor: Colors
+                                      .grey[200], // Upravte podle vaší potřeby
+                                  child: const CircularProgressIndicator(),
                                 );
                               } else if (snapshot.hasError ||
                                   snapshot.data == null) {
-                                user.profileImage = null;
                                 return CircleAvatar(
-                                  radius: 30.0, // Upravte podle vaší potřeby
-                                  child: Icon(Icons.person,
-                                      size:
-                                          50.0), // Upravte velikost podle vaší potřeby
-                                  backgroundColor: Colors.grey[200],
+                                  radius:
+                                      30.0, // Upravte velikost podle vaší potřeby
+                                  backgroundColor: Colors
+                                      .grey[200], // Upravte podle vaší potřeby
+                                  child: const Icon(Icons.person, size: 50.0),
                                 );
                               } else {
-                                user.imageFile = snapshot.data;
                                 return ClipOval(
                                   child: Image.file(
                                     snapshot.data!,
@@ -191,14 +192,14 @@ class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
                               }
                             },
                           ),
-                          SizedBox(width: 16.0),
+                          const SizedBox(width: 16.0),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
                                   "${user.firstName} ${user.lastName}",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize:
                                           18), // Upravte velikost písma podle vaší potřeby
                                 ),
@@ -214,7 +215,8 @@ class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
                             ),
                           ),
                           IconButton(
-                            icon: Icon(Icons.delete, color: Color(0xFF6E6E6E)),
+                            icon: const Icon(Icons.delete,
+                                color: Color(0xFF6E6E6E)),
                             onPressed: () =>
                                 _showDeleteConfirmationDialog(user),
                             // Přidat logiku pro smazání uživatele
@@ -225,7 +227,7 @@ class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
                   ),
                 );
               },
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 // Přidání paddingu na spodní část
                 bottom: kBottomNavigationBarHeight +
                     16, // Výška spodní navigace plus další prostor
@@ -246,14 +248,14 @@ class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
                   builder: (context) => const SettingsPage()));
             },
             style: ElevatedButton.styleFrom(
-              primary: Colors.white,
-              onPrimary: Colors.red,
+              foregroundColor: Colors.red,
+              backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18.0),
-                side: BorderSide(color: Colors.red),
+                side: const BorderSide(color: Colors.red),
               ),
             ),
-            child: Padding(
+            child: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
               child: Text(
                 'MÓD BĚŽNÝ UŽIVATEL',
@@ -264,7 +266,7 @@ class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
               ),
             ),
           ),
-          SizedBox(width: 55.0), // Mezera mezi tlačítky
+          const SizedBox(width: 55.0), // Mezera mezi tlačítky
 
           FloatingActionButton(
             onPressed: () async {
@@ -303,6 +305,9 @@ class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
                 try {
                   final success =
                       await psychoController.pairWithClient(pairingCode);
+
+                  if (!mounted) return;
+
                   if (success) {
                     setState(() {
                       pairedUsers = _getPairedUsers();
@@ -325,7 +330,7 @@ class _PsychoOverviewPageState extends State<PsychoOverviewPage> {
                 }
               }
             },
-            backgroundColor: Color(0xFFE50E2B),
+            backgroundColor: const Color(0xFFE50E2B),
             child: const Icon(Icons.add),
           ),
         ],
