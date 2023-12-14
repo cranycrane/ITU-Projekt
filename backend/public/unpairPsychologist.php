@@ -25,7 +25,7 @@ $stmt->bind_param("ii", $userId, $userId);
 if ($stmt->execute()) {
 
 } else {
-    http_response_code(400);
+    http_response_code(404);
     throw new \Exception("Chyba: uzivatel neexistuje");
 }
 
@@ -44,7 +44,7 @@ if ($stmt->execute()) {
     http_response_code(200);
     echo json_encode(['message' => 'Uspesne odebrano parovani']);
 } else {
-    http_response_code(400);
+    http_response_code(404);
     throw new \Exception("Chyba: uzivatel neexistuje");
 }
 

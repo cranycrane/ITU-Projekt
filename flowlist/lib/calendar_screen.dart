@@ -44,6 +44,7 @@ class CalendarPageState extends State<CalendarPage> {
     List<FlowData> records = await diaryController.readEntries();
     setState(() {
       _allRecords = records;
+      _recordFuture = _loadDay(_focusedDay);
     });
   }
 
@@ -249,7 +250,11 @@ class CalendarPageState extends State<CalendarPage> {
                   },
                   onDaySelected: (selectedDay, focusedDay) {
                     if (selectedDay.isAfter(DateTime.now())) {
-                      // Pokud je vybraný den v budoucnosti, nedělejte nic (nebo zobrazte chybovou zprávu)
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content:
+                                Text('Nelze pracovat se dny v budoucnosti')),
+                      );
                       return;
                     }
 

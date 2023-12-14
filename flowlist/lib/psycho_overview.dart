@@ -29,7 +29,7 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
   @override
   void initState() {
     super.initState();
-    _initializeUsers(); // Upraveno
+    _initializeUsers();
   }
 
   void _initializeUsers() async {
@@ -72,10 +72,29 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
             TextButton(
               child: const Text('Odebrat',
                   style: TextStyle(color: Color(0xFFE50E2B))),
-              onPressed: () {
-                // Logika pro odstranění uživatele
-                Navigator.of(context)
-                    .pop(); // Zavře dialogové okno po potvrzení
+              onPressed: () async {
+                try {
+                  await psychoController.unPairWithClient(user);
+                  setState(() {
+                    _initializeUsers();
+                  });
+                  if (!context.mounted) return;
+
+                  Navigator.of(context)
+                      .pop(); // Zavře dialogové okno po potvrzení
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Párování bylo úspěšně zrušeno')));
+                } catch (e) {
+                  String errorMessage = e.toString().split('Exception: ')[1];
+
+                  if (!context.mounted) return;
+
+                  Navigator.of(context)
+                      .pop(); // Zavře dialogové okno po potvrzení
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Chyba: $errorMessage')));
+                }
               },
             ),
           ],
@@ -310,7 +329,7 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
 
                   if (success) {
                     setState(() {
-                      pairedUsers = _getPairedUsers();
+                      _initializeUsers();
                     });
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(

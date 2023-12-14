@@ -8,6 +8,8 @@ import 'device_utils.dart';
 import 'storage_service.dart';
 import 'welcome_page.dart';
 
+import 'set_name.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -35,12 +37,12 @@ class MyApp extends StatelessWidget {
     if (firstLogin) {
       return const MaterialApp(
         title: 'FlowList',
-        home: WelcomePage(),
+        home: setNamePage(),
       );
     } else {
       return const MaterialApp(
         title: 'FlowList',
-        home: CalendarPage(),
+        home: setNamePage(),
       );
     }
   }
