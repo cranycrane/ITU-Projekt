@@ -45,7 +45,7 @@ class setNamePageState extends State<setNamePage> {
             Text(
               "Jak se jmenuješ?",
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
             ),
             SizedBox(height: 40), // Mezera mezi obrázkem a textem
             TextField(
@@ -127,7 +127,7 @@ class setNamePageState extends State<setNamePage> {
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25)),
-                    backgroundColor: Colors.red,
+                    backgroundColor: Color(0xFFE50E2B),
                   ),
                   child: const Text(
                     'DO APLIKACE',
