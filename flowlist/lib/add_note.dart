@@ -80,7 +80,7 @@ class NewEntryPageState extends State<NewEntryPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            "Nelze přejít do budoucího data!",
+            "Nelze pracovat se dny v budoucnosti",
             style: TextStyle(
               color: Colors.black, // Text color
             ),
@@ -198,10 +198,24 @@ class NewEntryPageState extends State<NewEntryPage> {
                         const SizedBox(height: 10),
                         TextField(
                           controller: _firstController,
+                          cursorColor: Color(0xFFE50E2B),
+                          cursorWidth: 2,
                           decoration: InputDecoration(
-                            labelText: 'První položka',
-                            border: const OutlineInputBorder(),
-                            fillColor: Colors.grey[200],
+                            floatingLabelStyle: TextStyle(color: Colors.black),
+                            labelText: 'První dobrá věc...',
+                            border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.green, width: 4),
+                                borderRadius: BorderRadius.circular(10)),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(
+                                color: Color(
+                                    0xFFE50E2B), // Barva ohraničení při psaní
+                                width: 2.0, // Šířka ohraničení
+                              ),
+                            ),
+                            fillColor: Colors.white,
                             filled: true,
                           ),
                           maxLines: 5,
@@ -209,10 +223,22 @@ class NewEntryPageState extends State<NewEntryPage> {
                         const SizedBox(height: 8),
                         TextField(
                           controller: _secondController,
+                          cursorColor: Color(0xFFE50E2B),
+                          cursorWidth: 2,
                           decoration: InputDecoration(
-                            labelText: 'Druhá položka',
-                            border: const OutlineInputBorder(),
-                            fillColor: Colors.grey[200],
+                            floatingLabelStyle: TextStyle(color: Colors.black),
+                            labelText: 'Druhá dobrá věc...',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(
+                                color: Color(
+                                    0xFFE50E2B), // Barva ohraničení při psaní
+                                width: 2.0, // Šířka ohraničení
+                              ),
+                            ),
+                            fillColor: Colors.white,
                             filled: true,
                           ),
                           maxLines: 5,
@@ -220,10 +246,23 @@ class NewEntryPageState extends State<NewEntryPage> {
                         const SizedBox(height: 8),
                         TextField(
                           controller: _thirdController,
+                          cursorColor: Color(0xFFE50E2B),
+                          cursorWidth: 2,
                           decoration: InputDecoration(
-                            labelText: 'Třetí položka',
-                            border: const OutlineInputBorder(),
-                            fillColor: Colors.grey[200],
+                            floatingLabelStyle: TextStyle(color: Colors.black),
+                            labelText: 'Třetí dobrá věc...',
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(width: 15),
+                                borderRadius: BorderRadius.circular(10)),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(
+                                color: Color(
+                                    0xFFE50E2B), // Barva ohraničení při psaní
+                                width: 2.0, // Šířka ohraničení
+                              ),
+                            ),
+                            fillColor: Colors.white,
                             filled: true,
                           ),
                           maxLines: 5,
@@ -234,7 +273,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                           children: <Widget>[
                             const Flexible(
                               child: Text(
-                                'Jak bys ohodnotil svůj den?',
+                                'Jak bys ohodnotil/a svůj den?',
                                 style: TextStyle(fontSize: 16),
                               ),
                             ),
@@ -245,7 +284,19 @@ class NewEntryPageState extends State<NewEntryPage> {
                               child: TextField(
                                 textAlign: TextAlign.center,
                                 controller: _ratingController,
-                                decoration: const InputDecoration(
+                                cursorColor: Color(0xFFE50E2B),
+                                cursorWidth: 2,
+                                decoration: InputDecoration(
+                                  floatingLabelStyle:
+                                      TextStyle(color: Colors.black),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: const BorderSide(
+                                      color: Color(
+                                          0xFFE50E2B), // Barva ohraničení při psaní
+                                      width: 2.0, // Šířka ohraničení
+                                    ),
+                                  ),
                                   hintText: '/10',
                                   border: OutlineInputBorder(),
                                   contentPadding:
