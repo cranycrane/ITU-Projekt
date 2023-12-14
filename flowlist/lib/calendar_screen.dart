@@ -152,9 +152,7 @@ class CalendarPageState extends State<CalendarPage> {
                         } else if (isSameDay(date, DateTime.now())) {
                           scoreColor = Color(0xFFE2AFB6);
                           textColor = Colors.black;
-                        } else if (date.year < _focusedDay.year ||
-                            (date.year == _focusedDay.year &&
-                                date.month < _focusedDay.month)) {
+                        } else if (_focusedDay.month != date.month) {
                           scoreColor = Color(0xFFBBBBBB);
                           textColor = Color(0xFF6E6E6E);
                         } else {
@@ -172,9 +170,10 @@ class CalendarPageState extends State<CalendarPage> {
 
                         // Zobrazit skóre pod dnem
                         return Positioned(
+                          bottom: 6.0,
                           child: Container(
                             width: dayWidth,
-                            padding: EdgeInsets.all(5),
+                            padding: EdgeInsets.all(5.0),
                             decoration: BoxDecoration(
                               color: scoreColor,
                               borderRadius: BorderRadius.only(
@@ -218,12 +217,12 @@ class CalendarPageState extends State<CalendarPage> {
                       color: Colors.black, // Set the text color as needed
                     ),
                     outsideDecoration: BoxDecoration(
-                        shape: BoxShape
-                            .rectangle, // You can use different shapes like BoxShape.rectangle
-                        color: const Color(0xFFBBBBBB),
-                        borderRadius: BorderRadius.circular(
-                            10.0) // Background color of the day cell
-                        ),
+                      shape: BoxShape
+                        .rectangle, // You can use different shapes like BoxShape.rectangle
+                      color: const Color(0xFFBBBBBB),
+                      borderRadius: BorderRadius.circular(
+                        10.0) // Background color of the day cell
+                    ),
                     outsideTextStyle: const TextStyle(
                       fontSize: 15, // Set the font size as needed
                       fontWeight: FontWeight.bold,
@@ -255,10 +254,18 @@ class CalendarPageState extends State<CalendarPage> {
                   },
                   onDaySelected: (selectedDay, focusedDay) {
                     if (selectedDay.isAfter(DateTime.now())) {
+                      // Pokud je vybraný den v budoucnosti, nedělejte nic (nebo zobrazte chybovou zprávu)
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content:
-                                Text('Nelze pracovat se dny v budoucnosti')),
+                        SnackBar(
+                          content: Text(
+                            "Nelze vybrat budoucí datum!",
+                            style: TextStyle(
+                              color: Colors.black, // Text color
+                            ),
+                          ),
+                          duration: Duration(seconds: 3), // Duration of the SnackBar display
+                          backgroundColor: Color(0xFFEAEAEA),
+                        ),
                       );
                       return;
                     }
@@ -270,9 +277,16 @@ class CalendarPageState extends State<CalendarPage> {
                     });
                   },
 
+                  //onPageChanged: (focusedDay) {
+                  //  _focusedDay = focusedDay;
+                  //},
+                  
                   onPageChanged: (focusedDay) {
-                    _focusedDay = focusedDay;
+                    setState(() {
+                      _focusedDay = focusedDay;
+                    });
                   },
+                  
                   headerStyle: const HeaderStyle(
                     formatButtonVisible: false,
                     titleCentered: true,
@@ -289,7 +303,7 @@ class CalendarPageState extends State<CalendarPage> {
               height: 4,
             ),
             Expanded(
-                child: SingleChildScrollView(
+              child: SingleChildScrollView(
               child: FutureBuilder<FlowData?>(
                 future: _recordFuture,
                 builder: (context, snapshot) {
@@ -411,11 +425,6 @@ class CalendarPageState extends State<CalendarPage> {
         backgroundColor: Colors.red,
         child: const Icon(size: 35, Icons.add),
         onPressed: () {
-          // Check if the selected day is in the future
-          if (_selectedDay.isAfter(DateTime.now())) {
-            // If it's in the future, set it to today
-            _selectedDay = DateTime.now();
-          }
           // Akce pro FloatingActionButton
           Navigator.of(context).push(
             MaterialPageRoute(
