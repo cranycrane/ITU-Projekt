@@ -100,7 +100,7 @@ class CalendarPageState extends State<CalendarPage> {
             ),
             Center(
               child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.6,
+                height: MediaQuery.of(context).size.height * 0.60,
                 width: MediaQuery.of(context).size.width * 0.95,
                 child: TableCalendar(
                   firstDay: DateTime.utc(2020, 10, 16),
@@ -109,11 +109,72 @@ class CalendarPageState extends State<CalendarPage> {
                   startingDayOfWeek: StartingDayOfWeek.monday,
                   focusedDay: _focusedDay,
                   calendarFormat: _calendarFormat,
-                  shouldFillViewport: true,
+                  shouldFillViewport: false,
                   calendarBuilders: CalendarBuilders(
+                    todayBuilder: (context, day, focusedDay) {
+                      return Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 3.0, vertical: 1),
+                        decoration: BoxDecoration(
+                          color: const Color(
+                              0xFFE2AFB6), // Zde změňte barvu na požadovanou
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '${day.day}',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15),
+                          ),
+                        ),
+                      );
+                    },
+                    outsideBuilder: (context, day, focusedDay) {
+                      return Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 3.0, vertical: 1),
+                        decoration: BoxDecoration(
+                          color: const Color(
+                              0xFFBBBBBB), // Zde změňte barvu na požadovanou
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '${day.day}',
+                            style: TextStyle(
+                                color: Color(0xFF6E6E6E),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15),
+                          ),
+                        ),
+                      );
+                    },
+                    defaultBuilder: (context, day, focusedDay) {
+                      return Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 3.0, vertical: 1),
+                        decoration: BoxDecoration(
+                          color: const Color(
+                              0xFFEAEAEA), // Zde změňte barvu na požadovanou
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '${day.day}',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15),
+                          ),
+                        ),
+                      );
+                    },
                     selectedBuilder: (context, date, events) {
                       return Container(
-                        margin: EdgeInsets.all(6.0),
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 3.0, vertical: 1),
                         decoration: BoxDecoration(
                           color: const Color(
                               0xFFE50E2B), // Zde změňte barvu na požadovanou
@@ -170,12 +231,13 @@ class CalendarPageState extends State<CalendarPage> {
 
                         // Zobrazit skóre pod dnem
                         return Positioned(
-                          bottom: 6.0,
+                          bottom: 2.0,
                           child: Container(
                             width: dayWidth,
-                            padding: EdgeInsets.all(5.0),
+
+                            //padding: EdgeInsets.all(1.0),
                             decoration: BoxDecoration(
-                              color: scoreColor,
+                              //color: scoreColor,
                               borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(8),
                                   bottomRight: Radius.circular(8)),
@@ -195,60 +257,6 @@ class CalendarPageState extends State<CalendarPage> {
                       return null;
                     },
                   ),
-                  calendarStyle: CalendarStyle(
-                    defaultDecoration: BoxDecoration(
-                        shape: BoxShape
-                            .rectangle, // You can use different shapes like BoxShape.rectangle
-                        color: const Color(0xFFEAEAEA),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    defaultTextStyle: const TextStyle(
-                      fontSize: 15, // Set the font size as needed
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black, // Set the text color as needed
-                    ),
-                    weekendDecoration: BoxDecoration(
-                        shape: BoxShape
-                            .rectangle, // You can use different shapes like BoxShape.rectangle
-                        color: const Color(0xFFEAEAEA),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    weekendTextStyle: const TextStyle(
-                      fontSize: 15, // Set the font size as needed
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black, // Set the text color as needed
-                    ),
-                    outsideDecoration: BoxDecoration(
-                      shape: BoxShape
-                        .rectangle, // You can use different shapes like BoxShape.rectangle
-                      color: const Color(0xFFBBBBBB),
-                      borderRadius: BorderRadius.circular(
-                        10.0) // Background color of the day cell
-                    ),
-                    outsideTextStyle: const TextStyle(
-                      fontSize: 15, // Set the font size as needed
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF6E6E6E), // Set the text color as needed
-                    ),
-                    selectedDecoration: BoxDecoration(
-                        shape: BoxShape
-                            .rectangle, // You can use different shapes like BoxShape.rectangle
-                        color: const Color(0xFFE50E2B),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    selectedTextStyle: const TextStyle(
-                      fontSize: 15, // Set the font size as needed
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white, // Set the text color as needed
-                    ),
-                    todayDecoration: BoxDecoration(
-                        shape: BoxShape
-                            .rectangle, // You can use different shapes like BoxShape.rectangle
-                        color: const Color(0xFFE2AFB6),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    todayTextStyle: const TextStyle(
-                      fontSize: 15, // Set the font size as needed
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black, // Set the text color as needed
-                    ),
-                  ),
                   selectedDayPredicate: (day) {
                     return isSameDay(_selectedDay, day);
                   },
@@ -260,11 +268,11 @@ class CalendarPageState extends State<CalendarPage> {
                           content: Text(
                             "Nelze vybrat budoucí datum!",
                             style: TextStyle(
-                              color: Colors.black, // Text color
+                              color: Colors.white, // Text color
                             ),
                           ),
-                          duration: Duration(seconds: 3), // Duration of the SnackBar display
-                          backgroundColor: Color(0xFFEAEAEA),
+                          duration: Duration(
+                              seconds: 3), // Duration of the SnackBar display
                         ),
                       );
                       return;
@@ -280,13 +288,13 @@ class CalendarPageState extends State<CalendarPage> {
                   //onPageChanged: (focusedDay) {
                   //  _focusedDay = focusedDay;
                   //},
-                  
+
                   onPageChanged: (focusedDay) {
                     setState(() {
                       _focusedDay = focusedDay;
                     });
                   },
-                  
+
                   headerStyle: const HeaderStyle(
                     formatButtonVisible: false,
                     titleCentered: true,
@@ -303,7 +311,7 @@ class CalendarPageState extends State<CalendarPage> {
               height: 4,
             ),
             Expanded(
-              child: SingleChildScrollView(
+                child: SingleChildScrollView(
               child: FutureBuilder<FlowData?>(
                 future: _recordFuture,
                 builder: (context, snapshot) {

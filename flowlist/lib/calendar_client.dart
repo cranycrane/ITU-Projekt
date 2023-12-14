@@ -262,6 +262,18 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                   onDaySelected: (selectedDay, focusedDay) {
                     if (selectedDay.isAfter(DateTime.now())) {
                       // Pokud je vybraný den v budoucnosti, nedělejte nic (nebo zobrazte chybovou zprávu)
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            "Nelze vybrat budoucí datum!",
+                            style: TextStyle(
+                              color: Colors.white, // Text color
+                            ),
+                          ),
+                          duration: Duration(
+                              seconds: 3), // Duration of the SnackBar display
+                        ),
+                      );
                       return;
                     }
 
@@ -272,8 +284,14 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                     });
                   },
 
+                  //onPageChanged: (focusedDay) {
+                  //  _focusedDay = focusedDay;
+                  //},
+
                   onPageChanged: (focusedDay) {
-                    _focusedDay = focusedDay;
+                    setState(() {
+                      _focusedDay = focusedDay;
+                    });
                   },
                   headerStyle: const HeaderStyle(
                     formatButtonVisible: false,

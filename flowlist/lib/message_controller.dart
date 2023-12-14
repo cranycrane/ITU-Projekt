@@ -46,8 +46,15 @@ class MessageController {
     }
   }
 
-  Future<bool> sendMessage(String toUserId, String messageText) async {
+  Future<void> sendMessage(String toUserId, String messageText) async {
     String? fromUserId = await StorageService().getUserId();
+
+    RegExp regex = RegExp(r'^[a-zA-Z0-9\s.,?!:;()-]+$');
+
+    // Kontrola, zda record obsahuje pouze povolené znaky
+    if (!regex.hasMatch(messageText)) {
+      throw Exception('Zpráva obsahuje nepovolené znaky');
+    }
 
     final response = await http.post(
       Uri.parse('$baseUrl/sendMessage.php'),
@@ -58,7 +65,11 @@ class MessageController {
       },
     );
 
-    return response.statusCode == 200;
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      throw Exception('Při posílání zprávy došlo k chybě');
+    }
   }
 }
 

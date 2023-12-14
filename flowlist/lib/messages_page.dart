@@ -7,7 +7,6 @@ import 'user_controller.dart';
 import 'dart:io';
 import 'package:intl/intl.dart';
 
-
 class MessagesPage extends StatefulWidget {
   final String toUserId;
 
@@ -40,29 +39,31 @@ class MessagesPageState extends State<MessagesPage> {
   }
 
   void _startPolling() {
-  _pollingTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
-    setState(() {
-      isFirstLoad = false; // Po prvním načtení již není první načtení
+    _pollingTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      setState(() {
+        isFirstLoad = false; // Po prvním načtení již není první načtení
+      });
+      messageController.getMessages();
     });
-    messageController.getMessages();
-  });
-}
-
-String formatTimestamp(String timestampStr) {
-  DateTime timestamp = DateTime.parse(timestampStr);
-  DateTime now = DateTime.now();
-  DateFormat formatter;
-
-  if (timestamp.year == now.year && timestamp.month == now.month && timestamp.day == now.day) {
-    formatter = DateFormat('HH:mm'); // Pouze hodiny a minuty pro dnešní datum
-  } else if (timestamp.year == now.year) {
-    formatter = DateFormat('dd.MM. HH:mm');
-  } else {
-    formatter = DateFormat('dd.MM. yyyy HH:mm'); // Celé datum, pokud se liší
   }
 
-  return formatter.format(timestamp);
-}
+  String formatTimestamp(String timestampStr) {
+    DateTime timestamp = DateTime.parse(timestampStr);
+    DateTime now = DateTime.now();
+    DateFormat formatter;
+
+    if (timestamp.year == now.year &&
+        timestamp.month == now.month &&
+        timestamp.day == now.day) {
+      formatter = DateFormat('HH:mm'); // Pouze hodiny a minuty pro dnešní datum
+    } else if (timestamp.year == now.year) {
+      formatter = DateFormat('dd.MM. HH:mm');
+    } else {
+      formatter = DateFormat('dd.MM. yyyy HH:mm'); // Celé datum, pokud se liší
+    }
+
+    return formatter.format(timestamp);
+  }
 
   void _sendMessage() async {
     final String messageText = _messageController.text;
@@ -71,15 +72,14 @@ String formatTimestamp(String timestampStr) {
     }
 
     try {
-      bool send =
-          await messageController.sendMessage(widget.toUserId, messageText);
-      if (send) {
-        messageController.getMessages(); // Načtení nových zpráv po odeslání
-        _messageController.clear();
-      }
+      await messageController.sendMessage(widget.toUserId, messageText);
+      messageController.getMessages(); // Načtení nových zpráv po odeslání
+      _messageController.clear();
     } catch (e) {
-      // Zachytávání výjimek
-      throw Exception("Chyba pri odesilani zpravy");
+      if (!context.mounted) return;
+      String errorMessage = e.toString().split('Exception: ')[1];
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Chyba: $errorMessage')));
     }
   }
 
@@ -97,16 +97,11 @@ String formatTimestamp(String timestampStr) {
           title: Container(
             height: 60,
             padding: const EdgeInsets.symmetric(
-                    horizontal: 3.0,
-                    vertical: 3.0), // Vnější odsazení pro obdélník
+                horizontal: 3.0, vertical: 3.0), // Vnější odsazení pro obdélník
             decoration: BoxDecoration(
-              color: Color(0xFFD9D9D9),
-              borderRadius: 
+              color: Colors.white,
+              borderRadius:
                   BorderRadius.all(Radius.circular(20.0)), // Zaoblené rohy
-              border: Border.all(
-                color: Color(0xFF61646B), // Color of the outline
-                width: 1.0, // Width of the outline
-              ),
             ),
             child: Row(
               children: <Widget>[
@@ -114,9 +109,9 @@ String formatTimestamp(String timestampStr) {
                   future: userController.getUserData(widget.toUserId),
                   builder: (BuildContext context,
                       AsyncSnapshot<UserProfile?> snapshot) {
-                    
                     Widget avatar;
-                    if (snapshot.connectionState == ConnectionState.waiting && isFirstLoad) {
+                    if (snapshot.connectionState == ConnectionState.waiting &&
+                        isFirstLoad) {
                       avatar = CircularProgressIndicator();
                     } else if (snapshot.hasError || snapshot.data == null) {
                       avatar = Icon(Icons.person, size: 50);
@@ -140,14 +135,14 @@ String formatTimestamp(String timestampStr) {
                     );
                   },
                 ),
-                SizedBox(width: 5.0), // Prostor mezi obrázkem a textem
                 Expanded(
                   child: FutureBuilder<UserProfile?>(
                     future: userController
                         .getUserData(widget.toUserId), // Získání dat uživatele
                     builder: (BuildContext context,
                         AsyncSnapshot<UserProfile?> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting && isFirstLoad) {
+                      if (snapshot.connectionState == ConnectionState.waiting &&
+                          isFirstLoad) {
                         return Text("Načítání..."); // Zobrazit při načítání
                       } else if (snapshot.hasError || snapshot.data == null) {
                         return Text(
@@ -156,8 +151,8 @@ String formatTimestamp(String timestampStr) {
                         UserProfile userProfile = snapshot.data!;
                         return Text(
                           "${userProfile.firstName} ${userProfile.lastName}", // Jméno uživatele
-                          style:
-                              const TextStyle(color: Colors.black, fontSize: 20),
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 20),
                         );
                       }
                     },
@@ -195,71 +190,106 @@ String formatTimestamp(String timestampStr) {
                         reverse: true,
                         itemBuilder: (context, index) {
                           final message = messages[index];
-                          bool isSentByMe = message.fromUserId.toString() != widget.toUserId;
-                          String formattedTime = formatTimestamp(message.timestamp);
+                          bool isSentByMe =
+                              message.fromUserId.toString() != widget.toUserId;
+                          String formattedTime =
+                              formatTimestamp(message.timestamp);
 
                           return Align(
-                            alignment: isSentByMe ? Alignment.centerRight : Alignment.centerLeft,
-                            child: Column(
-                              crossAxisAlignment: isSentByMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 15), // Stejné horizontální odsazení jako u kontejneru zprávy
-                                  child: Text(
-                                    formattedTime,
-                                    style: TextStyle(fontSize: 12, color: Colors.grey),
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    if (!isSentByMe) // Zobrazujeme avatara pouze pro přijaté zprávy
-                                      Padding(
-                                        padding: EdgeInsets.only(right: 3.0, left: 15.0),
-                                        child: FutureBuilder<UserProfile?>(
-                                          future: userController.getUserData(message.fromUserId.toString()),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.connectionState == ConnectionState.waiting && isFirstLoad) {
-                                              return CircularProgressIndicator(); // Při načítání
-                                            } else if (snapshot.hasError || snapshot.data == null) {
-                                              return Icon(Icons.person, size: 30); // Výchozí ikona
-                                            } else {
-                                              UserProfile userProfile = snapshot.data!;
-                                              return CircleAvatar(
-                                                radius: 15,
-                                                backgroundColor: Colors.grey[200],
-                                                backgroundImage: userProfile.profileImage != null
-                                                    ? FileImage(File(userProfile.profileImage!))
-                                                    : null,
-                                                child: userProfile.profileImage == null
-                                                    ? Icon(Icons.person, size: 30)
-                                                    : null,
-                                              );
-                                            }
-                                          },
-                                        ),
-                                      ),
+                              alignment: isSentByMe
+                                  ? Alignment.centerRight
+                                  : Alignment.centerLeft,
+                              child: Column(
+                                  crossAxisAlignment: isSentByMe
+                                      ? CrossAxisAlignment.end
+                                      : CrossAxisAlignment.start,
+                                  children: <Widget>[
                                     Container(
-                                      constraints: const BoxConstraints(maxWidth: 330.0),
-                                      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                                      decoration: BoxDecoration(
-                                        color: isSentByMe ? const Color(0xFFE50E2B) : Colors.grey[300],
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal:
+                                              15), // Stejné horizontální odsazení jako u kontejneru zprávy
                                       child: Text(
-                                        message.messageText,
+                                        formattedTime,
                                         style: TextStyle(
-                                          color: isSentByMe ? Colors.white : Colors.black,
-                                          fontSize: 16, // Nastavení velikosti písma
-                                        ),
+                                            fontSize: 12, color: Colors.grey),
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ]
-                            )
-                          );
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        if (!isSentByMe) // Zobrazujeme avatara pouze pro přijaté zprávy
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                right: 3.0, left: 15.0),
+                                            child: FutureBuilder<UserProfile?>(
+                                              future:
+                                                  userController.getUserData(
+                                                      message.fromUserId
+                                                          .toString()),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.connectionState ==
+                                                        ConnectionState
+                                                            .waiting &&
+                                                    isFirstLoad) {
+                                                  return CircularProgressIndicator(); // Při načítání
+                                                } else if (snapshot.hasError ||
+                                                    snapshot.data == null) {
+                                                  return Icon(Icons.person,
+                                                      size:
+                                                          30); // Výchozí ikona
+                                                } else {
+                                                  UserProfile userProfile =
+                                                      snapshot.data!;
+                                                  return CircleAvatar(
+                                                    radius: 15,
+                                                    backgroundColor:
+                                                        Colors.grey[200],
+                                                    backgroundImage: userProfile
+                                                                .profileImage !=
+                                                            null
+                                                        ? FileImage(File(
+                                                            userProfile
+                                                                .profileImage!))
+                                                        : null,
+                                                    child: userProfile
+                                                                .profileImage ==
+                                                            null
+                                                        ? Icon(Icons.person,
+                                                            size: 30)
+                                                        : null,
+                                                  );
+                                                }
+                                              },
+                                            ),
+                                          ),
+                                        Container(
+                                          constraints: const BoxConstraints(
+                                              maxWidth: 330.0),
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 5, horizontal: 10),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 15),
+                                          decoration: BoxDecoration(
+                                            color: isSentByMe
+                                                ? const Color(0xFFE50E2B)
+                                                : Colors.grey[300],
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          child: Text(
+                                            message.messageText,
+                                            style: TextStyle(
+                                              color: isSentByMe
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                              fontSize:
+                                                  16, // Nastavení velikosti písma
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ]));
                         },
                       );
                     }
@@ -272,7 +302,7 @@ String formatTimestamp(String timestampStr) {
       ),
     );
   }
-  
+
   Widget _buildMessageInputField() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
