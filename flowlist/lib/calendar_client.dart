@@ -163,8 +163,12 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                         } else if (isSameDay(date, DateTime.now())) {
                           scoreColor = Color(0xFFE2AFB6);
                           textColor = Colors.black;
+                        } else if (_focusedDay.month != date.month) {
+                          scoreColor = Color(0xFFBBBBBB);
+                          textColor = Color(0xFF6E6E6E);
                         } else {
-                          scoreColor = Color(0xFF6E6E6E);
+                          scoreColor = Color(0xFFEAEAEA);
+                          textColor = Colors.black;
                         }
 
                         FontWeight fontWeight =
