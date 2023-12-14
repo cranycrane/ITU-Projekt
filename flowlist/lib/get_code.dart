@@ -122,22 +122,26 @@ class PsychoUserPageState extends State<PsychoUserPage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             IconButton(
+              iconSize: 35,
               icon: Icon(Icons.home,
                   color: widget._selectedIndex == 0 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
+              iconSize: 35,
               icon: Icon(Icons.search,
                   color: widget._selectedIndex == 1 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(1),
             ),
             const SizedBox(width: 48), // Prostor pro Floating Action Button
             IconButton(
+              iconSize: 35,
               icon: Icon(Icons.message,
                   color: widget._selectedIndex == 2 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
+              iconSize: 35,
               icon: Icon(Icons.person_outline,
                   color: widget._selectedIndex == 3 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(3),

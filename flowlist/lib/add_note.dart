@@ -77,6 +77,18 @@ class NewEntryPageState extends State<NewEntryPage> {
 
     // Check if the new date is in the future and if the selected date is not today
     if (newDate.isAfter(DateTime.now()) && selectedDate != DateTime.now()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Nelze přejít do budoucího data!",
+            style: TextStyle(
+              color: Colors.black, // Text color
+            ),
+          ),
+          duration: Duration(seconds: 3), // Duration of the SnackBar display
+          backgroundColor: Color(0xFFEAEAEA),
+        ),
+      );
       return; // Do nothing if trying to go into the future from a non-today date
     }
     setState(() {
@@ -173,7 +185,8 @@ class NewEntryPageState extends State<NewEntryPage> {
                       _isDataLoaded = true;
                       if ((data?.record1.isEmpty ?? true) &&
                           (data?.record2.isEmpty ?? true) &&
-                          (data?.record3.isEmpty ?? true)) {
+                          (data?.record3.isEmpty ?? true) &&
+                          (data?.score == null)) {
                         dataFromBackend = false;
                       }
                     }
@@ -253,9 +266,17 @@ class NewEntryPageState extends State<NewEntryPage> {
                                   // Zobrazení dialogového okna pro potvrzení
                                   if (!dataFromBackend) {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                "Nelze smazat zaznam, ktery nebyl ulozen")));
+                                      SnackBar(
+                                        content: Text(
+                                          "Nelze smazat záznam, který nebyl uložen!",
+                                          style: TextStyle(
+                                            color: Colors.black, // Text color
+                                          ),
+                                        ),
+                                        duration: Duration(seconds: 3), // Duration of the SnackBar display
+                                        backgroundColor: Color(0xFFEAEAEA),
+                                      ),  
+                                        );
                                   }
                                   final confirmed = await showDialog<bool>(
                                         context: context,
@@ -298,7 +319,17 @@ class NewEntryPageState extends State<NewEntryPage> {
                                       // Kontrola, zda je stále kontext aktivní
                                       ScaffoldMessenger.of(savedContext)
                                           .showSnackBar(
-                                              SnackBar(content: Text(message)));
+                                            SnackBar(
+                                              content: Text(
+                                                message,
+                                                style: TextStyle(
+                                                  color: Colors.black, // Text color
+                                                ),
+                                              ),
+                                              duration: Duration(seconds: 3), // Duration of the SnackBar display
+                                              backgroundColor: Color(0xFFEAEAEA),
+                                            ),
+                                          ); 
                                     }
 
                                     if (success) {
@@ -344,7 +375,17 @@ class NewEntryPageState extends State<NewEntryPage> {
                                   if (mounted) {
                                     ScaffoldMessenger.of(savedContext)
                                         .showSnackBar(
-                                            SnackBar(content: Text(message)));
+                                          SnackBar(
+                                              content: Text(
+                                                message,
+                                                style: TextStyle(
+                                                  color: Colors.black, // Text color
+                                                ),
+                                              ),
+                                              duration: Duration(seconds: 3), // Duration of the SnackBar display
+                                              backgroundColor: Color(0xFFEAEAEA),
+                                            ),
+                                            );
                                   }
 
                                   if (success) {
@@ -379,22 +420,26 @@ class NewEntryPageState extends State<NewEntryPage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             IconButton(
+              iconSize: 35,
               icon: Icon(Icons.home,
                   color: _selectedIndex == 0 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
+              iconSize: 35,
               icon: Icon(Icons.search,
                   color: _selectedIndex == 1 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(1),
             ),
             const SizedBox(width: 48), // Prostor pro Floating Action Button
             IconButton(
+              iconSize: 35,
               icon: Icon(Icons.message,
                   color: _selectedIndex == 2 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
+              iconSize: 35,
               icon: Icon(Icons.settings,
                   color: _selectedIndex == 3 ? Colors.red : Colors.grey),
               onPressed: () => _onItemTapped(3),
