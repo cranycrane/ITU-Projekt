@@ -127,6 +127,7 @@ class SearchPageState extends State<SearchPage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             IconButton(
+              iconSize: 35,
               icon: Icon(Icons.home, // color: Color(0xFFE50E2B)
                   color: widget._selectedIndex == 0
                       ? const Color(0xFFE50E2B)
@@ -134,6 +135,7 @@ class SearchPageState extends State<SearchPage> {
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
+              iconSize: 35,
               icon: Icon(Icons.search,
                   color: widget._selectedIndex == 1
                       ? const Color(0xFFE50E2B)
@@ -142,6 +144,7 @@ class SearchPageState extends State<SearchPage> {
             ),
             const SizedBox(width: 48), // Prostor pro Floating Action Button
             IconButton(
+              iconSize: 35,
               icon: Icon(Icons.message,
                   color: widget._selectedIndex == 2
                       ? const Color(0xFFE50E2B)
@@ -149,6 +152,7 @@ class SearchPageState extends State<SearchPage> {
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
+              iconSize: 35,
               icon: Icon(Icons.person_outline,
                   color: widget._selectedIndex == 3
                       ? const Color(0xFFE50E2B)
