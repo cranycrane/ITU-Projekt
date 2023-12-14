@@ -371,9 +371,18 @@ class NewEntryPageState extends State<NewEntryPage> {
                                     await diaryController.createEntry(record);
                                     if (mounted) {
                                       ScaffoldMessenger.of(savedContext)
-                                          .showSnackBar(const SnackBar(
+                                          .showSnackBar(
+                                            const SnackBar(
                                               content: Text(
-                                                  'Záznam byl úspěšně přidán')));
+                                                "Záznam byl úspěšně přidán",
+                                                style: TextStyle(
+                                                  color: Colors.black, // Text color
+                                                ),
+                                              ),
+                                              duration: Duration(seconds: 3), // Duration of the SnackBar display
+                                              backgroundColor: Color(0xFFEAEAEA),
+                                            ),
+                                          );
                                     }
                                     _onItemTapped(0);
                                   } catch (e) {
@@ -381,9 +390,19 @@ class NewEntryPageState extends State<NewEntryPage> {
                                       String errorMessage =
                                           e.toString().split('Exception: ')[1];
                                       ScaffoldMessenger.of(savedContext)
-                                          .showSnackBar(SnackBar(
+                                          .showSnackBar(
+                                            SnackBar(
                                               content: Text(
-                                                  'Chyba: $errorMessage')));
+                                                'Chyba: $errorMessage',
+                                                style: TextStyle(
+                                                  color: Colors.black, // Text color
+                                                ),
+                                              ),
+                                              duration: Duration(seconds: 3), // Duration of the SnackBar display
+                                              backgroundColor: Color(0xFFEAEAEA),
+                                            ),
+                                                  
+                                          );
                                     }
                                   }
                                 },
