@@ -10,6 +10,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'user_profile.dart';
 import 'psycho_overview.dart';
 import 'get_code.dart';
+import 'psycho_controller.dart';
 
 class SettingsPage extends StatefulWidget {
   final int _selectedIndex = 3;
@@ -26,6 +27,7 @@ class SettingsPageState extends State<SettingsPage> {
   Map<String, dynamic>? statistics;
 
   bool isLoading = true;
+  bool? hasPsychologist = false;
 
   bool _isEditingName = false;
   final TextEditingController _nameController = TextEditingController();
@@ -118,6 +120,70 @@ class SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  Future<void> _showUnpairPsychologistDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible:
+          false, // Uživatel musí stisknout tlačítko pro zavření dialogu
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Potvrzení',
+            style: TextStyle(color: Colors.red), // Nastavení barvy nadpisu
+          ),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                    'Opravdu si přejete zrušit spárování se svým psychologem? Tato akce je nevratná.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Nerušit',
+                style: TextStyle(color: Colors.black), // Nastavení barvy textu
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text(
+                'Ano zrušit',
+                style: TextStyle(
+                    color:
+                        Colors.red), // Nastavení barvy textu pro akci smazání
+              ),
+              onPressed: () async {
+                try {
+                  await psychoController.unPairWithClient(user!);
+                  if (!context.mounted) return;
+
+                  Navigator.of(context)
+                      .pop(); // Zavře dialogové okno po potvrzení
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Párování bylo úspěšně zrušeno')));
+                } catch (e) {
+                  String errorMessage = e.toString().split('Exception: ')[1];
+
+                  if (!context.mounted) return;
+
+                  Navigator.of(context)
+                      .pop(); // Zavře dialogové okno po potvrzení
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Chyba: $errorMessage')));
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> _requestPermissions() async {
     await Permission.camera.request();
     await Permission.photos.request();
@@ -127,6 +193,10 @@ class SettingsPageState extends State<SettingsPage> {
     try {
       user = await userController
           .getUserData(); // Předpokládáme, že getUserName je ve vašem controlleru
+      
+      //var userInfo = await psychoController
+      //  .getPairingCode();
+      //hasPsychologist = userInfo['hasPsychologist'] ?? false;
 
       setState(() {
         isLoading = false;
@@ -300,6 +370,18 @@ class SettingsPageState extends State<SettingsPage> {
               ),
             ),
             // Další prvky nastavení
+            //if (hasPsychologist!=null && hasPsychologist==true)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
+              child: ElevatedButton(
+                onPressed: _showUnpairPsychologistDialog,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  minimumSize: const Size(double.infinity, 50),
+                ),
+                child: const Text('ZRUŠIT SPÁROVÁNÍ S PSYCHOLOGEM'),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 12.0),
               child: ElevatedButton(
