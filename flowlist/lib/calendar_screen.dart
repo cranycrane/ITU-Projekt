@@ -152,12 +152,17 @@ class CalendarPageState extends State<CalendarPage> {
                         } else if (isSameDay(date, DateTime.now())) {
                           scoreColor = Color(0xFFE2AFB6);
                           textColor = Colors.black;
+                        } else if (date.year < _focusedDay.year ||
+                            (date.year == _focusedDay.year &&
+                                date.month < _focusedDay.month)) {
+                          scoreColor = Color(0xFFBBBBBB);
+                          textColor = Color(0xFF6E6E6E);
                         } else {
-                          scoreColor = Color(0xFF6E6E6E);
+                          scoreColor = Color(0xFFEAEAEA);
+                          textColor = Colors.black;
                         }
 
-                        FontWeight fontWeight =
-                            isFocused ? FontWeight.bold : FontWeight.normal;
+                        FontWeight fontWeight = FontWeight.bold;
 
                         // Získání šířky obrazovky
                         double screenWidth =
