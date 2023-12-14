@@ -17,7 +17,8 @@ function getUserId(string $deviceId, \mysqli $conn): array {
         $user = $result->fetch_assoc();
 
         if ($user) {
-            return ['userId' => $user['id'], 'firstLogin' => false];
+            $firstLogin = is_null($user['firstName']) || is_null($user['lastName']);
+            return ['userId' => $user['id'], 'firstLogin' => $firstLogin];
         } else {
             // Uživatel nenalezen, vytvoření nového uživatele
             $insertSql = "INSERT INTO users (deviceId, firstSignIn) VALUES (?, ?)";
@@ -26,9 +27,11 @@ function getUserId(string $deviceId, \mysqli $conn): array {
             if ($insertStmt === false) {
                 throw new \Exception('Chyba při přípravě SQL dotazu pro vložení: ' . $conn->error);
             }
-            $firstSignIn = new \DateTime();
-            $firstSignInFormatted = $firstSignIn->format('Y-m-d');
+            $firstSignInDate = new \DateTime();
+            $firstSignInFormatted = $firstSignInDate->format('Y-m-d');
             $insertStmt->bind_param("ss", $deviceId, $firstSignInFormatted);
+
+
 
             if ($insertStmt->execute()) {
                 // Vrácení ID nově vytvořeného uživatele

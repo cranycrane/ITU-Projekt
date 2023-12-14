@@ -58,7 +58,7 @@ class NewEntryPageState extends State<NewEntryPage> {
       await diaryController.createEntry(record);
       return true; // Úspěch
     } catch (e) {
-      throw Exception('Chyba při vytváření záznamu: $e');
+      throw Exception('Chyba: $e');
     }
   }
 
@@ -366,30 +366,25 @@ class NewEntryPageState extends State<NewEntryPage> {
                                           int.tryParse(_ratingController.text),
                                       day: selectedDate);
 
-                                  bool success = await createEntry(record);
-                                  String message = success
-                                      ? 'Záznam byl úspěšně přidán'
-                                      : 'Přidání záznamu se nezdařilo';
-
-                                  // Použití uloženého kontextu a kontrola, zda je widget stále v stromu
-                                  if (mounted) {
-                                    ScaffoldMessenger.of(savedContext)
-                                        .showSnackBar(
-                                          SnackBar(
+                                  try {
+                                    // Zde předpokládáme, že `diaryController.createEntry(record)` vrací budoucnost (Future)
+                                    await diaryController.createEntry(record);
+                                    if (mounted) {
+                                      ScaffoldMessenger.of(savedContext)
+                                          .showSnackBar(const SnackBar(
                                               content: Text(
-                                                message,
-                                                style: TextStyle(
-                                                  color: Colors.black, // Text color
-                                                ),
-                                              ),
-                                              duration: Duration(seconds: 3), // Duration of the SnackBar display
-                                              backgroundColor: Color(0xFFEAEAEA),
-                                            ),
-                                            );
-                                  }
-
-                                  if (success) {
+                                                  'Záznam byl úspěšně přidán')));
+                                    }
                                     _onItemTapped(0);
+                                  } catch (e) {
+                                    if (mounted) {
+                                      String errorMessage =
+                                          e.toString().split('Exception: ')[1];
+                                      ScaffoldMessenger.of(savedContext)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  'Chyba: $errorMessage')));
+                                    }
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(

@@ -44,6 +44,24 @@ class PsychoController {
     }
   }
 
+  Future<void> unPairWithClient(UserProfile client) async {
+    final request = http.MultipartRequest(
+        'POST', Uri.parse('$baseUrl/unpairPsychologist.php'));
+    request.fields.addAll({
+      'userId': client.userId.toString(),
+    });
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      return;
+    } else if (response.statusCode == 404) {
+      throw Exception('Uživatel nebyl nalezen');
+    } else {
+      throw Exception('Při rušení párování s uživatelem došlo k chybě');
+    }
+  }
+
   Future<List<UserProfile>> getPairedUsers() async {
     String? userId = await StorageService().getUserId();
 

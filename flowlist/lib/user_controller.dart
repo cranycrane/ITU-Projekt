@@ -57,6 +57,10 @@ class UserController {
     String firstName = nameParts[0];
     String lastName = nameParts.length > 1 ? nameParts[1] : '';
 
+    if (firstName.isEmpty || lastName.isEmpty) {
+      throw Exception('Jméno nemůže být prázdné');
+    }
+
     final Map<String, dynamic> data = {
       'userId': userId,
       'firstName': firstName,
@@ -75,7 +79,7 @@ class UserController {
       //Map<String, dynamic> respond = json.decode(response.body);
       return;
     } else {
-      throw Exception('Failed to get user name: ${response.body}');
+      throw Exception('Chyba při změně jména: ${response.body}');
     }
   }
 

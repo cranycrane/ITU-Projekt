@@ -44,6 +44,7 @@ class CalendarPageState extends State<CalendarPage> {
     List<FlowData> records = await diaryController.readEntries();
     setState(() {
       _allRecords = records;
+      _recordFuture = _loadDay(_focusedDay);
     });
   }
 
