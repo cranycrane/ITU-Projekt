@@ -160,8 +160,7 @@ class CalendarPageState extends State<CalendarPage> {
                           textColor = Colors.black;
                         }
 
-                        FontWeight fontWeight =
-                            isFocused ? FontWeight.bold : FontWeight.normal;
+                        FontWeight fontWeight = FontWeight.bold;
 
                         // Získání šířky obrazovky
                         double screenWidth =
