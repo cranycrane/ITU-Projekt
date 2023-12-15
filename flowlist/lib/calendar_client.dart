@@ -182,6 +182,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
 
                         // Zobrazit skóre pod dnem
                         return Positioned(
+                          bottom:6,
                           child: Container(
                             width: dayWidth,
                             padding: EdgeInsets.all(5),
@@ -427,7 +428,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                           CircleAvatar(
                             radius: 30.0,
                             backgroundColor: Colors.grey[200],
-                            child: widget.client.profileImage == null
+                            child: widget.client.imageFile == null
                                 ? Icon(Icons.person, size: 60)
                                 : ClipOval(
                                     child: Image.file(

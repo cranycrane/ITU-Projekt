@@ -213,6 +213,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         show: true,
                         topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
                         rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                        bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, interval: 5.0, reservedSize: 35.0)),
+                        leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, interval: 1.0, reservedSize: 30.0)),
                       ),
                       borderData: FlBorderData(show: true),
                       lineBarsData: [

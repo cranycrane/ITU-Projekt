@@ -109,7 +109,7 @@ class CalendarPageState extends State<CalendarPage> {
                   startingDayOfWeek: StartingDayOfWeek.monday,
                   focusedDay: _focusedDay,
                   calendarFormat: _calendarFormat,
-                  shouldFillViewport: false,
+                  shouldFillViewport: true,
                   calendarBuilders: CalendarBuilders(
                     todayBuilder: (context, day, focusedDay) {
                       return Container(
@@ -134,7 +134,7 @@ class CalendarPageState extends State<CalendarPage> {
                     outsideBuilder: (context, day, focusedDay) {
                       return Container(
                         margin:
-                            EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
+                            EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
                         decoration: BoxDecoration(
                           color: const Color(
                               0xFFBBBBBB), // Zde změňte barvu na požadovanou
@@ -154,7 +154,7 @@ class CalendarPageState extends State<CalendarPage> {
                     defaultBuilder: (context, day, focusedDay) {
                       return Container(
                         margin:
-                            EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
+                            EdgeInsets.symmetric(horizontal: 6.0, vertical: 6.0),
                         decoration: BoxDecoration(
                           color: const Color(
                               0xFFEAEAEA), // Zde změňte barvu na požadovanou
@@ -174,7 +174,7 @@ class CalendarPageState extends State<CalendarPage> {
                     selectedBuilder: (context, date, events) {
                       return Container(
                         margin:
-                            EdgeInsets.symmetric(horizontal: 4.0, vertical: 1),
+                            EdgeInsets.symmetric(horizontal: 6.0, vertical: 6.0),
                         decoration: BoxDecoration(
                           color: const Color(
                               0xFFE50E2B), // Zde změňte barvu na požadovanou
@@ -231,11 +231,11 @@ class CalendarPageState extends State<CalendarPage> {
 
                         // Zobrazit skóre pod dnem
                         return Positioned(
-                          bottom: 2.0,
+                          bottom: 6.0,
                           child: Container(
                             width: dayWidth,
 
-                            //padding: EdgeInsets.all(1.0),
+                            padding: EdgeInsets.all(5.0),
                             decoration: BoxDecoration(
                               //color: scoreColor,
                               borderRadius: BorderRadius.only(
