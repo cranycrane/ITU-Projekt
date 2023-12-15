@@ -37,13 +37,15 @@ class UserController {
             userId: int.parse(userId!),
             firstName: firstName,
             lastName: lastName,
-            profileImage: filePath);
+            profileImage: filePath,
+            hasPsychologist: user['hasPsychologist']);
       } else {
         return UserProfile(
             userId: int.parse(userId!),
             firstName: firstName,
             lastName: lastName,
-            profileImage: null);
+            profileImage: null,
+            hasPsychologist: user['hasPsychologist']);
       }
     } else {
       throw Exception('Failed to get user name: ${response.body}');

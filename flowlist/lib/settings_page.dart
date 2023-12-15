@@ -1,4 +1,5 @@
 import 'package:flowlist/calendar_screen.dart';
+import 'package:flowlist/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'search_page.dart';
 import 'add_note.dart';
@@ -111,7 +112,7 @@ class SettingsPageState extends State<SettingsPage> {
                 bool success = await userController.deleteAccount();
                 if (mounted && success) {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const CalendarPage()));
+                      builder: (context) => const WelcomePage()));
                 }
               },
             ),
@@ -122,6 +123,21 @@ class SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _showUnpairPsychologistDialog() async {
+    if (user!.hasPsychologist! == false) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Nemáte spárovaného žádného psychologa",
+            style: TextStyle(
+              color: Colors.white, // Text color
+            ),
+          ),
+          duration: Duration(seconds: 3), // Duration of the SnackBar display
+        ),
+      );
+      return;
+    }
+
     return showDialog<void>(
       context: context,
       barrierDismissible:
@@ -194,10 +210,6 @@ class SettingsPageState extends State<SettingsPage> {
     try {
       user = await userController
           .getUserData(); // Předpokládáme, že getUserName je ve vašem controlleru
-      
-      //var userInfo = await psychoController
-      //  .getPairingCode();
-      //hasPsychologist = userInfo['hasPsychologist'] ?? false;
 
       setState(() {
         isLoading = false;
@@ -306,7 +318,6 @@ class SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
             ),
-
             GestureDetector(
               onTap: () async {
                 await _requestPermissions(); // Žádost o oprávnění
@@ -314,7 +325,6 @@ class SettingsPageState extends State<SettingsPage> {
               },
               child: const Icon(Icons.camera_alt), // Ikonka pro výběr obrázku
             ),
-
             const SizedBox(height: 8),
             Center(
               child: Row(
@@ -347,52 +357,77 @@ class SettingsPageState extends State<SettingsPage> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => PsychoOverviewPage()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey,
-                  minimumSize: const Size(double.infinity,
-                      50), // Nastavení šířky na šířku obrazovky a výšku na 50
-                ),
-                child: const Text(
-                  'PŘEPNOUT DO REŽIMU PSYCHOLOGA',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
+            Center(
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10.0, horizontal: 3),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => PsychoOverviewPage()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey,
+                        fixedSize:
+                            Size(MediaQuery.of(context).size.width * 0.42, 50)),
+                    child: const Text(
+                      'REŽIM PSYCHOLOGA',
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            // Další prvky nastavení
-            //if (hasPsychologist!=null && hasPsychologist==true)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12.0),
-              child: ElevatedButton(
-                onPressed: _showUnpairPsychologistDialog,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  minimumSize: const Size(double.infinity, 50),
+                // Další prvky nastavení
+                //if (hasPsychologist!=null && hasPsychologist==true)
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10.0, horizontal: 6),
+                  child: ElevatedButton(
+                    onPressed: _showUnpairPsychologistDialog,
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            user!.hasPsychologist! ? Colors.red : Colors.grey,
+                        fixedSize:
+                            Size(MediaQuery.of(context).size.width * 0.42, 50)),
+                    child: Text(
+                      'ZRUŠIT PÁROVÁNÍ\n S PSYCHOLOGEM',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: (user!.hasPsychologist!
+                              ? Colors.white
+                              : Colors.black)),
+                    ),
+                  ),
                 ),
-                child: const Text('ZRUŠIT SPÁROVÁNÍ S PSYCHOLOGEM'),
-              ),
+              ]),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 6.0, horizontal: 10),
               child: ElevatedButton(
                 onPressed: _showDeleteAccountDialog,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
-                  minimumSize: const Size(double.infinity,
-                      50), // Nastavení šířky na šířku obrazovky a výšku na 50
+                  // Zmenšení šířky tlačítka na 40% šířky obrazovky a výšky na 50
+                  minimumSize: Size(100, 50),
+                  // Přidání vnitřního odsazení pro změnu rozměrů tlačítka
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 ),
-                child: const Text('SMAZAT ÚČET'),
+                child: const Text(
+                  'SMAZAT ÚČET',
+                  style: TextStyle(
+                    fontSize:
+                        16, // Můžete upravit velikost písma, pokud je potřeba
+                  ),
+                ),
               ),
             ),
             FutureBuilder<Map<String, dynamic>>(

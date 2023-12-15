@@ -114,7 +114,7 @@ class CalendarPageState extends State<CalendarPage> {
                     todayBuilder: (context, day, focusedDay) {
                       return Container(
                         margin:
-                            EdgeInsets.symmetric(horizontal: 3.0, vertical: 1),
+                            EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
                         decoration: BoxDecoration(
                           color: const Color(
                               0xFFE2AFB6), // Zde změňte barvu na požadovanou
@@ -134,7 +134,7 @@ class CalendarPageState extends State<CalendarPage> {
                     outsideBuilder: (context, day, focusedDay) {
                       return Container(
                         margin:
-                            EdgeInsets.symmetric(horizontal: 3.0, vertical: 1),
+                            EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
                         decoration: BoxDecoration(
                           color: const Color(
                               0xFFBBBBBB), // Zde změňte barvu na požadovanou
@@ -154,7 +154,7 @@ class CalendarPageState extends State<CalendarPage> {
                     defaultBuilder: (context, day, focusedDay) {
                       return Container(
                         margin:
-                            EdgeInsets.symmetric(horizontal: 3.0, vertical: 1),
+                            EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
                         decoration: BoxDecoration(
                           color: const Color(
                               0xFFEAEAEA), // Zde změňte barvu na požadovanou
@@ -174,7 +174,7 @@ class CalendarPageState extends State<CalendarPage> {
                     selectedBuilder: (context, date, events) {
                       return Container(
                         margin:
-                            EdgeInsets.symmetric(horizontal: 3.0, vertical: 1),
+                            EdgeInsets.symmetric(horizontal: 4.0, vertical: 1),
                         decoration: BoxDecoration(
                           color: const Color(
                               0xFFE50E2B), // Zde změňte barvu na požadovanou
@@ -311,87 +311,106 @@ class CalendarPageState extends State<CalendarPage> {
               height: 4,
             ),
             Expanded(
-                child: SingleChildScrollView(
-              child: FutureBuilder<FlowData?>(
-                future: _recordFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return const Text('Došlo k chybě při načítání dat');
-                  } else {
-                    FlowData? record = snapshot.data;
-                    return Column(
-                      children: [
-                        if ((record?.record1 ?? '').isNotEmpty)
-                          Container(
-                            width: 380,
-                            constraints: const BoxConstraints(minHeight: 50.0),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color(0xFFBCBCBC),
-                                  width: 1.8), // Optional: Add border
-                              borderRadius: BorderRadius.circular(
-                                  10.0), // Optional: Add border radius
-                            ),
-                            padding: const EdgeInsets.all(
-                                8.0), // Optional: Add padding
-                            margin: const EdgeInsets.all(
-                                4.0), // Optional: Add margin
-                            child: Text(
-                              record?.record1 ?? '',
-                              style: const TextStyle(
-                                  color: Color(0xFF5b5b5b)), // Set text color
-                            ),
-                          ),
-                        if ((record?.record2 ?? '').isNotEmpty)
-                          Container(
-                            width: 380,
-                            constraints: const BoxConstraints(minHeight: 50.0),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color(0xFFBCBCBC),
-                                  width: 1.8), // Optional: Add border
-                              borderRadius: BorderRadius.circular(
-                                  10.0), // Optional: Add border radius
-                            ),
-                            padding: const EdgeInsets.all(
-                                8.0), // Optional: Add padding
-                            margin: const EdgeInsets.all(
-                                4.0), // Optional: Add margin
-                            child: Text(
-                              record?.record2 ?? '',
-                              style: const TextStyle(
-                                  color: Color(0xFF5b5b5b)), // Set text color
-                            ),
-                          ),
-                        if ((record?.record3 ?? '').isNotEmpty)
-                          Container(
-                            width: 380,
-                            constraints: const BoxConstraints(minHeight: 50.0),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color(0xFFBCBCBC),
-                                  width: 1.8), // Optional: Add border
-                              borderRadius: BorderRadius.circular(
-                                  10.0), // Optional: Add border radius
-                            ),
-                            padding: const EdgeInsets.all(
-                                8.0), // Optional: Add padding
-                            margin: const EdgeInsets.all(
-                                4.0), // Optional: Add margin
-                            child: Text(
-                              record?.record3 ?? '',
-                              style: const TextStyle(
-                                  color: Color(0xFF5b5b5b)), // Set text color
-                            ),
-                          ),
-                      ],
-                    );
-                  }
-                },
-              ),
-            ))
+                child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              NewEntryPage(selectedDay: _selectedDay),
+                        ),
+                      );
+                    },
+                    child: SingleChildScrollView(
+                      child: FutureBuilder<FlowData?>(
+                        future: _recordFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            return const Text('Došlo k chybě při načítání dat');
+                          } else {
+                            FlowData? record = snapshot.data;
+                            return Column(
+                              children: [
+                                if ((record?.record1 ?? '').isNotEmpty)
+                                  Container(
+                                    width: 380,
+                                    constraints:
+                                        const BoxConstraints(minHeight: 50.0),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: const Color(0xFFBCBCBC),
+                                          width: 1.8), // Optional: Add border
+                                      borderRadius: BorderRadius.circular(
+                                          10.0), // Optional: Add border radius
+                                    ),
+                                    padding: const EdgeInsets.all(
+                                        8.0), // Optional: Add padding
+                                    margin: const EdgeInsets.all(
+                                        4.0), // Optional: Add margin
+                                    child: Text(
+                                      record?.record1 ?? '',
+                                      maxLines: 2,
+                                      style: const TextStyle(
+                                          color: Color(
+                                              0xFF5b5b5b)), // Set text color
+                                    ),
+                                  ),
+                                if ((record?.record2 ?? '').isNotEmpty)
+                                  Container(
+                                    width: 380,
+                                    constraints:
+                                        const BoxConstraints(minHeight: 50.0),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: const Color(0xFFBCBCBC),
+                                          width: 1.8), // Optional: Add border
+                                      borderRadius: BorderRadius.circular(
+                                          10.0), // Optional: Add border radius
+                                    ),
+                                    padding: const EdgeInsets.all(
+                                        8.0), // Optional: Add padding
+                                    margin: const EdgeInsets.all(
+                                        4.0), // Optional: Add margin
+                                    child: Text(
+                                      record?.record2 ?? '',
+                                      maxLines: 2,
+                                      style: const TextStyle(
+                                          color: Color(
+                                              0xFF5b5b5b)), // Set text color
+                                    ),
+                                  ),
+                                if ((record?.record3 ?? '').isNotEmpty)
+                                  Container(
+                                    width: 380,
+                                    constraints:
+                                        const BoxConstraints(minHeight: 50.0),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: const Color(0xFFBCBCBC),
+                                          width: 1.8), // Optional: Add border
+                                      borderRadius: BorderRadius.circular(
+                                          10.0), // Optional: Add border radius
+                                    ),
+                                    padding: const EdgeInsets.all(
+                                        8.0), // Optional: Add padding
+                                    margin: const EdgeInsets.all(
+                                        4.0), // Optional: Add margin
+                                    child: Text(
+                                      record?.record3 ?? '',
+                                      maxLines: 2,
+                                      style: const TextStyle(
+                                          color: Color(
+                                              0xFF5b5b5b)), // Set text color
+                                    ),
+                                  ),
+                              ],
+                            );
+                          }
+                        },
+                      ),
+                    )))
           ]),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
