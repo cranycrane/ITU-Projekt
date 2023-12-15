@@ -331,6 +331,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                     margin: const EdgeInsets.all(4.0), // Optional: Add margin
                     child: Text(
                       _record?.record1 ?? '',
+                      maxLines: 2,
                       style: const TextStyle(
                           color: Color(0xFF5b5b5b)), // Set text color
                     ),
@@ -350,6 +351,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                     margin: const EdgeInsets.all(4.0), // Optional: Add margin
                     child: Text(
                       _record?.record2 ?? '',
+                      maxLines: 2,
                       style: const TextStyle(
                           color: Color(0xFF5b5b5b)), // Set text color
                     ),
@@ -369,6 +371,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                     margin: const EdgeInsets.all(4.0), // Optional: Add margin
                     child: Text(
                       _record?.record3 ?? '',
+                      maxLines: 2,
                       style: const TextStyle(
                           color: Color(0xFF5b5b5b)), // Set text color
                     ),

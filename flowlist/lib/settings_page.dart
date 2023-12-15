@@ -1,4 +1,5 @@
 import 'package:flowlist/calendar_screen.dart';
+import 'package:flowlist/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'search_page.dart';
 import 'add_note.dart';
@@ -110,7 +111,7 @@ class SettingsPageState extends State<SettingsPage> {
                 bool success = await userController.deleteAccount();
                 if (mounted && success) {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const CalendarPage()));
+                      builder: (context) => const WelcomePage()));
                 }
               },
             ),

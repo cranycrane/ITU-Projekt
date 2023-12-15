@@ -11,6 +11,7 @@ import 'dart:io';
 import 'user_profile.dart';
 import 'calendar_client.dart';
 import 'settings_page.dart';
+import 'package:intl/intl.dart';
 
 class PsychoOverviewPage extends StatefulWidget {
   const PsychoOverviewPage({super.key});
@@ -106,6 +107,12 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
   Future<List<UserProfile>> _getPairedUsers() async {
     List<UserProfile> records = await psychoController.getPairedUsers();
     return records;
+  }
+
+  String formatDateTime(DateTime dateTime) {
+    final DateFormat formatter =
+        DateFormat('d. M. yyyy'); // Formát d. MMMM yyyy, jazyk čeština
+    return formatter.format(dateTime);
   }
 
   @override
@@ -223,11 +230,12 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                                           18), // Upravte velikost písma podle vaší potřeby
                                 ),
                                 Text(
-                                  "Poslední příspěvek: 5.12.2023",
+                                  user.lastRecordDate != null
+                                      ? "Poslední příspěvek: ${formatDateTime(user.lastRecordDate!)}"
+                                      : "Poslední příspěvek: Dosud žádný",
                                   style: TextStyle(
                                     color: Colors.black.withOpacity(0.6),
-                                    fontSize:
-                                        14, // Upravte velikost písma podle vaší potřeby
+                                    fontSize: 14,
                                   ),
                                 ),
                               ],

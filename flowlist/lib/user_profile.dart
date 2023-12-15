@@ -7,13 +7,15 @@ class UserProfile {
   String? profileImage;
   File? imageFile;
   bool? hasPsychologist;
+  DateTime? lastRecordDate;
 
   UserProfile(
       {required this.userId,
       this.firstName = '',
       this.lastName = '',
       this.profileImage,
-      this.hasPsychologist});
+      this.hasPsychologist,
+      this.lastRecordDate});
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
@@ -21,7 +23,10 @@ class UserProfile {
         firstName: json['firstName'] ?? 'Jan',
         lastName: json['lastName'] ?? 'Novák',
         profileImage: json['profileImagePath'],
-        hasPsychologist: json['hasPsychologist']);
+        hasPsychologist: json['hasPsychologist'],
+        lastRecordDate: json['lastRecordDate'] != null
+            ? DateTime.parse(json['lastRecordDate'])
+            : null);
   }
 
   Map<String, dynamic> toJson() => {
@@ -29,6 +34,7 @@ class UserProfile {
         'firstName': firstName,
         'lastName': lastName,
         'profileImage': profileImage,
-        'hasPsychologist': hasPsychologist
+        'hasPsychologist': hasPsychologist,
+        'lastRecordDate': lastRecordDate,
       };
 }

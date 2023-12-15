@@ -17,7 +17,7 @@ function getUserId(string $deviceId, \mysqli $conn): array {
         $user = $result->fetch_assoc();
 
         if ($user) {
-            $firstLogin = is_null($user['firstName']) || is_null($user['lastName']);
+            $firstLogin = is_null($user['firstName']) && is_null($user['lastName']);
             return ['userId' => $user['id'], 'firstLogin' => $firstLogin];
         } else {
             // Uživatel nenalezen, vytvoření nového uživatele

@@ -33,11 +33,19 @@ try {
         $clients = [];
     
         while ($row = $result->fetch_assoc()) {
+            // Dotaz na poslední záznam
+            $lastRecordStmt = $conn->prepare("SELECT date FROM diary WHERE userId = ? ORDER BY date DESC LIMIT 1");
+            $lastRecordStmt->bind_param("s", $row['id']);
+            $lastRecordStmt->execute();
+            $lastRecordResult = $lastRecordStmt->get_result();
+            $lastRecordRow = $lastRecordResult->fetch_assoc();
+    
             $clients[] = [
                 'userId' => $row['id'],
                 'firstName' => $row['firstName'],
                 'lastName' => $row['lastName'],
-                'profileImagePath' => $row['profileImg']
+                'profileImagePath' => $row['profileImg'],
+                'lastRecordDate' => $lastRecordRow ? $lastRecordRow['date'] : null
             ];
         }
 

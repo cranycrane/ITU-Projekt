@@ -6,12 +6,16 @@ import 'flow.dart';
 import 'diary_entries_loader.dart';
 import 'diary_controller.dart';
 import 'package:intl/intl.dart'; // Přidání pro formátování data
-import 'get_code.dart';
+import 'messages_page.dart';
 import 'user_profile.dart';
+import 'psycho_overview.dart';
+import 'calendar_client.dart';
 
 class PsychoEntryPage extends StatefulWidget {
   final UserProfile client;
   final DateTime? selectedDay;
+
+  final int _selectedIndex = -1; // Index pro navigaci v BottomAppBar
 
   const PsychoEntryPage({Key? key, this.selectedDay, required this.client})
       : super(key: key);
@@ -30,8 +34,6 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
   bool _isDataLoaded = false;
   bool dataFromBackend = true;
   late Future<FlowData?> _recordFuture;
-
-  int _selectedIndex = -1; // Index pro navigaci v BottomAppBar
 
   @override
   void initState() {
@@ -91,26 +93,31 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
     switch (index) {
       case 0:
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const CalendarPage()));
+        // Kdyby byla domovská stránka na indexu 0
+        // Navigator.of(context).pushReplacementNamed('/home');
         break;
       case 1:
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => const SearchPage()));
+        // Přechod na stránku pro vyhledávání
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => PsychoOverviewPage()));
         break;
       case 2:
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const PsychoUserPage()));
+        // PsychoUserPage
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => CalendarClientPage(client: widget.client)));
+        // Tady byste mohli implementovat přechod na stránku oznámení
         break;
       case 3:
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const SettingsPage()));
+        // Navigace na SettingsPage, pokud uživatel není již na této stránce
+
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => MessagesPage(
+                  toUserId: widget.client.userId.toString(),
+                )));
+        break;
+      default:
         break;
     }
   }
@@ -177,7 +184,8 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                       _isDataLoaded = true;
                       if ((data?.record1.isEmpty ?? true) &&
                           (data?.record2.isEmpty ?? true) &&
-                          (data?.record3.isEmpty ?? true)) {
+                          (data?.record3.isEmpty ?? true) &&
+                          (data?.score == null)) {
                         dataFromBackend = false;
                       }
                     }
@@ -189,10 +197,24 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                         const SizedBox(height: 10),
                         TextField(
                           controller: _firstController,
+                          cursorColor: Color(0xFFE50E2B),
+                          cursorWidth: 2,
                           decoration: InputDecoration(
-                            labelText: 'První položka',
-                            border: const OutlineInputBorder(),
-                            fillColor: Colors.grey[200],
+                            floatingLabelStyle: TextStyle(color: Colors.black),
+                            labelText: 'První dobrá věc...',
+                            border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.green, width: 4),
+                                borderRadius: BorderRadius.circular(10)),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(
+                                color: Color(
+                                    0xFFE50E2B), // Barva ohraničení při psaní
+                                width: 2.0, // Šířka ohraničení
+                              ),
+                            ),
+                            fillColor: Colors.white,
                             filled: true,
                           ),
                           maxLines: 5,
@@ -200,10 +222,22 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                         const SizedBox(height: 8),
                         TextField(
                           controller: _secondController,
+                          cursorColor: Color(0xFFE50E2B),
+                          cursorWidth: 2,
                           decoration: InputDecoration(
-                            labelText: 'Druhá položka',
-                            border: const OutlineInputBorder(),
-                            fillColor: Colors.grey[200],
+                            floatingLabelStyle: TextStyle(color: Colors.black),
+                            labelText: 'Druhá dobrá věc...',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(
+                                color: Color(
+                                    0xFFE50E2B), // Barva ohraničení při psaní
+                                width: 2.0, // Šířka ohraničení
+                              ),
+                            ),
+                            fillColor: Colors.white,
                             filled: true,
                           ),
                           maxLines: 5,
@@ -211,10 +245,23 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                         const SizedBox(height: 8),
                         TextField(
                           controller: _thirdController,
+                          cursorColor: Color(0xFFE50E2B),
+                          cursorWidth: 2,
                           decoration: InputDecoration(
-                            labelText: 'Třetí položka',
-                            border: const OutlineInputBorder(),
-                            fillColor: Colors.grey[200],
+                            floatingLabelStyle: TextStyle(color: Colors.black),
+                            labelText: 'Třetí dobrá věc...',
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(width: 15),
+                                borderRadius: BorderRadius.circular(10)),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(
+                                color: Color(
+                                    0xFFE50E2B), // Barva ohraničení při psaní
+                                width: 2.0, // Šířka ohraničení
+                              ),
+                            ),
+                            fillColor: Colors.white,
                             filled: true,
                           ),
                           maxLines: 5,
@@ -225,7 +272,7 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                           children: <Widget>[
                             const Flexible(
                               child: Text(
-                                'Jak bys ohodnotil svůj den?',
+                                'Jak bys ohodnotil/a svůj den?',
                                 style: TextStyle(fontSize: 16),
                               ),
                             ),
@@ -236,7 +283,19 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                               child: TextField(
                                 textAlign: TextAlign.center,
                                 controller: _ratingController,
-                                decoration: const InputDecoration(
+                                cursorColor: Color(0xFFE50E2B),
+                                cursorWidth: 2,
+                                decoration: InputDecoration(
+                                  floatingLabelStyle:
+                                      TextStyle(color: Colors.black),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: const BorderSide(
+                                      color: Color(
+                                          0xFFE50E2B), // Barva ohraničení při psaní
+                                      width: 2.0, // Šířka ohraničení
+                                    ),
+                                  ),
                                   hintText: '/10',
                                   border: OutlineInputBorder(),
                                   contentPadding:
@@ -258,46 +317,99 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 6.0,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.home,
-                  color: _selectedIndex == 0 ? Colors.red : Colors.grey),
-              onPressed: () => _onItemTapped(0),
+          height: 70,
+          shape: const CircularNotchedRectangle(),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(
+                      size: 35,
+                      Icons.home,
+                      color: widget._selectedIndex == 0
+                          ? Colors.red
+                          : Colors.grey),
+                  onPressed: () => _onItemTapped(1),
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      // Přidání akce, která se provede po kliknutí
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                            builder: (context) => CalendarClientPage(
+                                  client: widget.client,
+                                )), // Změňte na cílovou stránku
+                      );
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                      padding: EdgeInsets.all(0),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFD9D9D9),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          width: 2.0,
+                          color: widget._selectedIndex == 1
+                              ? Color(0x6E6E6E)
+                              : Color(0x6E6E6E),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          CircleAvatar(
+                            radius: 25.0,
+                            backgroundColor: Colors.grey[200],
+                            child: widget.client.profileImage == null
+                                ? Icon(Icons.person, size: 50)
+                                : ClipOval(
+                                    child: Image.file(
+                                    widget.client.imageFile!,
+                                    width: 50,
+                                    height: 50,
+                                    fit: BoxFit.cover,
+                                  )),
+                          ),
+                          SizedBox(width: 8.0),
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text(
+                                  "${widget.client!.firstName} ${widget.client!.lastName}",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                IconButton(
+                  padding: EdgeInsets.only(right: 5),
+                  icon: Icon(
+                      size: 35,
+                      Icons.message,
+                      color: widget._selectedIndex == 2
+                          ? Colors.red
+                          : Colors.grey),
+                  onPressed: () => _onItemTapped(3),
+                ),
+              ],
             ),
-            IconButton(
-              icon: Icon(Icons.search,
-                  color: _selectedIndex == 1 ? Colors.red : Colors.grey),
-              onPressed: () => _onItemTapped(1),
-            ),
-            const SizedBox(width: 48), // Prostor pro Floating Action Button
-            IconButton(
-              icon: Icon(Icons.message,
-                  color: _selectedIndex == 2 ? Colors.red : Colors.grey),
-              onPressed: () => _onItemTapped(2),
-            ),
-            IconButton(
-              icon: Icon(Icons.settings,
-                  color: _selectedIndex == 3 ? Colors.red : Colors.grey),
-              onPressed: () => _onItemTapped(3),
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: keyboardHeight > 0
-          ? null
-          : FloatingActionButton(
-              backgroundColor: Colors.red,
-              child: const Icon(Icons.add),
-              onPressed: () {
-                // Akce pro FloatingActionButton
-              },
-            ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          )),
     );
   }
 }

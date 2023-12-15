@@ -37,12 +37,12 @@ class MyApp extends StatelessWidget {
     if (firstLogin) {
       return const MaterialApp(
         title: 'FlowList',
-        home: setNamePage(),
+        home: WelcomePage(),
       );
     } else {
       return const MaterialApp(
         title: 'FlowList',
-        home: setNamePage(),
+        home: CalendarPage(),
       );
     }
   }

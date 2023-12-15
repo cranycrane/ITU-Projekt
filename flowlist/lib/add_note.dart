@@ -324,10 +324,12 @@ class NewEntryPageState extends State<NewEntryPage> {
                                             color: Colors.black, // Text color
                                           ),
                                         ),
-                                        duration: Duration(seconds: 3), // Duration of the SnackBar display
+                                        duration: Duration(
+                                            seconds:
+                                                3), // Duration of the SnackBar display
                                         backgroundColor: Color(0xFFEAEAEA),
-                                      ),  
-                                        );
+                                      ),
+                                    );
                                   }
                                   final confirmed = await showDialog<bool>(
                                         context: context,
@@ -370,17 +372,19 @@ class NewEntryPageState extends State<NewEntryPage> {
                                       // Kontrola, zda je stále kontext aktivní
                                       ScaffoldMessenger.of(savedContext)
                                           .showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                message,
-                                                style: TextStyle(
-                                                  color: Colors.black, // Text color
-                                                ),
-                                              ),
-                                              duration: Duration(seconds: 3), // Duration of the SnackBar display
-                                              backgroundColor: Color(0xFFEAEAEA),
+                                        SnackBar(
+                                          content: Text(
+                                            message,
+                                            style: TextStyle(
+                                              color: Colors.black, // Text color
                                             ),
-                                          ); 
+                                          ),
+                                          duration: Duration(
+                                              seconds:
+                                                  3), // Duration of the SnackBar display
+                                          backgroundColor: Color(0xFFEAEAEA),
+                                        ),
+                                      );
                                     }
 
                                     if (success) {
@@ -423,17 +427,19 @@ class NewEntryPageState extends State<NewEntryPage> {
                                     if (mounted) {
                                       ScaffoldMessenger.of(savedContext)
                                           .showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                "Záznam byl úspěšně přidán",
-                                                style: TextStyle(
-                                                  color: Colors.black, // Text color
-                                                ),
-                                              ),
-                                              duration: Duration(seconds: 3), // Duration of the SnackBar display
-                                              backgroundColor: Color(0xFFEAEAEA),
+                                        const SnackBar(
+                                          content: Text(
+                                            "Záznam byl úspěšně přidán",
+                                            style: TextStyle(
+                                              color: Colors.black, // Text color
                                             ),
-                                          );
+                                          ),
+                                          duration: Duration(
+                                              seconds:
+                                                  3), // Duration of the SnackBar display
+                                          backgroundColor: Color(0xFFEAEAEA),
+                                        ),
+                                      );
                                     }
                                     _onItemTapped(0);
                                   } catch (e) {
@@ -442,18 +448,19 @@ class NewEntryPageState extends State<NewEntryPage> {
                                           e.toString().split('Exception: ')[1];
                                       ScaffoldMessenger.of(savedContext)
                                           .showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                'Chyba: $errorMessage',
-                                                style: TextStyle(
-                                                  color: Colors.black, // Text color
-                                                ),
-                                              ),
-                                              duration: Duration(seconds: 3), // Duration of the SnackBar display
-                                              backgroundColor: Color(0xFFEAEAEA),
+                                        SnackBar(
+                                          content: Text(
+                                            'Chyba: $errorMessage',
+                                            style: TextStyle(
+                                              color: Colors.black, // Text color
                                             ),
-                                                  
-                                          );
+                                          ),
+                                          duration: Duration(
+                                              seconds:
+                                                  3), // Duration of the SnackBar display
+                                          backgroundColor: Color(0xFFEAEAEA),
+                                        ),
+                                      );
                                     }
                                   }
                                 },
@@ -512,16 +519,6 @@ class NewEntryPageState extends State<NewEntryPage> {
           ],
         ),
       ),
-      floatingActionButton: keyboardHeight > 0
-          ? null
-          : FloatingActionButton(
-              backgroundColor: Colors.red,
-              child: const Icon(Icons.add),
-              onPressed: () {
-                // Akce pro FloatingActionButton
-              },
-            ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

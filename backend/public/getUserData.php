@@ -33,6 +33,7 @@ if ($stmt->execute()) {
             $user['profileImg'] = null; // Není-li obrázek nalezen
         }
         http_response_code(200);
+        $user['hasPsychologist'] = $user['assignedPsycho'] == null ? false : true;
         echo json_encode($user);
     } else {
         http_response_code(404);
