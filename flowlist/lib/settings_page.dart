@@ -11,6 +11,7 @@ import 'user_profile.dart';
 import 'psycho_overview.dart';
 import 'get_code.dart';
 import 'psycho_controller.dart';
+import 'statistics_page.dart';
 
 class SettingsPage extends StatefulWidget {
   final int _selectedIndex = 3;
@@ -435,6 +436,24 @@ class SettingsPageState extends State<SettingsPage> {
                         _buildStatisticRow('Nejvíce slov v záznamu',
                             statistics!['longestEntryLength'].toString()),
                         // Add more statistics as needed
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => const StatisticsPage()),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.grey,
+                              minimumSize: const Size(100, 30),
+                            ),
+                            child: const Text(
+                              'další statistiky',
+                              style: TextStyle(color: Colors.black, fontSize: 18),
+                              ),
+                          ),
+                        ),
                       ],
                     ),
                   );
