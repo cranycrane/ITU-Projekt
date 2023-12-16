@@ -78,7 +78,7 @@ class NewEntryPageState extends State<NewEntryPage> {
     // Check if the new date is in the future and if the selected date is not today
     if (newDate.isAfter(DateTime.now()) && selectedDate != DateTime.now()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
             "Nelze pracovat se dny v budoucnosti",
             style: TextStyle(
@@ -125,7 +125,7 @@ class NewEntryPageState extends State<NewEntryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    //final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     final double screenHeight = MediaQuery.of(context).size.height;
 
     String formattedDate =
@@ -198,10 +198,10 @@ class NewEntryPageState extends State<NewEntryPage> {
                         const SizedBox(height: 10),
                         TextField(
                           controller: _firstController,
-                          cursorColor: Color(0xFFE50E2B),
+                          cursorColor: const Color(0xFFE50E2B),
                           cursorWidth: 2,
                           decoration: InputDecoration(
-                            floatingLabelStyle: TextStyle(color: Colors.black),
+                            floatingLabelStyle: const TextStyle(color: Colors.black),
                             labelText: 'První dobrá věc...',
                             border: OutlineInputBorder(
                                 borderSide: const BorderSide(
@@ -223,10 +223,10 @@ class NewEntryPageState extends State<NewEntryPage> {
                         const SizedBox(height: 8),
                         TextField(
                           controller: _secondController,
-                          cursorColor: Color(0xFFE50E2B),
+                          cursorColor: const Color(0xFFE50E2B),
                           cursorWidth: 2,
                           decoration: InputDecoration(
-                            floatingLabelStyle: TextStyle(color: Colors.black),
+                            floatingLabelStyle: const TextStyle(color: Colors.black),
                             labelText: 'Druhá dobrá věc...',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)),
@@ -246,13 +246,13 @@ class NewEntryPageState extends State<NewEntryPage> {
                         const SizedBox(height: 8),
                         TextField(
                           controller: _thirdController,
-                          cursorColor: Color(0xFFE50E2B),
+                          cursorColor: const Color(0xFFE50E2B),
                           cursorWidth: 2,
                           decoration: InputDecoration(
-                            floatingLabelStyle: TextStyle(color: Colors.black),
+                            floatingLabelStyle: const TextStyle(color: Colors.black),
                             labelText: 'Třetí dobrá věc...',
                             border: OutlineInputBorder(
-                                borderSide: BorderSide(width: 15),
+                                borderSide: const BorderSide(width: 15),
                                 borderRadius: BorderRadius.circular(10)),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -284,11 +284,11 @@ class NewEntryPageState extends State<NewEntryPage> {
                               child: TextField(
                                 textAlign: TextAlign.center,
                                 controller: _ratingController,
-                                cursorColor: Color(0xFFE50E2B),
+                                cursorColor: const Color(0xFFE50E2B),
                                 cursorWidth: 2,
                                 decoration: InputDecoration(
                                   floatingLabelStyle:
-                                      TextStyle(color: Colors.black),
+                                      const TextStyle(color: Colors.black),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                     borderSide: const BorderSide(
@@ -300,7 +300,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                                   hintText: '/10',
                                   border: OutlineInputBorder(),
                                   contentPadding:
-                                      EdgeInsets.symmetric(vertical: 8.0),
+                                      const EdgeInsets.symmetric(vertical: 8.0),
                                 ),
                                 keyboardType: TextInputType.number,
                               ),
@@ -318,7 +318,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                                   print(dataFromBackend);
                                   if (!dataFromBackend) {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
+                                      const SnackBar(
                                         content: Text(
                                           "Nelze smazat záznam, který nebyl uložen!",
                                           style: TextStyle(
@@ -377,14 +377,14 @@ class NewEntryPageState extends State<NewEntryPage> {
                                         SnackBar(
                                           content: Text(
                                             message,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: Colors.black, // Text color
                                             ),
                                           ),
-                                          duration: Duration(
+                                          duration: const Duration(
                                               seconds:
                                                   3), // Duration of the SnackBar display
-                                          backgroundColor: Color(0xFFEAEAEA),
+                                          backgroundColor: const Color(0xFFEAEAEA),
                                         ),
                                       );
                                     }
@@ -453,14 +453,14 @@ class NewEntryPageState extends State<NewEntryPage> {
                                         SnackBar(
                                           content: Text(
                                             'Chyba: $errorMessage',
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: Colors.black, // Text color
                                             ),
                                           ),
-                                          duration: Duration(
+                                          duration: const Duration(
                                               seconds:
                                                   3), // Duration of the SnackBar display
-                                          backgroundColor: Color(0xFFEAEAEA),
+                                          backgroundColor: const Color(0xFFEAEAEA),
                                         ),
                                       );
                                     }

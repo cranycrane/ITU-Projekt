@@ -98,7 +98,7 @@ class MessagesPageState extends State<MessagesPage> {
             height: 60,
             padding: const EdgeInsets.symmetric(
                 horizontal: 3.0, vertical: 3.0), // Vnější odsazení pro obdélník
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius:
                   BorderRadius.all(Radius.circular(20.0)), // Zaoblené rohy
@@ -112,13 +112,13 @@ class MessagesPageState extends State<MessagesPage> {
                     Widget avatar;
                     if (snapshot.connectionState == ConnectionState.waiting &&
                         isFirstLoad) {
-                      avatar = CircularProgressIndicator();
+                      avatar = const CircularProgressIndicator();
                     } else if (snapshot.hasError || snapshot.data == null) {
-                      avatar = Icon(Icons.person, size: 50);
+                      avatar = const Icon(Icons.person, size: 50);
                     } else {
                       UserProfile userProfile = snapshot.data!;
                       avatar = userProfile.profileImage == null
-                          ? Icon(Icons.person, size: 50)
+                          ? const Icon(Icons.person, size: 50)
                           : Image.file(
                               File(userProfile.profileImage!),
                               width: 50,
@@ -143,9 +143,9 @@ class MessagesPageState extends State<MessagesPage> {
                         AsyncSnapshot<UserProfile?> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting &&
                           isFirstLoad) {
-                        return Text("Načítání..."); // Zobrazit při načítání
+                        return const Text("Načítání..."); // Zobrazit při načítání
                       } else if (snapshot.hasError || snapshot.data == null) {
-                        return Text(
+                        return const Text(
                             "Uživatel"); // Záložní text, pokud dojde k chybě nebo data nejsou dostupná
                       } else {
                         UserProfile userProfile = snapshot.data!;
@@ -162,8 +162,8 @@ class MessagesPageState extends State<MessagesPage> {
             ),
           ),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            color: Color(0xFF61646B),
+            icon: const Icon(Icons.arrow_back),
+            color: const Color(0xFF61646B),
             iconSize: 40, // Zvětšení velikosti ikony
             onPressed: () {
               Navigator.pop(context);
@@ -178,11 +178,11 @@ class MessagesPageState extends State<MessagesPage> {
                   builder: (BuildContext context,
                       AsyncSnapshot<List<Message>> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
-                      return Center(child: Text("Chyba při načítání zpráv"));
+                      return const Center(child: Text("Chyba při načítání zpráv"));
                     } else if (!snapshot.hasData) {
-                      return Center(child: Text("Žádné zprávy"));
+                      return const Center(child: Text("Žádné zprávy"));
                     } else {
                       var messages = snapshot.data!;
                       return ListView.builder(
@@ -205,12 +205,12 @@ class MessagesPageState extends State<MessagesPage> {
                                       : CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Container(
-                                      margin: EdgeInsets.symmetric(
+                                      margin: const EdgeInsets.symmetric(
                                           horizontal:
                                               15), // Stejné horizontální odsazení jako u kontejneru zprávy
                                       child: Text(
                                         formattedTime,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 12, color: Colors.grey),
                                       ),
                                     ),
@@ -219,7 +219,7 @@ class MessagesPageState extends State<MessagesPage> {
                                       children: [
                                         if (!isSentByMe) // Zobrazujeme avatara pouze pro přijaté zprávy
                                           Padding(
-                                            padding: EdgeInsets.only(
+                                            padding: const EdgeInsets.only(
                                                 right: 3.0, left: 15.0),
                                             child: FutureBuilder<UserProfile?>(
                                               future:
@@ -231,10 +231,10 @@ class MessagesPageState extends State<MessagesPage> {
                                                         ConnectionState
                                                             .waiting &&
                                                     isFirstLoad) {
-                                                  return CircularProgressIndicator(); // Při načítání
+                                                  return const CircularProgressIndicator(); // Při načítání
                                                 } else if (snapshot.hasError ||
                                                     snapshot.data == null) {
-                                                  return Icon(Icons.person,
+                                                  return const Icon(Icons.person,
                                                       size:
                                                           30); // Výchozí ikona
                                                 } else {
@@ -254,7 +254,7 @@ class MessagesPageState extends State<MessagesPage> {
                                                     child: userProfile
                                                                 .profileImage ==
                                                             null
-                                                        ? Icon(Icons.person,
+                                                        ? const Icon(Icons.person,
                                                             size: 30)
                                                         : null,
                                                   );
@@ -265,9 +265,9 @@ class MessagesPageState extends State<MessagesPage> {
                                         Container(
                                           constraints: const BoxConstraints(
                                               maxWidth: 330.0),
-                                          margin: EdgeInsets.symmetric(
+                                          margin: const EdgeInsets.symmetric(
                                               vertical: 5, horizontal: 10),
-                                          padding: EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.symmetric(
                                               vertical: 10, horizontal: 15),
                                           decoration: BoxDecoration(
                                             color: isSentByMe
@@ -295,7 +295,7 @@ class MessagesPageState extends State<MessagesPage> {
                     }
                   }),
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             _buildMessageInputField(),
           ],
         ),
@@ -305,7 +305,7 @@ class MessagesPageState extends State<MessagesPage> {
 
   Widget _buildMessageInputField() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
       color: Colors.white,
       child: Row(
         children: <Widget>[
@@ -334,7 +334,7 @@ class MessagesPageState extends State<MessagesPage> {
           IconButton(
             iconSize: 30,
             icon: const Icon(Icons.send),
-            color: Color(0xFF61646B),
+            color: const Color(0xFF61646B),
             onPressed: _sendMessage,
           ),
         ],

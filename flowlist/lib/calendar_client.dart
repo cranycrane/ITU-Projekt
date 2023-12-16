@@ -2,16 +2,12 @@ import 'package:flowlist/messages_page.dart';
 import 'package:flowlist/psycho_overview.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'settings_page.dart';
-import 'search_page.dart'; // Předpokládáme, že máte soubor search_page.dart
-import 'add_note.dart';
 import 'diary_controller.dart';
-import 'diary_entries_loader.dart';
+//import 'diary_entries_loader.dart';
 import 'flow.dart';
-import 'get_code.dart';
 import 'user_profile.dart';
-import 'user_controller.dart';
-import 'dart:io';
+//import 'user_controller.dart';
+//import 'dart:io';
 import 'psycho_note_read.dart';
 import 'statistics_page.dart';
 
@@ -79,7 +75,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
       case 1:
         // Přechod na stránku pro vyhledávání
         Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => PsychoOverviewPage()));
+            MaterialPageRoute(builder: (context) => const PsychoOverviewPage()));
         break;
       case 2:
         // PsychoUserPage
@@ -132,7 +128,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                     todayBuilder: (context, day, focusedDay) {
                       return Container(
                         margin:
-                            EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
+                            const EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
                         decoration: BoxDecoration(
                           color: const Color(
                               0xFFE2AFB6), // Zde změňte barvu na požadovanou
@@ -141,7 +137,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                         child: Center(
                           child: Text(
                             '${day.day}',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15),
@@ -152,7 +148,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                     outsideBuilder: (context, day, focusedDay) {
                       return Container(
                         margin:
-                            EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
+                            const EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
                         decoration: BoxDecoration(
                           color: const Color(
                               0xFFBBBBBB), // Zde změňte barvu na požadovanou
@@ -161,7 +157,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                         child: Center(
                           child: Text(
                             '${day.day}',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Color(0xFF6E6E6E),
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15),
@@ -171,7 +167,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                     },
                     defaultBuilder: (context, day, focusedDay) {
                       return Container(
-                        margin: EdgeInsets.symmetric(
+                        margin: const EdgeInsets.symmetric(
                             horizontal: 6.0, vertical: 6.0),
                         decoration: BoxDecoration(
                           color: const Color(
@@ -181,7 +177,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                         child: Center(
                           child: Text(
                             '${day.day}',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15),
@@ -191,7 +187,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                     },
                     selectedBuilder: (context, date, events) {
                       return Container(
-                        margin: EdgeInsets.symmetric(
+                        margin: const EdgeInsets.symmetric(
                             horizontal: 6.0, vertical: 6.0),
                         decoration: BoxDecoration(
                           color: const Color(
@@ -201,7 +197,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                         child: Center(
                           child: Text(
                             '${date.day}',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15),
@@ -220,7 +216,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                           dayRecords.isNotEmpty ? dayRecords.first : null;
 
                       // Kontrola, zda je den vybraný a zároveň ve stejném měsíci jako _focusedDay
-                      bool isFocused = isSameDay(_selectedDay, date);
+                      //bool isFocused = isSameDay(_selectedDay, date);
 
                       if (dayRecord != null && dayRecord.score != null) {
                         Color scoreColor;
@@ -252,8 +248,8 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                           bottom: 2.0,
                           child: Container(
                             width: dayWidth,
-                            padding: EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
+                            padding: const EdgeInsets.all(5.0),
+                            decoration: const BoxDecoration(
                               //color: scoreColor,
                               borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(8),
@@ -412,7 +408,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
           height: 70,
           shape: const CircularNotchedRectangle(),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -438,8 +434,8 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                       );
                     },
                     child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-                      padding: EdgeInsets.all(0),
+                      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                      padding: const EdgeInsets.all(0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(
@@ -456,7 +452,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                             radius: 30.0,
                             backgroundColor: Colors.grey[200],
                             child: widget.client.imageFile == null
-                                ? Icon(Icons.person, size: 60)
+                                ? const Icon(Icons.person, size: 60)
                                 : ClipOval(
                                     child: Image.file(
                                     widget.client.imageFile!,
@@ -465,15 +461,15 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                                     fit: BoxFit.cover,
                                   )),
                           ),
-                          SizedBox(width: 4.0),
+                          const SizedBox(width: 4.0),
                           Flexible(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
                                 Text(
-                                  "${widget.client!.firstName} ${widget.client!.lastName}",
-                                  style: TextStyle(
+                                  "${widget.client.firstName} ${widget.client.lastName}",
+                                  style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
                                   overflow: TextOverflow.ellipsis,
@@ -489,7 +485,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                   ),
                 ),
                 IconButton(
-                  padding: EdgeInsets.only(right: 5),
+                  padding: const EdgeInsets.only(right: 5),
                   icon: Icon(
                       size: 35,
                       Icons.query_stats,
@@ -499,7 +495,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                   onPressed: () => _onItemTapped(4),
                 ),
                 IconButton(
-                  padding: EdgeInsets.only(right: 5),
+                  padding: const EdgeInsets.only(right: 5),
                   icon: Icon(
                       size: 35,
                       Icons.message,
@@ -530,8 +526,8 @@ class UserDetailsWidget extends StatelessWidget {
           backgroundImage: NetworkImage(userPhotoUrl),
           // případně můžete použít AssetImage pro lokální obrázky
         ),
-        SizedBox(width: 8),
-        Text(userName, style: TextStyle(color: Colors.grey)),
+        const SizedBox(width: 8),
+        Text(userName, style: const TextStyle(color: Colors.grey)),
       ],
     );
   }

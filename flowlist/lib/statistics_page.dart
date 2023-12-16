@@ -87,7 +87,7 @@ class StatisticsPageState extends State<StatisticsPage> {
     });
   }
 
-  int numberOfDaysInMonth(DateTime date) {
+  int _numberOfDaysInMonth(DateTime date) {
     DateTime firstDayNextMonth = (date.month < 12)
         ? DateTime(date.year, date.month + 1, 1)
         : DateTime(date.year + 1, 1, 1);
@@ -203,7 +203,7 @@ class StatisticsPageState extends State<StatisticsPage> {
                     child: LineChart(
                       LineChartData(
                         minX: 1,
-                        maxX: 30,
+                        maxX: _numberOfDaysInMonth(_selectedMonth).toDouble(),
                         minY: 0,
                         maxY: 10,
                         gridData: const FlGridData(show: false),
@@ -216,7 +216,7 @@ class StatisticsPageState extends State<StatisticsPage> {
                           bottomTitles: AxisTitles(
                               sideTitles: SideTitles(
                                   showTitles: true,
-                                  interval: 5.0,
+                                  interval: 4.0,
                                   reservedSize: 35.0)),
                           leftTitles: AxisTitles(
                               sideTitles: SideTitles(

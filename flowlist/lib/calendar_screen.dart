@@ -4,7 +4,7 @@ import 'settings_page.dart';
 import 'search_page.dart'; // Předpokládáme, že máte soubor search_page.dart
 import 'add_note.dart';
 import 'diary_controller.dart';
-import 'diary_entries_loader.dart';
+//import 'diary_entries_loader.dart';
 import 'flow.dart';
 import 'get_code.dart';
 
@@ -114,7 +114,7 @@ class CalendarPageState extends State<CalendarPage> {
                     todayBuilder: (context, day, focusedDay) {
                       return Container(
                         margin:
-                            EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
+                            const EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
                         decoration: BoxDecoration(
                           color: const Color(
                               0xFFE2AFB6), // Zde změňte barvu na požadovanou
@@ -123,7 +123,7 @@ class CalendarPageState extends State<CalendarPage> {
                         child: Center(
                           child: Text(
                             '${day.day}',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15),
@@ -134,7 +134,7 @@ class CalendarPageState extends State<CalendarPage> {
                     outsideBuilder: (context, day, focusedDay) {
                       return Container(
                         margin:
-                            EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
+                            const EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
                         decoration: BoxDecoration(
                           color: const Color(
                               0xFFBBBBBB), // Zde změňte barvu na požadovanou
@@ -143,7 +143,7 @@ class CalendarPageState extends State<CalendarPage> {
                         child: Center(
                           child: Text(
                             '${day.day}',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Color(0xFF6E6E6E),
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15),
@@ -153,7 +153,7 @@ class CalendarPageState extends State<CalendarPage> {
                     },
                     defaultBuilder: (context, day, focusedDay) {
                       return Container(
-                        margin: EdgeInsets.symmetric(
+                        margin: const EdgeInsets.symmetric(
                             horizontal: 6.0, vertical: 6.0),
                         decoration: BoxDecoration(
                           color: const Color(
@@ -163,7 +163,7 @@ class CalendarPageState extends State<CalendarPage> {
                         child: Center(
                           child: Text(
                             '${day.day}',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15),
@@ -173,7 +173,7 @@ class CalendarPageState extends State<CalendarPage> {
                     },
                     selectedBuilder: (context, date, events) {
                       return Container(
-                        margin: EdgeInsets.symmetric(
+                        margin: const EdgeInsets.symmetric(
                             horizontal: 6.0, vertical: 6.0),
                         decoration: BoxDecoration(
                           color: const Color(
@@ -183,7 +183,7 @@ class CalendarPageState extends State<CalendarPage> {
                         child: Center(
                           child: Text(
                             '${date.day}',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15),
@@ -202,7 +202,7 @@ class CalendarPageState extends State<CalendarPage> {
                           dayRecords.isNotEmpty ? dayRecords.first : null;
 
                       // Kontrola, zda je den vybraný a zároveň ve stejném měsíci jako _focusedDay
-                      bool isFocused = isSameDay(_selectedDay, date);
+                      //bool isFocused = isSameDay(_selectedDay, date);
 
                       if (dayRecord != null && dayRecord.score != null) {
                         Color scoreColor;
@@ -215,7 +215,7 @@ class CalendarPageState extends State<CalendarPage> {
                           textColor = Colors.black;
                         } else if (_focusedDay.month != date.month) {
                           scoreColor = Color(0xFFBBBBBB);
-                          textColor = Color(0xFF6E6E6E);
+                          textColor = const Color(0xFF6E6E6E);
                         } else {
                           scoreColor = Color(0xFFEAEAEA);
                           textColor = Colors.black;
@@ -234,8 +234,8 @@ class CalendarPageState extends State<CalendarPage> {
                           bottom: 2.0,
                           child: Container(
                             width: dayWidth,
-                            padding: EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
+                            padding: const EdgeInsets.all(5.0),
+                            decoration: const BoxDecoration(
                               //color: scoreColor,
                               borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(8),
@@ -263,7 +263,7 @@ class CalendarPageState extends State<CalendarPage> {
                     if (selectedDay.isAfter(DateTime.now())) {
                       // Pokud je vybraný den v budoucnosti, nedělejte nic (nebo zobrazte chybovou zprávu)
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text(
                             "Nelze vybrat budoucí datum!",
                             style: TextStyle(
