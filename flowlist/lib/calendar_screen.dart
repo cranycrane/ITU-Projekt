@@ -114,7 +114,7 @@ class CalendarPageState extends State<CalendarPage> {
                     todayBuilder: (context, day, focusedDay) {
                       return Container(
                         margin:
-                            EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
+                            EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
                         decoration: BoxDecoration(
                           color: const Color(
                               0xFFE2AFB6), // Zde změňte barvu na požadovanou
@@ -153,8 +153,8 @@ class CalendarPageState extends State<CalendarPage> {
                     },
                     defaultBuilder: (context, day, focusedDay) {
                       return Container(
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 6.0, vertical: 6.0),
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 6.0, vertical: 6.0),
                         decoration: BoxDecoration(
                           color: const Color(
                               0xFFEAEAEA), // Zde změňte barvu na požadovanou
@@ -173,8 +173,8 @@ class CalendarPageState extends State<CalendarPage> {
                     },
                     selectedBuilder: (context, date, events) {
                       return Container(
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 6.0, vertical: 6.0),
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 6.0, vertical: 6.0),
                         decoration: BoxDecoration(
                           color: const Color(
                               0xFFE50E2B), // Zde změňte barvu na požadovanou
@@ -231,10 +231,9 @@ class CalendarPageState extends State<CalendarPage> {
 
                         // Zobrazit skóre pod dnem
                         return Positioned(
-                          bottom: 6.0,
+                          bottom: 2.0,
                           child: Container(
                             width: dayWidth,
-
                             padding: EdgeInsets.all(5.0),
                             decoration: BoxDecoration(
                               //color: scoreColor,

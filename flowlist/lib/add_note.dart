@@ -183,10 +183,10 @@ class NewEntryPageState extends State<NewEntryPage> {
                       _ratingController.text =
                           data?.score == -1 ? '' : data!.score!.toString();
                       _isDataLoaded = true;
-                      if ((data?.record1.isEmpty ?? true) &&
-                          (data?.record2.isEmpty ?? true) &&
-                          (data?.record3.isEmpty ?? true) &&
-                          (data?.score == null)) {
+                      if ((data!.record1.isEmpty) &&
+                          (data.record2.isEmpty) &&
+                          (data.record3.isEmpty) &&
+                          (data.score == -1)) {
                         dataFromBackend = false;
                       }
                     }
@@ -315,6 +315,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                               child: ElevatedButton(
                                 onPressed: () async {
                                   // Zobrazení dialogového okna pro potvrzení
+                                  print(dataFromBackend);
                                   if (!dataFromBackend) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
@@ -330,6 +331,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                                         backgroundColor: Color(0xFFEAEAEA),
                                       ),
                                     );
+                                    return;
                                   }
                                   final confirmed = await showDialog<bool>(
                                         context: context,

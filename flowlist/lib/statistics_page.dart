@@ -1,12 +1,4 @@
-import 'package:flowlist/calendar_screen.dart';
 import 'package:flutter/material.dart';
-import 'user_controller.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'dart:io';
-import 'package:permission_handler/permission_handler.dart';
-import 'user_profile.dart';
-import 'settings_page.dart';
 import 'flow.dart';
 import 'diary_controller.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -19,10 +11,10 @@ class StatisticsPage extends StatefulWidget {
   const StatisticsPage({Key? key, this.userId}) : super(key: key);
 
   @override
-  _StatisticsPageState createState() => _StatisticsPageState();
+  StatisticsPageState createState() => StatisticsPageState();
 }
 
-class _StatisticsPageState extends State<StatisticsPage> {
+class StatisticsPageState extends State<StatisticsPage> {
   List<FlowData?> _allRecords = [];
   List<FlSpot> _lineChartSpots = []; // Initialized as an empty list
   bool _isLoading = true;
@@ -54,7 +46,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
         _isLoading = false;
       });
     } catch (e) {
-      print('Error loading records: $e');
       setState(() => _isLoading = false);
     }
   }
@@ -68,7 +59,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
     if (nextMonth.year > now.year ||
         (nextMonth.year == now.year && nextMonth.month > now.month)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
             "Nelze zobrazit budoucí měsíc!",
             style: TextStyle(
@@ -100,7 +91,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
     DateTime firstDayNextMonth = (date.month < 12)
         ? DateTime(date.year, date.month + 1, 1)
         : DateTime(date.year + 1, 1, 1);
-    return firstDayNextMonth.subtract(Duration(days: 1)).day;
+    return firstDayNextMonth.subtract(const Duration(days: 1)).day;
   }
 
   double _calculateMeanScore(List<FlowData?> records) {
@@ -131,8 +122,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   @override
   Widget build(BuildContext context) {
-    int daysInMonth = numberOfDaysInMonth(_selectedMonth);
-    double meanScore = _calculateMeanScore(_allRecords);
     String meanScoreText;
     if (_allRecords.isEmpty) {
       meanScoreText = '-';
@@ -143,15 +132,15 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Statistiky vašich hodnocení',
           style: TextStyle(fontSize: 22, color: Color(0xFF61646B)),
         ),
         backgroundColor: Colors.white,
         toolbarHeight: 60,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          color: Color(0xFF61646B),
+          icon: const Icon(Icons.arrow_back),
+          color: const Color(0xFF61646B),
           iconSize: 40, // Zvětšení velikosti ikony
           onPressed: () {
             Navigator.pop(context);
@@ -159,7 +148,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
         ),
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -169,18 +158,16 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                        icon: Icon(Icons.chevron_left, size: 30),
+                        icon: const Icon(Icons.chevron_left, size: 30),
                         onPressed: _goToPreviousMonth,
                       ),
                       Text(
-                        DateFormat('MMMM', 'cs_CZ').format(_selectedMonth) +
-                            ' ' +
-                            DateFormat('y', 'cs_CZ').format(_selectedMonth),
-                        style: TextStyle(
+                        '${DateFormat('MMMM', 'cs_CZ').format(_selectedMonth)} ${DateFormat('y', 'cs_CZ').format(_selectedMonth)}',
+                        style: const TextStyle(
                             fontSize: 30, fontWeight: FontWeight.bold),
                       ),
                       IconButton(
-                        icon: Icon(Icons.chevron_right, size: 30),
+                        icon: const Icon(Icons.chevron_right, size: 30),
                         onPressed: _goToNextMonth,
                       ),
                     ],
@@ -193,7 +180,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     alignment: Alignment.centerLeft,
                     child: RichText(
                       text: TextSpan(
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 25, color: Colors.black), // Default style
                         children: <TextSpan>[
                           const TextSpan(text: 'Průměrné hodnocení dne: '),
@@ -219,8 +206,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         maxX: 30,
                         minY: 0,
                         maxY: 10,
-                        gridData: FlGridData(show: false),
-                        titlesData: FlTitlesData(
+                        gridData: const FlGridData(show: false),
+                        titlesData: const FlTitlesData(
                           show: true,
                           topTitles: AxisTitles(
                               sideTitles: SideTitles(showTitles: false)),
@@ -244,14 +231,14 @@ class _StatisticsPageState extends State<StatisticsPage> {
                             isCurved: false,
                             barWidth: 3,
                             color: Colors.red,
-                            dotData: FlDotData(show: true),
+                            dotData: const FlDotData(show: true),
                           ),
                         ],
                       ),
                     ),
                   ),
                 ),
-                SizedBox(height: 200),
+                const SizedBox(height: 200),
               ],
             ),
     );

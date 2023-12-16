@@ -57,7 +57,7 @@ class UserController {
 
     List<String> nameParts = name.split(' ');
     String firstName = nameParts[0];
-    String lastName = nameParts.length > 1 ? nameParts[1] : '';
+    String lastName = nameParts[1].length > 1 ? nameParts[1] : nameParts[2];
 
     if (firstName.isEmpty || lastName.isEmpty) {
       throw Exception('Jméno nemůže být prázdné');

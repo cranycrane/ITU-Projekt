@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'calendar_screen.dart';
-import 'search_page.dart';
-import 'settings_page.dart';
 import 'flow.dart';
 import 'diary_entries_loader.dart';
 import 'diary_controller.dart';
@@ -10,6 +7,7 @@ import 'messages_page.dart';
 import 'user_profile.dart';
 import 'psycho_overview.dart';
 import 'calendar_client.dart';
+import 'statistics_page.dart';
 
 class PsychoEntryPage extends StatefulWidget {
   final UserProfile client;
@@ -100,8 +98,8 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
         break;
       case 1:
         // Přechod na stránku pro vyhledávání
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => PsychoOverviewPage()));
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => const PsychoOverviewPage()));
         break;
       case 2:
         // PsychoUserPage
@@ -117,6 +115,12 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                   toUserId: widget.client.userId.toString(),
                 )));
         break;
+      case 4:
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => StatisticsPage(
+                  userId: widget.client.userId.toString(),
+                )));
+        break;
       default:
         break;
     }
@@ -124,7 +128,6 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     final double screenHeight = MediaQuery.of(context).size.height;
 
     String formattedDate =
@@ -196,11 +199,13 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                       children: <Widget>[
                         const SizedBox(height: 10),
                         TextField(
+                          readOnly: true,
                           controller: _firstController,
-                          cursorColor: Color(0xFFE50E2B),
+                          cursorColor: const Color(0xFFE50E2B),
                           cursorWidth: 2,
                           decoration: InputDecoration(
-                            floatingLabelStyle: TextStyle(color: Colors.black),
+                            floatingLabelStyle:
+                                const TextStyle(color: Colors.black),
                             labelText: 'První dobrá věc...',
                             border: OutlineInputBorder(
                                 borderSide: const BorderSide(
@@ -221,11 +226,13 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                         ),
                         const SizedBox(height: 8),
                         TextField(
+                          readOnly: true,
                           controller: _secondController,
-                          cursorColor: Color(0xFFE50E2B),
+                          cursorColor: const Color(0xFFE50E2B),
                           cursorWidth: 2,
                           decoration: InputDecoration(
-                            floatingLabelStyle: TextStyle(color: Colors.black),
+                            floatingLabelStyle:
+                                const TextStyle(color: Colors.black),
                             labelText: 'Druhá dobrá věc...',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)),
@@ -244,14 +251,16 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                         ),
                         const SizedBox(height: 8),
                         TextField(
+                          readOnly: true,
                           controller: _thirdController,
-                          cursorColor: Color(0xFFE50E2B),
+                          cursorColor: const Color(0xFFE50E2B),
                           cursorWidth: 2,
                           decoration: InputDecoration(
-                            floatingLabelStyle: TextStyle(color: Colors.black),
+                            floatingLabelStyle:
+                                const TextStyle(color: Colors.black),
                             labelText: 'Třetí dobrá věc...',
                             border: OutlineInputBorder(
-                                borderSide: BorderSide(width: 15),
+                                borderSide: const BorderSide(width: 15),
                                 borderRadius: BorderRadius.circular(10)),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -281,13 +290,14 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                               width:
                                   80, // Nastavení pevné šířky pro textové pole
                               child: TextField(
+                                readOnly: true,
                                 textAlign: TextAlign.center,
                                 controller: _ratingController,
-                                cursorColor: Color(0xFFE50E2B),
+                                cursorColor: const Color(0xFFE50E2B),
                                 cursorWidth: 2,
                                 decoration: InputDecoration(
                                   floatingLabelStyle:
-                                      TextStyle(color: Colors.black),
+                                      const TextStyle(color: Colors.black),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                     borderSide: const BorderSide(
@@ -297,9 +307,9 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                                     ),
                                   ),
                                   hintText: '/10',
-                                  border: OutlineInputBorder(),
+                                  border: const OutlineInputBorder(),
                                   contentPadding:
-                                      EdgeInsets.symmetric(vertical: 8.0),
+                                      const EdgeInsets.symmetric(vertical: 8.0),
                                 ),
                                 keyboardType: TextInputType.number,
                               ),
@@ -320,7 +330,7 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
           height: 70,
           shape: const CircularNotchedRectangle(),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -346,43 +356,43 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                       );
                     },
                     child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-                      padding: EdgeInsets.all(0),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 0),
+                      padding: const EdgeInsets.all(0),
                       decoration: BoxDecoration(
-                        color: Color(0xFFD9D9D9),
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(15),
                         border: Border.all(
                           width: 2.0,
                           color: widget._selectedIndex == 1
-                              ? Color(0x6E6E6E)
-                              : Color(0x6E6E6E),
+                              ? const Color(0xFFE50E2B)
+                              : Colors.grey,
                         ),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           CircleAvatar(
-                            radius: 25.0,
+                            radius: 30.0,
                             backgroundColor: Colors.grey[200],
-                            child: widget.client.profileImage == null
-                                ? Icon(Icons.person, size: 50)
+                            child: widget.client.imageFile == null
+                                ? const Icon(Icons.person, size: 60)
                                 : ClipOval(
                                     child: Image.file(
                                     widget.client.imageFile!,
-                                    width: 50,
-                                    height: 50,
+                                    width: 60,
+                                    height: 60,
                                     fit: BoxFit.cover,
                                   )),
                           ),
-                          SizedBox(width: 8.0),
+                          const SizedBox(width: 4.0),
                           Flexible(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
                                 Text(
-                                  "${widget.client!.firstName} ${widget.client!.lastName}",
-                                  style: TextStyle(
+                                  "${widget.client.firstName} ${widget.client.lastName}",
+                                  style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
                                   overflow: TextOverflow.ellipsis,
@@ -398,7 +408,17 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                   ),
                 ),
                 IconButton(
-                  padding: EdgeInsets.only(right: 5),
+                  padding: const EdgeInsets.only(right: 5),
+                  icon: Icon(
+                      size: 35,
+                      Icons.query_stats,
+                      color: widget._selectedIndex == 2
+                          ? Colors.red
+                          : Colors.grey),
+                  onPressed: () => _onItemTapped(4),
+                ),
+                IconButton(
+                  padding: const EdgeInsets.only(right: 5),
                   icon: Icon(
                       size: 35,
                       Icons.message,

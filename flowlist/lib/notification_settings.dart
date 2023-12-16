@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class NotificationSettingsPage extends StatefulWidget {
   @override
@@ -26,33 +28,63 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   @override
   void initState() {
     super.initState();
-    var initializationSettingsAndroid =
-        AndroidInitializationSettings('flowlist'); // Nastavte ikonu aplikace
+    var initializationSettingsAndroid = const AndroidInitializationSettings(
+        'ic_launcher'); // Nastavte ikonu aplikace
     var initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);
     localNotificationsPlugin.initialize(initializationSettings);
-    /*
-    */
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation('Europe/Prague'));
   }
 
   void _scheduleNotification() async {
-    var scheduledNotificationDateTime = DateTime.now()
-        .add(Duration(hours: selectedTime.hour, minutes: selectedTime.minute));
+    final now = tz.TZDateTime.now(tz.local);
+    final scheduledTime = tz.TZDateTime(tz.local, now.year, now.month, now.day,
+        selectedTime.hour, selectedTime.minute);
+
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'your_channel_id',
-      'your_channel_name',
+      '0',
+      'Flow-lístek',
       importance: Importance.max,
       priority: Priority.high,
     );
-    var platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
 
-    await localNotificationsPlugin.show(
-      0,
-      'Naplánované Upozornění',
-      notificationText,
-      //scheduledNotificationDateTime,
-      platformChannelSpecifics,
+    var platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+    );
+
+    await localNotificationsPlugin.zonedSchedule(
+        0,
+        'Nezapomeň na Flow-lístekk',
+        selectedOption == 'Vlastní'
+            ? _ownNotificationController.text
+            : selectedOption,
+        scheduledTime.isBefore(now)
+            ? scheduledTime.add(const Duration(days: 1))
+            : scheduledTime,
+        const NotificationDetails(
+            android: AndroidNotificationDetails('0', 'pomoc',
+                channelDescription: 'your channel pomoc')),
+        matchDateTimeComponents: DateTimeComponents.time,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime);
+
+    print(scheduledTime);
+
+    if (!context.mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          "Nastavení notifikací úspěšně uloženo",
+          style: TextStyle(
+            color: Colors.black, // Text color
+          ),
+        ),
+        duration: Duration(seconds: 3), // Duration of the SnackBar display
+        backgroundColor: Color(0xFFEAEAEA),
+      ),
     );
   }
 
@@ -195,9 +227,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                       backgroundColor: Colors.red,
                       // Zmenšení šířky tlačítka na 40% šířky obrazovky a výšky na 50
                     ),
-                    onPressed: () {
-                      // Implementace uložení nastavení
-                    },
+                    onPressed: _scheduleNotification,
                     child: Text('ULOŽIT NASTAVENÍ'),
                   ),
                 ],

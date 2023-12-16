@@ -35,8 +35,8 @@ class DiaryController {
 
     // Regulární výraz pro povolené znaky - upravte podle potřeby
 
-    if (record.score == null || (record.score! < 0 || record.score! > 11)) {
-      throw Exception('Skore dne musi byt v intervalu 0-11');
+    if (record.score == null || (record.score! < 0 || record.score! > 10)) {
+      throw Exception('Skore dne musi byt v intervalu 0-10');
     }
 
     final request =

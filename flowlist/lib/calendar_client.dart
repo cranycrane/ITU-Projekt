@@ -13,6 +13,7 @@ import 'user_profile.dart';
 import 'user_controller.dart';
 import 'dart:io';
 import 'psycho_note_read.dart';
+import 'statistics_page.dart';
 
 class CalendarClientPage extends StatefulWidget {
   final UserProfile client;
@@ -94,6 +95,12 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                   toUserId: widget.client.userId.toString(),
                 )));
         break;
+      case 4:
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => StatisticsPage(
+                  userId: widget.client.userId.toString(),
+                )));
+        break;
       default:
         break;
     }
@@ -122,9 +129,70 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                   calendarFormat: _calendarFormat,
                   shouldFillViewport: true,
                   calendarBuilders: CalendarBuilders(
+                    todayBuilder: (context, day, focusedDay) {
+                      return Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: const Color(
+                              0xFFE2AFB6), // Zde změňte barvu na požadovanou
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '${day.day}',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15),
+                          ),
+                        ),
+                      );
+                    },
+                    outsideBuilder: (context, day, focusedDay) {
+                      return Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: const Color(
+                              0xFFBBBBBB), // Zde změňte barvu na požadovanou
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '${day.day}',
+                            style: TextStyle(
+                                color: Color(0xFF6E6E6E),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15),
+                          ),
+                        ),
+                      );
+                    },
+                    defaultBuilder: (context, day, focusedDay) {
+                      return Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 6.0, vertical: 6.0),
+                        decoration: BoxDecoration(
+                          color: const Color(
+                              0xFFEAEAEA), // Zde změňte barvu na požadovanou
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '${day.day}',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15),
+                          ),
+                        ),
+                      );
+                    },
                     selectedBuilder: (context, date, events) {
                       return Container(
-                        margin: EdgeInsets.all(6.0),
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 6.0, vertical: 6.0),
                         decoration: BoxDecoration(
                           color: const Color(
                               0xFFE50E2B), // Zde změňte barvu na požadovanou
@@ -171,8 +239,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                           textColor = Colors.black;
                         }
 
-                        FontWeight fontWeight =
-                            isFocused ? FontWeight.bold : FontWeight.normal;
+                        FontWeight fontWeight = FontWeight.bold;
 
                         // Získání šířky obrazovky
                         double screenWidth =
@@ -182,12 +249,12 @@ class CalendarClientPageState extends State<CalendarClientPage> {
 
                         // Zobrazit skóre pod dnem
                         return Positioned(
-                          bottom:6,
+                          bottom: 2.0,
                           child: Container(
                             width: dayWidth,
-                            padding: EdgeInsets.all(5),
+                            padding: EdgeInsets.all(5.0),
                             decoration: BoxDecoration(
-                              color: scoreColor,
+                              //color: scoreColor,
                               borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(8),
                                   bottomRight: Radius.circular(8)),
@@ -206,60 +273,6 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                       }
                       return null;
                     },
-                  ),
-                  calendarStyle: CalendarStyle(
-                    defaultDecoration: BoxDecoration(
-                        shape: BoxShape
-                            .rectangle, // You can use different shapes like BoxShape.rectangle
-                        color: const Color(0xFFEAEAEA),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    defaultTextStyle: const TextStyle(
-                      fontSize: 15, // Set the font size as needed
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black, // Set the text color as needed
-                    ),
-                    weekendDecoration: BoxDecoration(
-                        shape: BoxShape
-                            .rectangle, // You can use different shapes like BoxShape.rectangle
-                        color: const Color(0xFFEAEAEA),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    weekendTextStyle: const TextStyle(
-                      fontSize: 15, // Set the font size as needed
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black, // Set the text color as needed
-                    ),
-                    outsideDecoration: BoxDecoration(
-                        shape: BoxShape
-                            .rectangle, // You can use different shapes like BoxShape.rectangle
-                        color: const Color(0xFFBBBBBB),
-                        borderRadius: BorderRadius.circular(
-                            10.0) // Background color of the day cell
-                        ),
-                    outsideTextStyle: const TextStyle(
-                      fontSize: 15, // Set the font size as needed
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF6E6E6E), // Set the text color as needed
-                    ),
-                    selectedDecoration: BoxDecoration(
-                        shape: BoxShape
-                            .rectangle, // You can use different shapes like BoxShape.rectangle
-                        color: const Color(0xFFE50E2B),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    selectedTextStyle: const TextStyle(
-                      fontSize: 15, // Set the font size as needed
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white, // Set the text color as needed
-                    ),
-                    todayDecoration: BoxDecoration(
-                        shape: BoxShape
-                            .rectangle, // You can use different shapes like BoxShape.rectangle
-                        color: const Color(0xFFE2AFB6),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    todayTextStyle: const TextStyle(
-                      fontSize: 15, // Set the font size as needed
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black, // Set the text color as needed
-                    ),
                   ),
                   selectedDayPredicate: (day) {
                     return isSameDay(_selectedDay, day);
@@ -314,71 +327,86 @@ class CalendarClientPageState extends State<CalendarClientPage> {
               height: 4,
             ),
             Expanded(
-                child: SingleChildScrollView(
-                    child: Column(
-              children: [
-                if ((_record?.record1 ?? '').isNotEmpty)
-                  Container(
-                    width: 380,
-                    constraints: const BoxConstraints(minHeight: 50.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                          color: const Color(0xFFBCBCBC),
-                          width: 1.8), // Optional: Add border
-                      borderRadius: BorderRadius.circular(
-                          10.0), // Optional: Add border radius
-                    ),
-                    padding: const EdgeInsets.all(8.0), // Optional: Add padding
-                    margin: const EdgeInsets.all(4.0), // Optional: Add margin
-                    child: Text(
-                      _record?.record1 ?? '',
-                      maxLines: 2,
-                      style: const TextStyle(
-                          color: Color(0xFF5b5b5b)), // Set text color
-                    ),
-                  ),
-                if ((_record?.record2 ?? '').isNotEmpty)
-                  Container(
-                    width: 380,
-                    constraints: const BoxConstraints(minHeight: 50.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                          color: const Color(0xFFBCBCBC),
-                          width: 1.8), // Optional: Add border
-                      borderRadius: BorderRadius.circular(
-                          10.0), // Optional: Add border radius
-                    ),
-                    padding: const EdgeInsets.all(8.0), // Optional: Add padding
-                    margin: const EdgeInsets.all(4.0), // Optional: Add margin
-                    child: Text(
-                      _record?.record2 ?? '',
-                      maxLines: 2,
-                      style: const TextStyle(
-                          color: Color(0xFF5b5b5b)), // Set text color
-                    ),
-                  ),
-                if ((_record?.record3 ?? '').isNotEmpty)
-                  Container(
-                    width: 380,
-                    constraints: const BoxConstraints(minHeight: 50.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                          color: const Color(0xFFBCBCBC),
-                          width: 1.8), // Optional: Add border
-                      borderRadius: BorderRadius.circular(
-                          10.0), // Optional: Add border radius
-                    ),
-                    padding: const EdgeInsets.all(8.0), // Optional: Add padding
-                    margin: const EdgeInsets.all(4.0), // Optional: Add margin
-                    child: Text(
-                      _record?.record3 ?? '',
-                      maxLines: 2,
-                      style: const TextStyle(
-                          color: Color(0xFF5b5b5b)), // Set text color
-                    ),
-                  ),
-              ],
-            )))
+                child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => PsychoEntryPage(
+                              selectedDay: _selectedDay, client: widget.client),
+                        ),
+                      );
+                    },
+                    child: SingleChildScrollView(
+                        child: Column(
+                      children: [
+                        if ((_record?.record1 ?? '').isNotEmpty)
+                          Container(
+                            width: 380,
+                            constraints: const BoxConstraints(minHeight: 50.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: const Color(0xFFBCBCBC),
+                                  width: 1.8), // Optional: Add border
+                              borderRadius: BorderRadius.circular(
+                                  10.0), // Optional: Add border radius
+                            ),
+                            padding: const EdgeInsets.all(
+                                8.0), // Optional: Add padding
+                            margin: const EdgeInsets.all(
+                                4.0), // Optional: Add margin
+                            child: Text(
+                              _record?.record1 ?? '',
+                              maxLines: 2,
+                              style: const TextStyle(
+                                  color: Color(0xFF5b5b5b)), // Set text color
+                            ),
+                          ),
+                        if ((_record?.record2 ?? '').isNotEmpty)
+                          Container(
+                            width: 380,
+                            constraints: const BoxConstraints(minHeight: 50.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: const Color(0xFFBCBCBC),
+                                  width: 1.8), // Optional: Add border
+                              borderRadius: BorderRadius.circular(
+                                  10.0), // Optional: Add border radius
+                            ),
+                            padding: const EdgeInsets.all(
+                                8.0), // Optional: Add padding
+                            margin: const EdgeInsets.all(
+                                4.0), // Optional: Add margin
+                            child: Text(
+                              _record?.record2 ?? '',
+                              maxLines: 2,
+                              style: const TextStyle(
+                                  color: Color(0xFF5b5b5b)), // Set text color
+                            ),
+                          ),
+                        if ((_record?.record3 ?? '').isNotEmpty)
+                          Container(
+                            width: 380,
+                            constraints: const BoxConstraints(minHeight: 50.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: const Color(0xFFBCBCBC),
+                                  width: 1.8), // Optional: Add border
+                              borderRadius: BorderRadius.circular(
+                                  10.0), // Optional: Add border radius
+                            ),
+                            padding: const EdgeInsets.all(
+                                8.0), // Optional: Add padding
+                            margin: const EdgeInsets.all(
+                                4.0), // Optional: Add margin
+                            child: Text(
+                              _record?.record3 ?? '',
+                              maxLines: 2,
+                              style: const TextStyle(
+                                  color: Color(0xFF5b5b5b)), // Set text color
+                            ),
+                          ),
+                      ],
+                    ))))
           ]),
       bottomNavigationBar: BottomAppBar(
           height: 70,
@@ -413,7 +441,6 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                       margin: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
                       padding: EdgeInsets.all(0),
                       decoration: BoxDecoration(
-                        color: Color(0xFFEAEAEA),
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(
                           width: 2.0,
@@ -438,7 +465,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                                     fit: BoxFit.cover,
                                   )),
                           ),
-                          SizedBox(width: 8.0),
+                          SizedBox(width: 4.0),
                           Flexible(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -460,6 +487,16 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                       ),
                     ),
                   ),
+                ),
+                IconButton(
+                  padding: EdgeInsets.only(right: 5),
+                  icon: Icon(
+                      size: 35,
+                      Icons.query_stats,
+                      color: widget._selectedIndex == 2
+                          ? Colors.red
+                          : Colors.grey),
+                  onPressed: () => _onItemTapped(4),
                 ),
                 IconButton(
                   padding: EdgeInsets.only(right: 5),
