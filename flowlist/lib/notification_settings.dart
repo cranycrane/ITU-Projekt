@@ -105,7 +105,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
               )
           ),
           child: MediaQuery(
-            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true, textScaleFactor: 1.4),
             child: child!,
           )
         );
