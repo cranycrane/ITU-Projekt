@@ -92,6 +92,24 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: selectedTime,
+      cancelText: 'zrušit',
+      confirmText: 'potvrdit',
+      helpText: 'vyberte čas',
+      minuteLabelText: 'minuty',
+      hourLabelText: 'hodiny',
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+              colorScheme: const ColorScheme.light(
+              primary: Colors.red,
+              )
+          ),
+          child: MediaQuery(
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+            child: child!,
+          )
+        );
+      },
     );
     if (picked != null && picked != selectedTime) {
       setState(() {
@@ -109,12 +127,22 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-          toolbarHeight: 60,
-          title: Text('Nastavení Upozornění'),
+         appBar: AppBar(
+        title: const Text(
+          'Nastavení upozornění',
+          style: TextStyle(fontSize: 22, color: Color(0xFF61646B)),
         ),
+        backgroundColor: Colors.white,
+        toolbarHeight: 60,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          color: const Color(0xFF61646B),
+          iconSize: 40, // Zvětšení velikosti ikony
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
         body: Center(
           child: SingleChildScrollView(
             child: Padding(
@@ -124,7 +152,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 children: <Widget>[
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     Text('Čas Upozornění: ${formatTime24H(selectedTime)}',
-                        style: TextStyle(fontSize: 16)),
+                        style: TextStyle(fontSize: 18)),
                     SizedBox(width: 30),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
