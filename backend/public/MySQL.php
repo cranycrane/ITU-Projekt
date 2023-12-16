@@ -93,7 +93,8 @@ if ($conn->connect_error) {
 }
 
 // Nastavení kódování pro správnou komunikaci s databází
-$conn->set_charset("utf8");
+$conn->set_charset("utf8mb4");
+
 
 // Tento skript nyní můžete vkládat do vašich ostatních PHP skriptů, které vyžadují připojení k databázi
 ?>

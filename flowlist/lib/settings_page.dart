@@ -1,4 +1,5 @@
 import 'package:flowlist/calendar_screen.dart';
+import 'package:flowlist/notification_settings.dart';
 import 'package:flowlist/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'search_page.dart';
@@ -259,7 +260,7 @@ class SettingsPageState extends State<SettingsPage> {
 
   Widget _buildStatisticRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
+      padding: const EdgeInsets.only(bottom: 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -296,207 +297,233 @@ class SettingsPageState extends State<SettingsPage> {
     }
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: <Widget>[
-            CircleAvatar(
-              // Předpokládáme, že radius není nutný, pokud používáte pevnou velikost 80x80
-              backgroundColor: Colors.grey[200],
-              //backgroundImage: user?.profileImage != null
-              //    ? FileImage(user.profileImage)
-              //    : null,
-              radius: 50,
-              child: user?.profileImage == null
-                  ? const Icon(Icons.person, size: 100)
-                  : SizedBox(
-                      width: 100,
-                      height: 100,
-                      child: ClipOval(
-                        child: Image.file(File(user!.profileImage!),
-                            width: 100, height: 100, fit: BoxFit.fill),
-                      ),
-                    ),
-            ),
-            GestureDetector(
-              onTap: () async {
-                await _requestPermissions(); // Žádost o oprávnění
-                await _pickAndCropImage(); // Funkce pro výběr obrázku
-              },
-              child: const Icon(Icons.camera_alt), // Ikonka pro výběr obrázku
-            ),
-            const SizedBox(height: 8),
-            Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _isEditingName
-                      ? Expanded(
-                          child: TextField(
-                            controller: _nameController,
-                            style: const TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
-                            onSubmitted:
-                                _updateName, // Volání funkce pro aktualizaci jména
+      body: Stack(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ListView(
+              children: <Widget>[
+                CircleAvatar(
+                  // Předpokládáme, že radius není nutný, pokud používáte pevnou velikost 80x80
+                  backgroundColor: Colors.grey[200],
+                  //backgroundImage: user?.profileImage != null
+                  //    ? FileImage(user.profileImage)
+                  //    : null,
+                  radius: 50,
+                  child: user?.profileImage == null
+                      ? const Icon(Icons.person, size: 100)
+                      : SizedBox(
+                          width: 100,
+                          height: 100,
+                          child: ClipOval(
+                            child: Image.file(File(user!.profileImage!),
+                                width: 100, height: 100, fit: BoxFit.fill),
                           ),
-                        )
-                      : Text(
-                          _nameController.text,
-                          style: const TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
                         ),
-                  IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () {
-                      setState(() {
-                        _isEditingName =
-                            true; // Přepne stav na režim úpravy jména
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-            Center(
-              child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10.0, horizontal: 3),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => PsychoOverviewPage()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey,
-                        fixedSize:
-                            Size(MediaQuery.of(context).size.width * 0.42, 50)),
-                    child: const Text(
-                      'REŽIM PSYCHOLOGA',
-                      maxLines: 2,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    await _requestPermissions(); // Žádost o oprávnění
+                    await _pickAndCropImage(); // Funkce pro výběr obrázku
+                  },
+                  child:
+                      const Icon(Icons.camera_alt), // Ikonka pro výběr obrázku
+                ),
+                const SizedBox(height: 8),
+                Center(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _isEditingName
+                          ? Expanded(
+                              child: TextField(
+                                controller: _nameController,
+                                style: const TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.bold),
+                                onSubmitted:
+                                    _updateName, // Volání funkce pro aktualizaci jména
+                              ),
+                            )
+                          : Text(
+                              _nameController.text,
+                              style: const TextStyle(
+                                  fontSize: 24, fontWeight: FontWeight.bold),
+                            ),
+                      IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () {
+                          setState(() {
+                            _isEditingName =
+                                true; // Přepne stav na režim úpravy jména
+                          });
+                        },
                       ),
-                    ),
+                    ],
                   ),
                 ),
-                // Další prvky nastavení
-                //if (hasPsychologist!=null && hasPsychologist==true)
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10.0, horizontal: 6),
-                  child: ElevatedButton(
-                    onPressed: _showUnpairPsychologistDialog,
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            user!.hasPsychologist! ? Colors.red : Colors.grey,
-                        fixedSize:
-                            Size(MediaQuery.of(context).size.width * 0.42, 50)),
-                    child: Text(
-                      'ZRUŠIT PÁROVÁNÍ\n S PSYCHOLOGEM',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: (user!.hasPsychologist!
-                              ? Colors.white
-                              : Colors.black)),
-                    ),
-                  ),
-                ),
-              ]),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 6.0, horizontal: 10),
-              child: ElevatedButton(
-                onPressed: _showDeleteAccountDialog,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  // Zmenšení šířky tlačítka na 40% šířky obrazovky a výšky na 50
-                  minimumSize: Size(100, 50),
-                  // Přidání vnitřního odsazení pro změnu rozměrů tlačítka
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                ),
-                child: const Text(
-                  'SMAZAT ÚČET',
-                  style: TextStyle(
-                    fontSize:
-                        16, // Můžete upravit velikost písma, pokud je potřeba
-                  ),
-                ),
-              ),
-            ),
-            FutureBuilder<Map<String, dynamic>>(
-              future: userController.getStatistics(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return const Text(
-                    'Chyba při načítání statistik',
-                    style: TextStyle(
-                      fontSize: 18, // Adjust the font size as needed
-                      fontWeight: FontWeight.bold,
-                    ),
-                  );
-                } else if (!snapshot.hasData) {
-                  return const Text(
-                    'Žádné statistiky k zobrazení',
-                    style: TextStyle(
-                      fontSize: 18, // Adjust the font size as needed
-                      fontWeight: FontWeight.bold,
-                    ),
-                  );
-                } else {
-                  statistics = snapshot.data;
-                  return Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        _buildStatisticRow('Celkem dnů s Flow-lístkem:',
-                            statistics!['totalDays'].toString()),
-                        _buildStatisticRow('Celkem vyplněných dnů:',
-                            statistics!['filledDays'].toString()),
-                        _buildStatisticRow('Celkem nevyplněných dnů:',
-                            statistics!['unfilledDays'].toString()),
-                        _buildStatisticRow('Celkový počet slov:',
-                            statistics!['totalWords'].toString()),
-                        _buildStatisticRow('Průměrný počet slov na záznam:',
-                            statistics!['averageWordsPerEntry'].toString()),
-                        _buildStatisticRow('Nejvíce slov v záznamu',
-                            statistics!['longestEntryLength'].toString()),
-                        // Add more statistics as needed
-                        Align(
-                          alignment: Alignment.centerLeft,
+                Center(
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 0.0, horizontal: 3),
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).push(
-                                MaterialPageRoute(builder: (context) => const StatisticsPage()),
+                                MaterialPageRoute(
+                                    builder: (context) => PsychoOverviewPage()),
                               );
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.grey,
-                              minimumSize: const Size(100, 30),
-                            ),
+                                backgroundColor: Colors.grey,
+                                fixedSize: Size(
+                                    MediaQuery.of(context).size.width * 0.42,
+                                    50)),
                             child: const Text(
-                              'další statistiky',
-                              style: TextStyle(color: Colors.black, fontSize: 18),
+                              'REŽIM PSYCHOLOGA',
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
                               ),
+                            ),
                           ),
                         ),
-                      ],
+                        // Další prvky nastavení
+                        //if (hasPsychologist!=null && hasPsychologist==true)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 5.0, horizontal: 6),
+                          child: ElevatedButton(
+                            onPressed: _showUnpairPsychologistDialog,
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: user!.hasPsychologist!
+                                    ? Colors.red
+                                    : Colors.grey,
+                                fixedSize: Size(
+                                    MediaQuery.of(context).size.width * 0.42,
+                                    50)),
+                            child: Text(
+                              'ZRUŠIT PÁROVÁNÍ\n S PSYCHOLOGEM',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: (user!.hasPsychologist!
+                                      ? Colors.white
+                                      : Colors.black)),
+                            ),
+                          ),
+                        ),
+                      ]),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 6.0, horizontal: 10),
+                  child: ElevatedButton(
+                    onPressed: _showDeleteAccountDialog,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      // Zmenšení šířky tlačítka na 40% šířky obrazovky a výšky na 50
+                      minimumSize: Size(100, 50),
+                      // Přidání vnitřního odsazení pro změnu rozměrů tlačítka
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     ),
-                  );
-                }
+                    child: const Text(
+                      'SMAZAT ÚČET',
+                      style: TextStyle(
+                        fontSize:
+                            16, // Můžete upravit velikost písma, pokud je potřeba
+                      ),
+                    ),
+                  ),
+                ),
+                FutureBuilder<Map<String, dynamic>>(
+                  future: userController.getStatistics(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return const Text(
+                        'Chyba při načítání statistik',
+                        style: TextStyle(
+                          fontSize: 18, // Adjust the font size as needed
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    } else if (!snapshot.hasData) {
+                      return const Text(
+                        'Žádné statistiky k zobrazení',
+                        style: TextStyle(
+                          fontSize: 18, // Adjust the font size as needed
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    } else {
+                      statistics = snapshot.data;
+                      return Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            _buildStatisticRow('Celkem dnů s Flow-lístkem:',
+                                statistics!['totalDays'].toString()),
+                            _buildStatisticRow('Celkem vyplněných dnů:',
+                                statistics!['filledDays'].toString()),
+                            _buildStatisticRow('Celkem nevyplněných dnů:',
+                                statistics!['unfilledDays'].toString()),
+                            _buildStatisticRow('Celkový počet slov:',
+                                statistics!['totalWords'].toString()),
+                            _buildStatisticRow('Průměrný počet slov na záznam:',
+                                statistics!['averageWordsPerEntry'].toString()),
+                            _buildStatisticRow('Nejvíce slov v záznamu',
+                                statistics!['longestEntryLength'].toString()),
+                            // Add more statistics as needed
+                            Align(
+                              alignment: Alignment.center,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const StatisticsPage()),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.grey,
+                                  minimumSize: const Size(100, 30),
+                                ),
+                                child: const Text(
+                                  'DALŠÍ STATISTIKY',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 18),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 30, // Nastavte podle potřeby pro umístění od horního okraje
+            right: 10, // Nastavte podle potřeby pro umístění od pravého okraje
+            child: IconButton(
+              icon: Icon(Icons.settings, size: 35), // Velikost ikony nastavení
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => NotificationSettingsPage()),
+                );
               },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),

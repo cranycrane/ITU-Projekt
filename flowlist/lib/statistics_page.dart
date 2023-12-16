@@ -14,7 +14,9 @@ import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 class StatisticsPage extends StatefulWidget {
-  const StatisticsPage({Key? key}) : super(key: key);
+  final String? userId;
+
+  const StatisticsPage({Key? key, this.userId}) : super(key: key);
 
   @override
   _StatisticsPageState createState() => _StatisticsPageState();
@@ -22,10 +24,9 @@ class StatisticsPage extends StatefulWidget {
 
 class _StatisticsPageState extends State<StatisticsPage> {
   List<FlowData?> _allRecords = [];
-  List<FlSpot> _lineChartSpots = [];  // Initialized as an empty list
+  List<FlSpot> _lineChartSpots = []; // Initialized as an empty list
   bool _isLoading = true;
   DateTime _selectedMonth = DateTime.now();
-  
 
   @override
   void initState() {
@@ -36,10 +37,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   void _fetchAllRecords() async {
     try {
-      List<FlowData> allRecords = await diaryController.readEntries();
+      List<FlowData> allRecords =
+          await diaryController.readEntries(widget.userId);
       List<FlowData> filteredRecords = allRecords.where((record) {
         return record.day.year == _selectedMonth.year &&
-              record.day.month == _selectedMonth.month;
+            record.day.month == _selectedMonth.month;
       }).toList();
 
       // Sort the records from oldest to newest
@@ -59,10 +61,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   void _goToNextMonth() {
     DateTime now = DateTime.now();
-    DateTime nextMonth = DateTime(_selectedMonth.year, _selectedMonth.month + 1, 1);
+    DateTime nextMonth =
+        DateTime(_selectedMonth.year, _selectedMonth.month + 1, 1);
 
     // Check if the next month is in the future compared to the current month and year
-    if (nextMonth.year > now.year || (nextMonth.year == now.year && nextMonth.month > now.month)) {
+    if (nextMonth.year > now.year ||
+        (nextMonth.year == now.year && nextMonth.month > now.month)) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -78,15 +82,17 @@ class _StatisticsPageState extends State<StatisticsPage> {
       return; // Do nothing if trying to go into the future
     }
     setState(() {
-      _selectedMonth = DateTime(_selectedMonth.year, _selectedMonth.month + 1, 1);
-      _fetchAllRecords();// Re-fetch or update your data for the new month
+      _selectedMonth =
+          DateTime(_selectedMonth.year, _selectedMonth.month + 1, 1);
+      _fetchAllRecords(); // Re-fetch or update your data for the new month
     });
   }
 
   void _goToPreviousMonth() {
     setState(() {
-      _selectedMonth = DateTime(_selectedMonth.year, _selectedMonth.month - 1, 1);
-      _fetchAllRecords();// Re-fetch or update your data for the new month
+      _selectedMonth =
+          DateTime(_selectedMonth.year, _selectedMonth.month - 1, 1);
+      _fetchAllRecords(); // Re-fetch or update your data for the new month
     });
   }
 
@@ -101,15 +107,17 @@ class _StatisticsPageState extends State<StatisticsPage> {
     if (records.isEmpty) {
       return 0.0;
     }
-    double sum = records.fold(0, (total, record) => total + (record?.score ?? 0));
+    double sum =
+        records.fold(0, (total, record) => total + (record?.score ?? 0));
     return sum / records.length;
   }
 
   List<FlSpot> _generateChartData(List<FlowData> records) {
     List<FlSpot> spots = [];
     for (var record in records) {
-      double xValue = _dateToAxisValue(record.day); 
-      double yValue = record.score?.toDouble() ?? 0; // Default to 0 if score is null
+      double xValue = _dateToAxisValue(record.day);
+      double yValue =
+          record.score?.toDouble() ?? 0; // Default to 0 if score is null
       spots.add(FlSpot(xValue, yValue));
     }
     return spots;
@@ -117,7 +125,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   double _dateToAxisValue(DateTime? date) {
     if (date == null) return 0;
-    return date.day.toDouble(); // Simple example, you may need more complex logic
+    return date.day
+        .toDouble(); // Simple example, you may need more complex logic
   }
 
   @override
@@ -136,10 +145,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
       appBar: AppBar(
         title: Text(
           'Statistiky vašich hodnocení',
-          style: TextStyle(fontSize: 26, color: Color(0xFF61646B)),
+          style: TextStyle(fontSize: 22, color: Color(0xFF61646B)),
         ),
         backgroundColor: Colors.white,
-        toolbarHeight: 85,
+        toolbarHeight: 60,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           color: Color(0xFF61646B),
@@ -150,89 +159,101 @@ class _StatisticsPageState extends State<StatisticsPage> {
         ),
       ),
       body: _isLoading
-        ? Center(child: CircularProgressIndicator())
-        : Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.chevron_left, size: 30),
-                      onPressed: _goToPreviousMonth,
-                    ),
-                    Text(
-                      DateFormat('MMMM', 'cs_CZ').format(_selectedMonth) + ' ' + DateFormat('y', 'cs_CZ').format(_selectedMonth),
-                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.chevron_right, size: 30),
-                      onPressed: _goToNextMonth,
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left:30.0, top:10.0, bottom:15.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: RichText(
-                    text: TextSpan(
-                      style: TextStyle(fontSize: 25, color: Colors.black), // Default style
-                      children: <TextSpan>[
-                        const TextSpan(text: 'Průměrné hodnocení dne: '),
-                        TextSpan(
-                          text: meanScoreText,
-                          style: const TextStyle(fontSize: 28, color: Colors.red, fontWeight: FontWeight.bold), // Specific style for the score
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal:0.0),
-                child: Text(
-                  'hodnocení všech dnů tento měsíc:',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 12, top: 5),
-                  child: LineChart(
-                    LineChartData(
-                      minX: 1,
-                      maxX: daysInMonth.toDouble(),
-                      minY: 0,
-                      maxY: 10,
-                      gridData: FlGridData(show: false),
-                      titlesData: FlTitlesData(
-                        show: true,
-                        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                        rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                        bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, interval: 5.0, reservedSize: 35.0)),
-                        leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, interval: 1.0, reservedSize: 30.0)),
+          ? Center(child: CircularProgressIndicator())
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.chevron_left, size: 30),
+                        onPressed: _goToPreviousMonth,
                       ),
-                      borderData: FlBorderData(show: true),
-                      lineBarsData: [
-                        LineChartBarData(
-                          spots: _lineChartSpots,
-                          isCurved: false,
-                          barWidth: 3,
-                          color: Colors.red,
-                          dotData: FlDotData(show: true),
-                        ),
-                      ],
+                      Text(
+                        DateFormat('MMMM', 'cs_CZ').format(_selectedMonth) +
+                            ' ' +
+                            DateFormat('y', 'cs_CZ').format(_selectedMonth),
+                        style: TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.bold),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.chevron_right, size: 30),
+                        onPressed: _goToNextMonth,
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 30.0, top: 10.0, bottom: 15.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                            fontSize: 25, color: Colors.black), // Default style
+                        children: <TextSpan>[
+                          const TextSpan(text: 'Průměrné hodnocení dne: '),
+                          TextSpan(
+                            text: meanScoreText,
+                            style: const TextStyle(
+                                fontSize: 28,
+                                color: Colors.red,
+                                fontWeight: FontWeight
+                                    .bold), // Specific style for the score
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 200),
-            ],
-        ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 12, top: 5),
+                    child: LineChart(
+                      LineChartData(
+                        minX: 1,
+                        maxX: 30,
+                        minY: 0,
+                        maxY: 10,
+                        gridData: FlGridData(show: false),
+                        titlesData: FlTitlesData(
+                          show: true,
+                          topTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false)),
+                          rightTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false)),
+                          bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                  showTitles: true,
+                                  interval: 5.0,
+                                  reservedSize: 35.0)),
+                          leftTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                  showTitles: true,
+                                  interval: 1.0,
+                                  reservedSize: 30.0)),
+                        ),
+                        borderData: FlBorderData(show: true),
+                        lineBarsData: [
+                          LineChartBarData(
+                            spots: _lineChartSpots,
+                            isCurved: false,
+                            barWidth: 3,
+                            color: Colors.red,
+                            dotData: FlDotData(show: true),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 200),
+              ],
+            ),
     );
   }
 }

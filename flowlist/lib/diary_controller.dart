@@ -34,14 +34,6 @@ class DiaryController {
     String? userId = await StorageService().getUserId();
 
     // Regulární výraz pro povolené znaky - upravte podle potřeby
-    RegExp regex = RegExp(r'^[a-zA-Z0-9\s.,?!:;()-]+$');
-
-    // Kontrola, zda record obsahuje pouze povolené znaky
-    if ((!regex.hasMatch(record.record1) && record.record1.isNotEmpty) ||
-        (!regex.hasMatch(record.record2) && record.record2.isNotEmpty) ||
-        (!regex.hasMatch(record.record3) && record.record3.isNotEmpty)) {
-      throw Exception('Záznam obsahuje nepovolené znaky');
-    }
 
     if (record.score == null || (record.score! < 0 || record.score! > 11)) {
       throw Exception('Skore dne musi byt v intervalu 0-11');
