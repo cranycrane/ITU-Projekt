@@ -68,7 +68,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   }
 
   void _scheduleNotification() async {
-    if (selectedTime.hour == 0 || selectedTime.minute == 0) {
+    if (selectedTime.hour == 0 && selectedTime.minute == 0) {
       return;
     }
     final now = tz.TZDateTime.now(tz.local);
