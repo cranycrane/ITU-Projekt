@@ -107,8 +107,8 @@ class SettingsPageState extends State<SettingsPage> {
               child: const Text(
                 'Smazat',
                 style: TextStyle(
-                    color:
-                        AppColors.red), // Nastavení barvy textu pro akci smazání
+                    color: AppColors
+                        .red), // Nastavení barvy textu pro akci smazání
               ),
               onPressed: () async {
                 bool success = await userController.deleteAccount();
@@ -172,8 +172,8 @@ class SettingsPageState extends State<SettingsPage> {
               child: const Text(
                 'Ano zrušit',
                 style: TextStyle(
-                    color:
-                        AppColors.red), // Nastavení barvy textu pro akci smazání
+                    color: AppColors
+                        .red), // Nastavení barvy textu pro akci smazání
               ),
               onPressed: () async {
                 try {
@@ -352,20 +352,42 @@ class SettingsPageState extends State<SettingsPage> {
                                     _updateName, // Volání funkce pro aktualizaci jména
                               ),
                             )
-                          : Text(
-                              _nameController.text,
-                              style: const TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.bold),
-                            ),
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () {
-                          setState(() {
-                            _isEditingName =
-                                true; // Přepne stav na režim úpravy jména
-                          });
-                        },
-                      ),
+                          : Container(
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              child: Text(
+                                _nameController.text,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                                style: const TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.bold),
+                              )),
+                      _isEditingName
+                          ? ElevatedButton(
+                              onPressed: () =>
+                                  _updateName(_nameController.text),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: user!.hasPsychologist!
+                                    ? AppColors.red
+                                    : AppColors.middleGrey,
+                              ),
+                              child: Text(
+                                'ULOŽIT',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: (user!.hasPsychologist!
+                                        ? Colors.white
+                                        : Colors.black)),
+                              ),
+                            )
+                          : IconButton(
+                              icon: const Icon(Icons.edit),
+                              onPressed: () {
+                                setState(() {
+                                  _isEditingName =
+                                      true; // Přepne stav na režim úpravy jména
+                                });
+                              },
+                            )
                     ],
                   ),
                 ),
@@ -380,7 +402,8 @@ class SettingsPageState extends State<SettingsPage> {
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                    builder: (context) => const PsychoOverviewPage()),
+                                    builder: (context) =>
+                                        const PsychoOverviewPage()),
                               );
                             },
                             style: ElevatedButton.styleFrom(
@@ -435,8 +458,8 @@ class SettingsPageState extends State<SettingsPage> {
                       // Zmenšení šířky tlačítka na 40% šířky obrazovky a výšky na 50
                       minimumSize: const Size(100, 50),
                       // Přidání vnitřního odsazení pro změnu rozměrů tlačítka
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
                     ),
                     child: const Text(
                       'SMAZAT ÚČET',
@@ -522,7 +545,8 @@ class SettingsPageState extends State<SettingsPage> {
             top: 30, // Nastavte podle potřeby pro umístění od horního okraje
             right: 10, // Nastavte podle potřeby pro umístění od pravého okraje
             child: IconButton(
-              icon: const Icon(Icons.settings, size: 35), // Velikost ikony nastavení
+              icon: const Icon(Icons.settings,
+                  size: 35), // Velikost ikony nastavení
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -543,26 +567,34 @@ class SettingsPageState extends State<SettingsPage> {
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.home,
-                  color: widget._selectedIndex == 0 ? AppColors.red : AppColors.middleGrey),
+                  color: widget._selectedIndex == 0
+                      ? AppColors.red
+                      : AppColors.middleGrey),
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.search,
-                  color: widget._selectedIndex == 1 ? AppColors.red : AppColors.middleGrey),
+                  color: widget._selectedIndex == 1
+                      ? AppColors.red
+                      : AppColors.middleGrey),
               onPressed: () => _onItemTapped(1),
             ),
             const SizedBox(width: 48), // Prostor pro Floating Action Button
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.message,
-                  color: widget._selectedIndex == 2 ? AppColors.red : AppColors.middleGrey),
+                  color: widget._selectedIndex == 2
+                      ? AppColors.red
+                      : AppColors.middleGrey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.person_outline,
-                  color: widget._selectedIndex == 3 ? AppColors.red : AppColors.middleGrey),
+                  color: widget._selectedIndex == 3
+                      ? AppColors.red
+                      : AppColors.middleGrey),
               onPressed: () => _onItemTapped(3),
             ),
           ],
