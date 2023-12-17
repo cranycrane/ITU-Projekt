@@ -1,16 +1,15 @@
-# flowlist
+# Aplikace Flow-List
+## Pro FIT VUT, předmět ITU - Návrh uživatelských prostředí
+Zdrojové soubory naleznete ve složce **lib**
 
-A new Flutter project.
+Autoři:
+Jakub Jeřábek (xjerab28),
+Vojtěch Teichmann (xteich02),
+Doubravka Šimůnková (xsimun05)
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Jak spustit vývojové prostředí?
+1. Nainstalujte Flutter a Android Studio
+2. V Android Studiu vytvořte emulované zařízení
+3. V složce s projektem napište *flutter pub get*, což stáhne potřebné závislosti
+4. Následně pomocí vestavěného debug módu můžete aplikaci spustit, 
+nebo vytvořit instalační apk skrze příkaz *flutter build apk*
