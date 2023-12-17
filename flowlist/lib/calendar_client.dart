@@ -121,7 +121,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                     todayBuilder: (context, day, focusedDay) {
                       return Container(
                         margin: const EdgeInsets.symmetric(
-                            horizontal: 6.0, vertical: 6),
+                            horizontal: 4.0, vertical: 6),
                         decoration: BoxDecoration(
                           color: AppColors.lightRed,
                           borderRadius: BorderRadius.circular(8.0),
@@ -140,7 +140,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                     outsideBuilder: (context, day, focusedDay) {
                       return Container(
                         margin: const EdgeInsets.symmetric(
-                            horizontal: 6.0, vertical: 6),
+                            horizontal: 4.0, vertical: 6),
                         decoration: BoxDecoration(
                           color: AppColors.middleGrey,
                           borderRadius: BorderRadius.circular(8.0),
@@ -159,7 +159,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                     defaultBuilder: (context, day, focusedDay) {
                       return Container(
                         margin: const EdgeInsets.symmetric(
-                            horizontal: 6.0, vertical: 6.0),
+                            horizontal: 4.0, vertical: 6.0),
                         decoration: BoxDecoration(
                           color: AppColors.lightGrey,
                           borderRadius: BorderRadius.circular(8.0),
@@ -178,7 +178,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                     selectedBuilder: (context, date, events) {
                       return Container(
                         margin: const EdgeInsets.symmetric(
-                            horizontal: 6.0, vertical: 6.0),
+                            horizontal: 4.0, vertical: 6.0),
                         decoration: BoxDecoration(
                           color: AppColors.red,
                           borderRadius: BorderRadius.circular(8.0),
