@@ -175,7 +175,7 @@ class SearchPageState extends State<SearchPage> {
           DateTime currentDate = DateTime.now();
 
           // Navigace na NewEntryPage s aktuálním datem
-          Navigator.of(context).push(
+          Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) => NewEntryPage(selectedDay: currentDate),
             ),
@@ -214,7 +214,7 @@ class SearchPageState extends State<SearchPage> {
             margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             child: InkWell(
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) => NewEntryPage(selectedDay: entry.day),
                 ));
               },
