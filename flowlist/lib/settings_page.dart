@@ -14,6 +14,7 @@ import 'psycho_overview.dart';
 import 'get_code.dart';
 import 'psycho_controller.dart';
 import 'statistics_page.dart';
+import 'app_colors.dart';
 
 class SettingsPage extends StatefulWidget {
   final int _selectedIndex = 3;
@@ -82,7 +83,7 @@ class SettingsPageState extends State<SettingsPage> {
         return AlertDialog(
           title: const Text(
             'Potvrzení',
-            style: TextStyle(color: Colors.red), // Nastavení barvy nadpisu
+            style: TextStyle(color: AppColors.red), // Nastavení barvy nadpisu
           ),
           content: const SingleChildScrollView(
             child: ListBody(
@@ -107,7 +108,7 @@ class SettingsPageState extends State<SettingsPage> {
                 'Smazat',
                 style: TextStyle(
                     color:
-                        Colors.red), // Nastavení barvy textu pro akci smazání
+                        AppColors.red), // Nastavení barvy textu pro akci smazání
               ),
               onPressed: () async {
                 bool success = await userController.deleteAccount();
@@ -147,7 +148,7 @@ class SettingsPageState extends State<SettingsPage> {
         return AlertDialog(
           title: const Text(
             'Potvrzení',
-            style: TextStyle(color: Colors.red), // Nastavení barvy nadpisu
+            style: TextStyle(color: AppColors.red), // Nastavení barvy nadpisu
           ),
           content: const SingleChildScrollView(
             child: ListBody(
@@ -172,7 +173,7 @@ class SettingsPageState extends State<SettingsPage> {
                 'Ano zrušit',
                 style: TextStyle(
                     color:
-                        Colors.red), // Nastavení barvy textu pro akci smazání
+                        AppColors.red), // Nastavení barvy textu pro akci smazání
               ),
               onPressed: () async {
                 try {
@@ -312,7 +313,7 @@ class SettingsPageState extends State<SettingsPage> {
               children: <Widget>[
                 CircleAvatar(
                   // Předpokládáme, že radius není nutný, pokud používáte pevnou velikost 80x80
-                  backgroundColor: Colors.grey[200],
+                  backgroundColor: AppColors.lightGrey,
                   //backgroundImage: user?.profileImage != null
                   //    ? FileImage(user.profileImage)
                   //    : null,
@@ -379,11 +380,11 @@ class SettingsPageState extends State<SettingsPage> {
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                    builder: (context) => PsychoOverviewPage()),
+                                    builder: (context) => const PsychoOverviewPage()),
                               );
                             },
                             style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.grey,
+                                backgroundColor: AppColors.darkGrey,
                                 fixedSize: Size(
                                     MediaQuery.of(context).size.width * 0.42,
                                     50)),
@@ -392,7 +393,7 @@ class SettingsPageState extends State<SettingsPage> {
                               maxLines: 2,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -407,8 +408,8 @@ class SettingsPageState extends State<SettingsPage> {
                             onPressed: _showUnpairPsychologistDialog,
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: user!.hasPsychologist!
-                                    ? Colors.red
-                                    : Colors.grey,
+                                    ? AppColors.red
+                                    : AppColors.middleGrey,
                                 fixedSize: Size(
                                     MediaQuery.of(context).size.width * 0.42,
                                     50)),
@@ -430,12 +431,12 @@ class SettingsPageState extends State<SettingsPage> {
                   child: ElevatedButton(
                     onPressed: _showDeleteAccountDialog,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
+                      backgroundColor: AppColors.red,
                       // Zmenšení šířky tlačítka na 40% šířky obrazovky a výšky na 50
-                      minimumSize: Size(100, 50),
+                      minimumSize: const Size(100, 50),
                       // Přidání vnitřního odsazení pro změnu rozměrů tlačítka
                       padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     ),
                     child: const Text(
                       'SMAZAT ÚČET',
@@ -498,13 +499,13 @@ class SettingsPageState extends State<SettingsPage> {
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.grey,
+                                  backgroundColor: AppColors.darkGrey,
                                   minimumSize: const Size(100, 30),
                                 ),
                                 child: const Text(
                                   'DALŠÍ STATISTIKY',
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 18),
+                                      color: Colors.white, fontSize: 18),
                                 ),
                               ),
                             ),
@@ -521,7 +522,7 @@ class SettingsPageState extends State<SettingsPage> {
             top: 30, // Nastavte podle potřeby pro umístění od horního okraje
             right: 10, // Nastavte podle potřeby pro umístění od pravého okraje
             child: IconButton(
-              icon: Icon(Icons.settings, size: 35), // Velikost ikony nastavení
+              icon: const Icon(Icons.settings, size: 35), // Velikost ikony nastavení
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -542,34 +543,34 @@ class SettingsPageState extends State<SettingsPage> {
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.home,
-                  color: widget._selectedIndex == 0 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 0 ? AppColors.red : AppColors.middleGrey),
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.search,
-                  color: widget._selectedIndex == 1 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 1 ? AppColors.red : AppColors.middleGrey),
               onPressed: () => _onItemTapped(1),
             ),
             const SizedBox(width: 48), // Prostor pro Floating Action Button
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.message,
-                  color: widget._selectedIndex == 2 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 2 ? AppColors.red : AppColors.middleGrey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.person_outline,
-                  color: widget._selectedIndex == 3 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 3 ? AppColors.red : AppColors.middleGrey),
               onPressed: () => _onItemTapped(3),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red,
-        child: const Icon(Icons.add),
+        backgroundColor: AppColors.red,
+        child: const Icon(size: 35, Icons.add),
         onPressed: () {
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const NewEntryPage()));

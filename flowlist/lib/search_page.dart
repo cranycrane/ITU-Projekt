@@ -6,7 +6,9 @@ import 'flow.dart';
 import 'diary_controller.dart';
 import 'package:intl/intl.dart';
 import 'get_code.dart';
+import 'app_colors.dart';
 
+// Definice třídy stavového widgetu pro vyhledávací stránku
 class SearchPage extends StatefulWidget {
   final int _selectedIndex = 1;
 
@@ -16,6 +18,7 @@ class SearchPage extends StatefulWidget {
   SearchPageState createState() => SearchPageState();
 }
 
+// Třída stavu pro vyhledávací stránku
 class SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
   List<FlowData> _allRecords = []; // List pro uložení všech záznamů
@@ -25,20 +28,21 @@ class SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     super.initState();
-    _fetchAllRecords();
+    _fetchAllRecords(); // Načtení všech záznamů při inicializaci
   }
 
   void _fetchAllRecords() async {
+    // Asynchronní načtení všech záznamů
     List<FlowData> records = await diaryController.readEntries();
     setState(() {
-      _allRecords = records;
+      _allRecords = records; // Uložení záznamů do stavu
     });
   }
 
   void _performSearch(String query) async {
     List<FlowData> filteredRecords = await _filterEntries(query);
     setState(() {
-      _filteredRecords = filteredRecords;
+      _filteredRecords = filteredRecords; // Aktualizace stavu s filtrovanými záznamy
     });
   }
 
@@ -60,6 +64,7 @@ class SearchPageState extends State<SearchPage> {
     }).toList();
   }
 
+ // Implementace navigace na základě vybrané položky v navigační liště
   void _onItemTapped(int index) {
     switch (index) {
       case 0:
@@ -67,11 +72,11 @@ class SearchPageState extends State<SearchPage> {
             MaterialPageRoute(builder: (context) => const CalendarPage()));
         break;
       case 1:
-        // Již jsme na vyhledávací stránce, není potřeba akce
+
         break;
       case 2:
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => PsychoUserPage()));
+            .push(MaterialPageRoute(builder: (context) => const PsychoUserPage()));
         break;
       case 3:
         Navigator.of(context).pushReplacement(
@@ -83,6 +88,7 @@ class SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Zde je vybudováné celé uživatelské rozhraní stránky
       resizeToAvoidBottomInset: false,
       body: ListView(
         children: <Widget>[
@@ -97,10 +103,10 @@ class SearchPageState extends State<SearchPage> {
                     borderSide: BorderSide.none),
                 filled: true,
                 fillColor: Colors.white,
-                prefixIcon: const Icon(Icons.search, color: Color(0xFFE50E2B)),
+                prefixIcon: const Icon(Icons.search, color: AppColors.red),
                 suffixIcon: _searchController.text.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.clear, color: Color(0xFFE50E2B)),
+                        icon: const Icon(Icons.clear, color: AppColors.red),
                         onPressed: () {
                           setState(() {
                             _searchController.clear();
@@ -110,7 +116,6 @@ class SearchPageState extends State<SearchPage> {
                     : null,
               ),
               onChanged: (value) {
-                // Implementace pro vyhledávání záznamů
                 _performSearch(value);
               },
               onSubmitted: (value) {},
@@ -128,43 +133,43 @@ class SearchPageState extends State<SearchPage> {
           children: <Widget>[
             IconButton(
               iconSize: 35,
-              icon: Icon(Icons.home, // color: Color(0xFFE50E2B)
+              icon: Icon(Icons.home, 
                   color: widget._selectedIndex == 0
-                      ? const Color(0xFFE50E2B)
-                      : Colors.grey),
+                      ? AppColors.red
+                      :  AppColors.middleGrey),
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.search,
                   color: widget._selectedIndex == 1
-                      ? const Color(0xFFE50E2B)
-                      : Colors.grey),
+                      ? AppColors.red
+                      :  AppColors.middleGrey),
               onPressed: () => _onItemTapped(1),
             ),
-            const SizedBox(width: 48), // Prostor pro Floating Action Button
+            const SizedBox(width: 48),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.message,
                   color: widget._selectedIndex == 2
-                      ? const Color(0xFFE50E2B)
-                      : Colors.grey),
+                      ? AppColors.red
+                      :  AppColors.middleGrey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.person_outline,
                   color: widget._selectedIndex == 3
-                      ? const Color(0xFFE50E2B)
-                      : Colors.grey),
+                      ? AppColors.red
+                      :  AppColors.middleGrey),
               onPressed: () => _onItemTapped(3),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFFE50E2B),
-        child: const Icon(Icons.add),
+        backgroundColor: AppColors.red,
+        child: const Icon(size: 35, Icons.add),
         onPressed: () {
           // Získání aktuálního data
           DateTime currentDate = DateTime.now();
@@ -175,13 +180,13 @@ class SearchPageState extends State<SearchPage> {
               builder: (context) => NewEntryPage(selectedDay: currentDate),
             ),
           );
-          // Implementace akce pro Floating Action Button
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
+// Vytvoření widgetu pro zobrazení výsledků vyhledávání
   Widget _buildSearchResults() {
     if (_searchController.text.isEmpty) {
       return const Center(child: Text("Zadejte hledaný výraz."));
@@ -241,7 +246,7 @@ class SearchPageState extends State<SearchPage> {
     );
   }
 
-// Helper method to highlight search term
+// Funkce pro zvýraznění vyhledávaného termínu ve výsledcích
   Widget _highlightSearchTerm(String text, String searchTerm) {
     if (searchTerm.isEmpty) {
       return Text(text);
@@ -267,8 +272,7 @@ class SearchPageState extends State<SearchPage> {
         text: text.substring(
             indexOfHighlight, indexOfHighlight + searchTerm.length),
         style: const TextStyle(
-            color: Color(
-                0xFFE50E2B)), // Změna barvy textu na červenou color: Color(0xFFE50E2B)
+            color: AppColors.red),
       ));
       start = indexOfHighlight + searchTerm.length;
     } while (start < text.length);

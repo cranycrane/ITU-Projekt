@@ -6,6 +6,7 @@ import 'dart:async';
 import 'user_controller.dart';
 import 'dart:io';
 import 'package:intl/intl.dart';
+import 'app_colors.dart';
 
 class MessagesPage extends StatefulWidget {
   final String toUserId;
@@ -153,7 +154,7 @@ class MessagesPageState extends State<MessagesPage> {
           ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            color: const Color(0xFF61646B),
+            color: AppColors.darkGrey,
             iconSize: 40, // Zvětšení velikosti ikony
             onPressed: () {
               Navigator.pop(context);
@@ -202,7 +203,8 @@ class MessagesPageState extends State<MessagesPage> {
                                       child: Text(
                                         formattedTime,
                                         style: const TextStyle(
-                                            fontSize: 12, color: Colors.grey),
+                                            fontSize: 12,
+                                            color: AppColors.middleGrey),
                                       ),
                                     ),
                                     Row(
@@ -244,8 +246,8 @@ class MessagesPageState extends State<MessagesPage> {
                                               vertical: 10, horizontal: 15),
                                           decoration: BoxDecoration(
                                             color: isSentByMe
-                                                ? const Color(0xFFE50E2B)
-                                                : Colors.grey[300],
+                                                ? AppColors.red
+                                                : AppColors.middleGrey,
                                             borderRadius:
                                                 BorderRadius.circular(20),
                                           ),
@@ -297,7 +299,7 @@ class MessagesPageState extends State<MessagesPage> {
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20.0),
                   borderSide: const BorderSide(
-                      width: 2.0, color: Color(0xFFE50E2B)), // Barva zvýraznění
+                      width: 2.0, color: AppColors.red), // Barva zvýraznění
                 ),
                 filled: true,
                 fillColor: Colors.white,
@@ -307,7 +309,7 @@ class MessagesPageState extends State<MessagesPage> {
           IconButton(
             iconSize: 30,
             icon: const Icon(Icons.send),
-            color: const Color(0xFF61646B),
+            color: AppColors.darkGrey,
             onPressed: _sendMessage,
           ),
         ],

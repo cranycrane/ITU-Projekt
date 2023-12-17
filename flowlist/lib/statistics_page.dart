@@ -4,6 +4,7 @@ import 'diary_controller.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'app_colors.dart';
 
 class StatisticsPage extends StatefulWidget {
   final String? userId;
@@ -90,7 +91,7 @@ class StatisticsPageState extends State<StatisticsPage> {
             ),
           ),
           duration: Duration(seconds: 3), // Duration of the SnackBar display
-          backgroundColor: Color(0xFFEAEAEA),
+          backgroundColor:  AppColors.lightGrey,
         ),
       );
       return; // Do nothing if trying to go into the future
@@ -156,13 +157,13 @@ class StatisticsPageState extends State<StatisticsPage> {
       appBar: AppBar(
         title: const Text(
           'Statistiky vašich hodnocení',
-          style: TextStyle(fontSize: 22, color: Color(0xFF61646B)),
+          style: TextStyle(fontSize: 22, color: AppColors.darkGrey),
         ),
         backgroundColor: Colors.white,
         toolbarHeight: 60,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          color: const Color(0xFF61646B),
+          color: AppColors.darkGrey,
           iconSize: 40, // Zvětšení velikosti ikony
           onPressed: () {
             Navigator.pop(context);
@@ -210,7 +211,7 @@ class StatisticsPageState extends State<StatisticsPage> {
                             text: meanScoreText,
                             style: const TextStyle(
                                 fontSize: 28,
-                                color: Colors.red,
+                                color: AppColors.red,
                                 fontWeight: FontWeight
                                     .bold), // Specific style for the score
                           ),
@@ -252,7 +253,7 @@ class StatisticsPageState extends State<StatisticsPage> {
                             spots: _lineChartSpots,
                             isCurved: false,
                             barWidth: 3,
-                            color: Colors.red,
+                            color: AppColors.red,
                             dotData: const FlDotData(show: true),
                           ),
                         ],

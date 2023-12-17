@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'set_name.dart';
+import 'app_colors.dart';
 
 class WelcomePage2 extends StatefulWidget {
   const WelcomePage2({super.key});

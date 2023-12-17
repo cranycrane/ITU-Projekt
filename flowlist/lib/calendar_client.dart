@@ -10,6 +10,7 @@ import 'user_profile.dart';
 //import 'dart:io';
 import 'psycho_note_read.dart';
 import 'statistics_page.dart';
+import 'app_colors.dart';
 
 class CalendarClientPage extends StatefulWidget {
   final UserProfile client;
@@ -130,8 +131,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                         margin:
                             const EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
                         decoration: BoxDecoration(
-                          color: const Color(
-                              0xFFE2AFB6), // Zde změňte barvu na požadovanou
+                          color: AppColors.lightRed, // Zde změňte barvu na požadovanou
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Center(
@@ -150,15 +150,14 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                         margin:
                             const EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
                         decoration: BoxDecoration(
-                          color: const Color(
-                              0xFFBBBBBB), // Zde změňte barvu na požadovanou
+                          color: AppColors.middleGrey, // Zde změňte barvu na požadovanou
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Center(
                           child: Text(
                             '${day.day}',
                             style: const TextStyle(
-                                color: Color(0xFF6E6E6E),
+                                color: AppColors.darkGrey,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15),
                           ),
@@ -170,8 +169,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                         margin: const EdgeInsets.symmetric(
                             horizontal: 6.0, vertical: 6.0),
                         decoration: BoxDecoration(
-                          color: const Color(
-                              0xFFEAEAEA), // Zde změňte barvu na požadovanou
+                          color: AppColors.lightGrey, // Zde změňte barvu na požadovanou
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Center(
@@ -190,8 +188,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                         margin: const EdgeInsets.symmetric(
                             horizontal: 6.0, vertical: 6.0),
                         decoration: BoxDecoration(
-                          color: const Color(
-                              0xFFE50E2B), // Zde změňte barvu na požadovanou
+                          color: AppColors.red, // Zde změňte barvu na požadovanou
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Center(
@@ -219,19 +216,15 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                       //bool isFocused = isSameDay(_selectedDay, date);
 
                       if (dayRecord != null && dayRecord.score != null) {
-                        Color scoreColor;
                         Color textColor = Colors.white;
 
                         if (isSameDay(_selectedDay, date)) {
-                          scoreColor = Color(0xFFE50E2B);
+                          textColor = Colors.white;
                         } else if (isSameDay(date, DateTime.now())) {
-                          scoreColor = Color(0xFFE2AFB6);
                           textColor = Colors.black;
                         } else if (_focusedDay.month != date.month) {
-                          scoreColor = Color(0xFFBBBBBB);
-                          textColor = Color(0xFF6E6E6E);
+                          textColor = AppColors.darkGrey;
                         } else {
-                          scoreColor = Color(0xFFEAEAEA);
                           textColor = Colors.black;
                         }
 
@@ -341,7 +334,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                             constraints: const BoxConstraints(minHeight: 50.0),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                  color: const Color(0xFFBCBCBC),
+                                  color: AppColors.middleGrey,
                                   width: 1.8), // Optional: Add border
                               borderRadius: BorderRadius.circular(
                                   10.0), // Optional: Add border radius
@@ -354,7 +347,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                               _record?.record1 ?? '',
                               maxLines: 2,
                               style: const TextStyle(
-                                  color: Color(0xFF5b5b5b)), // Set text color
+                                  color: AppColors.darkGrey), // Set text color
                             ),
                           ),
                         if ((_record?.record2 ?? '').isNotEmpty)
@@ -363,7 +356,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                             constraints: const BoxConstraints(minHeight: 50.0),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                  color: const Color(0xFFBCBCBC),
+                                  color: AppColors.middleGrey,
                                   width: 1.8), // Optional: Add border
                               borderRadius: BorderRadius.circular(
                                   10.0), // Optional: Add border radius
@@ -376,7 +369,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                               _record?.record2 ?? '',
                               maxLines: 2,
                               style: const TextStyle(
-                                  color: Color(0xFF5b5b5b)), // Set text color
+                                  color: AppColors.darkGrey), // Set text color
                             ),
                           ),
                         if ((_record?.record3 ?? '').isNotEmpty)
@@ -385,7 +378,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                             constraints: const BoxConstraints(minHeight: 50.0),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                  color: const Color(0xFFBCBCBC),
+                                  color: AppColors.middleGrey,
                                   width: 1.8), // Optional: Add border
                               borderRadius: BorderRadius.circular(
                                   10.0), // Optional: Add border radius
@@ -398,7 +391,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                               _record?.record3 ?? '',
                               maxLines: 2,
                               style: const TextStyle(
-                                  color: Color(0xFF5b5b5b)), // Set text color
+                                  color: AppColors.darkGrey), // Set text color
                             ),
                           ),
                       ],
@@ -418,8 +411,8 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                       size: 35,
                       Icons.home,
                       color: widget._selectedIndex == 0
-                          ? Colors.red
-                          : Colors.grey),
+                          ? AppColors.red
+                          : AppColors.middleGrey),
                   onPressed: () => _onItemTapped(1),
                 ),
                 Expanded(
@@ -441,8 +434,8 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                         border: Border.all(
                           width: 2.0,
                           color: widget._selectedIndex == 1
-                              ? Color(0xFFE50E2B)
-                              : Colors.grey,
+                              ? AppColors.red
+                              : AppColors.middleGrey,
                         ),
                       ),
                       child: Row(
@@ -450,7 +443,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                         children: <Widget>[
                           CircleAvatar(
                             radius: 30.0,
-                            backgroundColor: Colors.grey[200],
+                            backgroundColor: AppColors.lightGrey,
                             child: widget.client.imageFile == null
                                 ? const Icon(Icons.person, size: 60)
                                 : ClipOval(
@@ -490,8 +483,8 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                       size: 35,
                       Icons.query_stats,
                       color: widget._selectedIndex == 2
-                          ? Colors.red
-                          : Colors.grey),
+                          ? AppColors.red
+                          : AppColors.middleGrey),
                   onPressed: () => _onItemTapped(4),
                 ),
                 IconButton(
@@ -500,8 +493,8 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                       size: 35,
                       Icons.message,
                       color: widget._selectedIndex == 2
-                          ? Colors.red
-                          : Colors.grey),
+                          ? AppColors.red
+                          : AppColors.middleGrey),
                   onPressed: () => _onItemTapped(3),
                 ),
               ],
@@ -515,7 +508,7 @@ class UserDetailsWidget extends StatelessWidget {
   final String userName;
   final String userPhotoUrl;
 
-  UserDetailsWidget({required this.userName, required this.userPhotoUrl});
+  const UserDetailsWidget({required this.userName, required this.userPhotoUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -527,7 +520,7 @@ class UserDetailsWidget extends StatelessWidget {
           // případně můžete použít AssetImage pro lokální obrázky
         ),
         const SizedBox(width: 8),
-        Text(userName, style: const TextStyle(color: Colors.grey)),
+        Text(userName, style: const TextStyle(color: AppColors.middleGrey)),
       ],
     );
   }
