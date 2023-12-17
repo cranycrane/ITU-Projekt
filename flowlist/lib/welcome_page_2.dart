@@ -8,8 +8,8 @@ import 'set_name.dart';
 import 'app_colors.dart';
 
 class WelcomePage2 extends StatefulWidget {
-  bool onlyLooking;
-  WelcomePage2({super.key, required this.onlyLooking});
+  final bool onlyLooking;
+  const WelcomePage2({super.key, required this.onlyLooking});
 
   @override
   WelcomePageState2 createState() => WelcomePageState2();

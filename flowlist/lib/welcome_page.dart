@@ -3,13 +3,12 @@
 /// Autor: Jakub Jerabek (xjerab28)
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'welcome_page_2.dart';
 import 'app_colors.dart';
 
 class WelcomePage extends StatefulWidget {
-  bool onlyLooking;
-  WelcomePage({super.key, required this.onlyLooking});
+  final bool onlyLooking;
+  const WelcomePage({super.key, required this.onlyLooking});
 
   @override
   _WelcomePageState createState() => _WelcomePageState();

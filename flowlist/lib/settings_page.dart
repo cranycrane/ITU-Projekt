@@ -81,8 +81,7 @@ class SettingsPageState extends State<SettingsPage> {
   Future<void> _showDeleteAccountDialog() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible:
-          false, 
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text(
@@ -101,7 +100,7 @@ class SettingsPageState extends State<SettingsPage> {
             TextButton(
               child: const Text(
                 'Zrušit',
-                style: TextStyle(color: Colors.black), 
+                style: TextStyle(color: Colors.black),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -110,15 +109,14 @@ class SettingsPageState extends State<SettingsPage> {
             TextButton(
               child: const Text(
                 'Smazat',
-                style: TextStyle(
-                    color: AppColors
-                        .red), 
+                style: TextStyle(color: AppColors.red),
               ),
               onPressed: () async {
                 bool success = await userController.deleteAccount();
                 if (mounted && success) {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => WelcomePage(onlyLooking: false)));
+                      builder: (context) =>
+                          const WelcomePage(onlyLooking: false)));
                 }
               },
             ),
@@ -135,7 +133,7 @@ class SettingsPageState extends State<SettingsPage> {
           content: Text(
             "Nemáte spárovaného žádného psychologa",
             style: TextStyle(
-              color: Colors.white, 
+              color: Colors.white,
             ),
           ),
           duration: Duration(seconds: 3),
@@ -146,8 +144,7 @@ class SettingsPageState extends State<SettingsPage> {
 
     return showDialog<void>(
       context: context,
-      barrierDismissible:
-          false, 
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text(
@@ -175,17 +172,14 @@ class SettingsPageState extends State<SettingsPage> {
             TextButton(
               child: const Text(
                 'Ano zrušit',
-                style: TextStyle(
-                    color: AppColors
-                        .red), 
+                style: TextStyle(color: AppColors.red),
               ),
               onPressed: () async {
                 try {
                   await psychoController.unPairWithClient(user!);
                   if (!context.mounted) return;
 
-                  Navigator.of(context)
-                      .pop(); 
+                  Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text('Párování bylo úspěšně zrušeno')));
                 } catch (e) {
@@ -193,8 +187,7 @@ class SettingsPageState extends State<SettingsPage> {
 
                   if (!context.mounted) return;
 
-                  Navigator.of(context)
-                      .pop(); 
+                  Navigator.of(context).pop();
 
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Chyba: $errorMessage')));
@@ -214,8 +207,7 @@ class SettingsPageState extends State<SettingsPage> {
 
   void _loadUserData() async {
     try {
-      user = await userController
-          .getUserData(); 
+      user = await userController.getUserData();
 
       setState(() {
         isLoading = false;
@@ -331,8 +323,7 @@ class SettingsPageState extends State<SettingsPage> {
                     await _requestPermissions(); // Žádost o oprávnění
                     await _pickAndCropImage(); // Funkce pro výběr obrázku
                   },
-                  child:
-                      const Icon(Icons.camera_alt), 
+                  child: const Icon(Icons.camera_alt),
                 ),
                 const SizedBox(height: 8),
                 Center(
@@ -351,8 +342,7 @@ class SettingsPageState extends State<SettingsPage> {
                               ),
                             )
                           : FittedBox(
-                              fit: BoxFit
-                                  .scaleDown,
+                              fit: BoxFit.scaleDown,
                               child: Text(
                                 _nameController.text,
                                 overflow: TextOverflow.ellipsis,
@@ -463,8 +453,7 @@ class SettingsPageState extends State<SettingsPage> {
                     child: const Text(
                       'SMAZAT ÚČET',
                       style: TextStyle(
-                        fontSize:
-                            16, 
+                        fontSize: 16,
                       ),
                     ),
                   ),
@@ -479,7 +468,7 @@ class SettingsPageState extends State<SettingsPage> {
                       return const Text(
                         'Chyba při načítání statistik',
                         style: TextStyle(
-                          fontSize: 18, 
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       );
@@ -487,7 +476,7 @@ class SettingsPageState extends State<SettingsPage> {
                       return const Text(
                         'Žádné statistiky k zobrazení',
                         style: TextStyle(
-                          fontSize: 18, 
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       );
@@ -543,33 +532,29 @@ class SettingsPageState extends State<SettingsPage> {
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height *
-                0.045, 
-            right: MediaQuery.of(context).size.width *
-                0.05, 
+            top: MediaQuery.of(context).size.height * 0.045,
+            right: MediaQuery.of(context).size.width * 0.05,
             //tlačítko pro přepnutí do nastavení notifikací
             child: IconButton(
-              icon: const Icon(Icons.edit_notifications,
-                  size: 35), 
+              icon: const Icon(Icons.edit_notifications, size: 35),
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                      builder: (context) => NotificationSettingsPage()),
+                      builder: (context) => const NotificationSettingsPage()),
                 );
               },
             ),
           ),
           Positioned(
             top: MediaQuery.of(context).size.height * 0.045,
-            right: MediaQuery.of(context).size.width *
-                0.85,
+            right: MediaQuery.of(context).size.width * 0.85,
             child: IconButton(
-              icon: const Icon(Icons.question_mark,
-                  size: 35),
+              icon: const Icon(Icons.question_mark, size: 35),
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                      builder: (context) => WelcomePage(onlyLooking: true)),
+                      builder: (context) =>
+                          const WelcomePage(onlyLooking: true)),
                 );
               },
             ),
