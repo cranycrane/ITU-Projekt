@@ -2,7 +2,6 @@
 /// FIT VUT, ITU - Tvorba uzivatelskych rozhrani
 /// Autor: Vojtech Teichmann (xteich02)
 
-
 import 'package:flowlist/psycho_controller.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -24,10 +23,9 @@ class PsychoOverviewPage extends StatefulWidget {
 class PsychoOverviewPageState extends State<PsychoOverviewPage> {
   // Deklarace proměnných pro uchování dat uživatelů
   late Future<List<UserProfile>> pairedUsers;
-  final TextEditingController _searchController =
-      TextEditingController(); 
-  List<UserProfile> _allUsers = [];  
-  List<UserProfile> _filteredUsers = []; 
+  final TextEditingController _searchController = TextEditingController();
+  List<UserProfile> _allUsers = [];
+  List<UserProfile> _filteredUsers = [];
 
   @override
   void initState() {
@@ -37,8 +35,7 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
 
 // Načtení párovaných uživatelů a jejich nastavení do stavu
   void _initializeUsers() async {
-    _allUsers = await psychoController
-        .getPairedUsers(); 
+    _allUsers = await psychoController.getPairedUsers();
     setState(() {
       _filteredUsers = _allUsers;
     });
@@ -70,13 +67,14 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
               'Chcete opravdu odebrat uživatele ${user.firstName} ${user.lastName}?'),
           actions: <Widget>[
             TextButton(
-              child: const Text('Zrušit', style: TextStyle(color: AppColors.middleGrey)),
+              child: const Text('Zrušit',
+                  style: TextStyle(color: AppColors.middleGrey)),
               onPressed: () =>
                   Navigator.of(context).pop(), // Zavře dialogové okno
             ),
             TextButton(
-              child: const Text('Odebrat',
-                  style: TextStyle(color: AppColors.red)),
+              child:
+                  const Text('Odebrat', style: TextStyle(color: AppColors.red)),
               onPressed: () async {
                 try {
                   await psychoController.unPairWithClient(user);
@@ -110,8 +108,7 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
 
   // Formátování data a času
   String formatDateTime(DateTime dateTime) {
-    final DateFormat formatter =
-        DateFormat('d. M. yyyy'); 
+    final DateFormat formatter = DateFormat('d. M. yyyy');
     return formatter.format(dateTime);
   }
 
@@ -134,13 +131,10 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                     borderSide: BorderSide.none),
                 filled: true,
                 fillColor: Colors.white,
-                prefixIcon: const Icon(Icons.search,
-                    color: AppColors.red), 
+                prefixIcon: const Icon(Icons.search, color: AppColors.red),
                 suffixIcon: _searchController.text.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.clear,
-                            color:
-                                AppColors.red), 
+                        icon: const Icon(Icons.clear, color: AppColors.red),
                         onPressed: () {
                           _searchController.clear();
                           _performSearch('');
@@ -167,8 +161,7 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                   },
                   child: Card(
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(10), 
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     margin:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -176,11 +169,8 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                       padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
                         color: AppColors.lightGrey,
-                        
-                        borderRadius:
-                            BorderRadius.circular(10), 
-                        border: Border.all(
-                            color: AppColors.middleGrey), 
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: AppColors.middleGrey),
                       ),
                       child: Row(
                         children: <Widget>[
@@ -192,27 +182,23 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                                   ConnectionState.waiting) {
                                 return CircleAvatar(
                                   radius: 30.0,
-                                  backgroundColor: Colors
-                                      .grey[200], 
+                                  backgroundColor: Colors.grey[200],
                                   child: const CircularProgressIndicator(),
                                 );
                               } else if (snapshot.hasError ||
                                   snapshot.data == null) {
                                 return CircleAvatar(
-                                  radius:
-                                      30.0, 
-                                  backgroundColor: Colors
-                                      .grey[200], 
+                                  radius: 30.0,
+                                  backgroundColor: Colors.grey[200],
                                   child: const Icon(Icons.person, size: 50.0),
                                 );
                               } else {
+                                user.imageFile = snapshot.data;
                                 return ClipOval(
                                   child: Image.file(
                                     snapshot.data!,
-                                    width:
-                                        60.0, 
-                                    height:
-                                        60.0, 
+                                    width: 60.0,
+                                    height: 60.0,
                                     fit: BoxFit.cover,
                                   ),
                                 );
@@ -226,9 +212,7 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                               children: <Widget>[
                                 Text(
                                   "${user.firstName} ${user.lastName}",
-                                  style: const TextStyle(
-                                      fontSize:
-                                          18), 
+                                  style: const TextStyle(fontSize: 18),
                                 ),
                                 Text(
                                   user.lastRecordDate != null
@@ -247,7 +231,6 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                                 color: AppColors.darkGrey),
                             onPressed: () =>
                                 _showDeleteConfirmationDialog(user),
-                           
                           ),
                         ],
                       ),
@@ -256,9 +239,7 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                 );
               },
               padding: const EdgeInsets.only(
-                
-                bottom: kBottomNavigationBarHeight +
-                    16, 
+                bottom: kBottomNavigationBarHeight + 16,
               ),
             ),
           ),
@@ -266,12 +247,10 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
       ),
       floatingActionButton: Row(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment:
-            MainAxisAlignment.center, 
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           ElevatedButton(
             onPressed: () {
-              
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) => const SettingsPage()));
             },
@@ -359,11 +338,10 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
               }
             },
             backgroundColor: AppColors.red,
-            child: const Icon(size: 35 , Icons.add),
+            child: const Icon(size: 35, Icons.add),
           ),
         ],
       ),
     );
   }
-
 }
