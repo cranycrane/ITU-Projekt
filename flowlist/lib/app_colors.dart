@@ -1,4 +1,7 @@
-// lib/app_colors.dart
+/// Aplikace Flow-list
+/// FIT VUT, ITU - Tvorba uživatelských rozhraní
+/// Autor: Doubravka Šimůnková (xsimun05)
+
 import 'package:flutter/material.dart';
 
 //třída pro barvy aplikace

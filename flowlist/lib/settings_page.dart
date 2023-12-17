@@ -1,3 +1,7 @@
+/// Aplikace Flow-list
+/// FIT VUT, ITU - Tvorba uživatelských rozhraní
+/// Autor: Doubravka Šimůnková (xsimun05)
+
 import 'package:flowlist/calendar_screen.dart';
 import 'package:flowlist/notification_settings.dart';
 import 'package:flowlist/welcome_page.dart';
