@@ -1,9 +1,15 @@
+/// Aplikace Flow-List
+/// FIT VUT, ITU - Tvorba uzivatelskych rozhrani
+/// Autor: Jakub Jerabek (xjerab28)
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'welcome_page_2.dart';
 import 'app_colors.dart';
 
 class WelcomePage extends StatefulWidget {
-  const WelcomePage({super.key});
+  bool onlyLooking;
+  WelcomePage({super.key, required this.onlyLooking});
 
   @override
   _WelcomePageState createState() => _WelcomePageState();
@@ -22,8 +28,6 @@ class _WelcomePageState extends State<WelcomePage> {
           Image.asset(
             'assets/whatIsFlowlist.png',
             width: MediaQuery.of(context).size.width * 0.7,
-
-            // URL obrázku
           ),
           SizedBox(height: 20),
           const Padding(
@@ -54,7 +58,7 @@ class _WelcomePageState extends State<WelcomePage> {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
-                backgroundColor: const Color(0xFFE50E2B),
+                backgroundColor: AppColors.red,
                 padding: const EdgeInsets.symmetric(
                     horizontal: 32.0, vertical: 12.0),
                 shape: RoundedRectangleBorder(

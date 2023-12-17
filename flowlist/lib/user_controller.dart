@@ -1,3 +1,7 @@
+/// Aplikace Flow-List
+/// FIT VUT, ITU - Tvorba uzivatelskych rozhrani
+/// Autor: Jakub Jerabek (xjerab28), Doubravka Šimůnková (xsimun05)
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'storage_service.dart';
@@ -27,9 +31,7 @@ class UserController {
         var imageString = user['profileImg'];
         var imageBytes = base64Decode(imageString.split(',')[1]);
 
-        // Uložení obrázku jako souboru
-        String fileName =
-            'profile_$userId.jpg'; // Jednoduché pojmenování souboru
+        String fileName = 'profile_$userId.jpg';
         Directory tempDir = await getTemporaryDirectory();
         String filePath = '${tempDir.path}/$fileName';
         profileImageFile = File(filePath);
@@ -74,11 +76,10 @@ class UserController {
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: data, // Odesílání dat jako Map
+      body: data,
     );
 
     if (response.statusCode == 200) {
-      //Map<String, dynamic> respond = json.decode(response.body);
       return;
     } else {
       throw Exception('Chyba při změně jména: ${response.body}');
@@ -87,10 +88,7 @@ class UserController {
 
   Future<void> updateProfileImage(String imagePath) async {
     String? userId = await StorageService().getUserId();
-    Uri apiUrl = Uri.parse(
-        '$baseUrl/updateUserPhoto.php'); // Nahraďte správnou URL vašeho API
-
-    // Předpokládáme, že 'imagePath' je cesta k obrázku na zařízení
+    Uri apiUrl = Uri.parse('$baseUrl/updateUserPhoto.php');
     var request = http.MultipartRequest('POST', apiUrl)
       ..fields['userId'] = userId ?? ''
       ..files.add(await http.MultipartFile.fromPath('profileImg', imagePath));
@@ -98,9 +96,7 @@ class UserController {
     var response = await request.send();
 
     if (response.statusCode == 200) {
-      // Zpracování úspěšné odpovědi
     } else {
-      // Zpracování chyby
       throw Exception("Chyba pri aktualizaci profiloveho obrazku");
     }
   }
@@ -148,19 +144,22 @@ class UserController {
     }
   }
 
-  Future<void> updateNotificationTime(TimeOfDay time) async {
+  Future<void> updateNotificationTime(TimeOfDay? time) async {
     String? userId = await StorageService().getUserId();
+    var request;
+    Uri apiUrl = Uri.parse('$baseUrl/updateNotificationTime.php');
+    if (time != null) {
+      final hours = time.hour.toString().padLeft(2, '0');
+      final minutes = time.minute.toString().padLeft(2, '0');
 
-    final hours = time.hour.toString().padLeft(2, '0');
-    final minutes = time.minute.toString().padLeft(2, '0');
-
-    Uri apiUrl = Uri.parse(
-        '$baseUrl/updateNotificationTime.php'); // Nahraďte správnou URL vašeho API
-
-    // Předpokládáme, že 'imagePath' je cesta k obrázku na zařízení
-    var request = http.MultipartRequest('POST', apiUrl)
-      ..fields['userId'] = userId ?? ''
-      ..fields['notificationTime'] = '$hours:$minutes';
+      request = http.MultipartRequest('POST', apiUrl)
+        ..fields['userId'] = userId ?? ''
+        ..fields['notificationTime'] = '$hours:$minutes';
+    } else {
+      request = http.MultipartRequest('POST', apiUrl)
+        ..fields['userId'] = userId ?? ''
+        ..fields['notificationTime'] = '';
+    }
 
     var response = await request.send();
 

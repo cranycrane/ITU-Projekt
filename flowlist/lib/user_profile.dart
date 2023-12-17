@@ -1,3 +1,7 @@
+/// Aplikace Flow-List
+/// FIT VUT, ITU - Tvorba uzivatelskych rozhrani
+/// Autor: Jakub Jerabek (xjerab28)
+
 import 'dart:io';
 
 class UserProfile {

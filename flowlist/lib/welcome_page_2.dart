@@ -1,3 +1,7 @@
+/// Aplikace Flow-List
+/// FIT VUT, ITU - Tvorba uzivatelskych rozhrani
+/// Autor: Jakub Jerabek (xjerab28)
+///
 import 'package:flutter/material.dart';
 import 'set_name.dart';
 import 'app_colors.dart';
@@ -22,14 +26,11 @@ class _WelcomePageState2 extends State<WelcomePage2> {
           Image.asset(
             'assets/whyFlowlist.png',
             width: MediaQuery.of(context).size.width * 0.6,
-
-            // URL obrázku
           ),
           SizedBox(height: 20),
           const Padding(
             padding: EdgeInsets.all(16.0),
             child: FittedBox(
-              // Scales text to fit its parent
               fit: BoxFit.scaleDown,
               child: Text(
                 'A PROČ BYCH SI HO MĚL PSÁT?',
@@ -59,7 +60,7 @@ class _WelcomePageState2 extends State<WelcomePage2> {
                     text: 'Tak co, jdeš do toho?',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 18, // Made slightly larger for emphasis
+                      fontSize: 18,
                     ),
                   ),
                 ],
@@ -72,7 +73,7 @@ class _WelcomePageState2 extends State<WelcomePage2> {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
-                backgroundColor: const Color(0xFFE50E2B),
+                backgroundColor: AppColors.red,
                 padding: const EdgeInsets.symmetric(
                     horizontal: 32.0, vertical: 12.0),
                 shape: RoundedRectangleBorder(
@@ -80,7 +81,6 @@ class _WelcomePageState2 extends State<WelcomePage2> {
                 ),
               ),
               onPressed: () {
-                // TODO: Implementovat funkci tlačítka
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const setNamePage()));
               },

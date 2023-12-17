@@ -1,10 +1,13 @@
+/// Aplikace Flow-List
+/// FIT VUT, ITU - Tvorba uzivatelskych rozhrani
+/// Autor: Jakub Jerabek (xjerab28)
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'settings_page.dart';
-import 'search_page.dart'; // Předpokládáme, že máte soubor search_page.dart
+import 'search_page.dart';
 import 'add_note.dart';
 import 'diary_controller.dart';
-//import 'diary_entries_loader.dart';
+
 import 'flow.dart';
 import 'get_code.dart';
 import 'app_colors.dart';
@@ -40,7 +43,6 @@ class CalendarPageState extends State<CalendarPage> {
     _recordFuture = _loadDay(_focusedDay);
   }
 
-  // Funkce pro načtení záznamů z deníku
   void _fetchAllRecords() async {
     List<FlowData> records = await diaryController.readEntries();
     setState(() {
@@ -64,23 +66,17 @@ class CalendarPageState extends State<CalendarPage> {
   void _onItemTapped(int index) {
     switch (index) {
       case 0:
-        // Kdyby byla domovská stránka na indexu 0
-        // Navigator.of(context).pushReplacementNamed('/home');
         break;
       case 1:
-        // Přechod na stránku pro vyhledávání
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => const SearchPage()));
         break;
       case 2:
-        // PsychoUserPage
         Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => const PsychoUserPage()));
-        // Tady byste mohli implementovat přechod na stránku oznámení
+
         break;
       case 3:
-        // Navigace na SettingsPage, pokud uživatel není již na této stránce
-
         Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => const SettingsPage()));
         break;
@@ -114,10 +110,10 @@ class CalendarPageState extends State<CalendarPage> {
                   calendarBuilders: CalendarBuilders(
                     todayBuilder: (context, day, focusedDay) {
                       return Container(
-                        margin:
-                            const EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 6.0, vertical: 6),
                         decoration: BoxDecoration(
-                          color: AppColors.lightRed, // Zde změňte barvu na požadovanou
+                          color: AppColors.lightRed,
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Center(
@@ -133,10 +129,10 @@ class CalendarPageState extends State<CalendarPage> {
                     },
                     outsideBuilder: (context, day, focusedDay) {
                       return Container(
-                        margin:
-                            const EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 6.0, vertical: 6),
                         decoration: BoxDecoration(
-                          color: AppColors.middleGrey, // Zde změňte barvu na požadovanou
+                          color: AppColors.middleGrey,
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Center(
@@ -155,7 +151,7 @@ class CalendarPageState extends State<CalendarPage> {
                         margin: const EdgeInsets.symmetric(
                             horizontal: 6.0, vertical: 6.0),
                         decoration: BoxDecoration(
-                          color: AppColors.lightGrey, // Zde změňte barvu na požadovanou
+                          color: AppColors.lightGrey,
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Center(
@@ -174,7 +170,7 @@ class CalendarPageState extends State<CalendarPage> {
                         margin: const EdgeInsets.symmetric(
                             horizontal: 6.0, vertical: 6.0),
                         decoration: BoxDecoration(
-                          color: AppColors.red, // Zde změňte barvu na požadovanou
+                          color: AppColors.red,
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Center(
@@ -198,9 +194,6 @@ class CalendarPageState extends State<CalendarPage> {
                       var dayRecord =
                           dayRecords.isNotEmpty ? dayRecords.first : null;
 
-                      // Kontrola, zda je den vybraný a zároveň ve stejném měsíci jako _focusedDay
-                      //bool isFocused = isSameDay(_selectedDay, date);
-
                       if (dayRecord != null && dayRecord.score != null) {
                         Color textColor = Colors.white;
 
@@ -216,20 +209,17 @@ class CalendarPageState extends State<CalendarPage> {
 
                         FontWeight fontWeight = FontWeight.bold;
 
-                        // Získání šířky obrazovky
                         double screenWidth =
                             (MediaQuery.of(context).size.width * 0.95);
-                        // Vypočítání šířky jednoho dne
+
                         double dayWidth = screenWidth / 7 - 12;
 
-                        // Zobrazit skóre pod dnem
                         return Positioned(
                           bottom: 2.0,
                           child: Container(
                             width: dayWidth,
                             padding: const EdgeInsets.all(5.0),
                             decoration: const BoxDecoration(
-                              //color: scoreColor,
                               borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(8),
                                   bottomRight: Radius.circular(8)),
@@ -254,17 +244,15 @@ class CalendarPageState extends State<CalendarPage> {
                   },
                   onDaySelected: (selectedDay, focusedDay) {
                     if (selectedDay.isAfter(DateTime.now())) {
-                      // Pokud je vybraný den v budoucnosti, nedělejte nic (nebo zobrazte chybovou zprávu)
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text(
                             "Nelze vybrat budoucí datum!",
                             style: TextStyle(
-                              color: Colors.white, // Text color
+                              color: Colors.white,
                             ),
                           ),
-                          duration: Duration(
-                              seconds: 3), // Duration of the SnackBar display
+                          duration: Duration(seconds: 3),
                         ),
                       );
                       return;
@@ -276,17 +264,11 @@ class CalendarPageState extends State<CalendarPage> {
                       _recordFuture = _loadDay(selectedDay);
                     });
                   },
-
-                  //onPageChanged: (focusedDay) {
-                  //  _focusedDay = focusedDay;
-                  //},
-
                   onPageChanged: (focusedDay) {
                     setState(() {
                       _focusedDay = focusedDay;
                     });
                   },
-
                   headerStyle: const HeaderStyle(
                     formatButtonVisible: false,
                     titleCentered: true,
@@ -295,7 +277,6 @@ class CalendarPageState extends State<CalendarPage> {
                     leftChevronIcon: Icon(Icons.chevron_left, size: 40),
                     rightChevronIcon: Icon(Icons.chevron_right, size: 40),
                   ),
-                  // Další přizpůsobení vzhledu, pokud je to potřeba
                 ),
               ),
             ),
@@ -333,19 +314,16 @@ class CalendarPageState extends State<CalendarPage> {
                                     decoration: BoxDecoration(
                                       border: Border.all(
                                           color: AppColors.middleGrey,
-                                          width: 1.8), // Optional: Add border
-                                      borderRadius: BorderRadius.circular(
-                                          10.0), // Optional: Add border radius
+                                          width: 1.8),
+                                      borderRadius: BorderRadius.circular(10.0),
                                     ),
-                                    padding: const EdgeInsets.all(
-                                        8.0), // Optional: Add padding
-                                    margin: const EdgeInsets.all(
-                                        4.0), // Optional: Add margin
+                                    padding: const EdgeInsets.all(8.0),
+                                    margin: const EdgeInsets.all(4.0),
                                     child: Text(
                                       record?.record1 ?? '',
                                       maxLines: 2,
                                       style: const TextStyle(
-                                          color: AppColors.darkGrey), // Set text color
+                                          color: AppColors.darkGrey),
                                     ),
                                   ),
                                 if ((record?.record2 ?? '').isNotEmpty)
@@ -356,19 +334,16 @@ class CalendarPageState extends State<CalendarPage> {
                                     decoration: BoxDecoration(
                                       border: Border.all(
                                           color: AppColors.middleGrey,
-                                          width: 1.8), // Optional: Add border
-                                      borderRadius: BorderRadius.circular(
-                                          10.0), // Optional: Add border radius
+                                          width: 1.8),
+                                      borderRadius: BorderRadius.circular(10.0),
                                     ),
-                                    padding: const EdgeInsets.all(
-                                        8.0), // Optional: Add padding
-                                    margin: const EdgeInsets.all(
-                                        4.0), // Optional: Add margin
+                                    padding: const EdgeInsets.all(8.0),
+                                    margin: const EdgeInsets.all(4.0),
                                     child: Text(
                                       record?.record2 ?? '',
                                       maxLines: 2,
                                       style: const TextStyle(
-                                          color: AppColors.darkGrey), // Set text color
+                                          color: AppColors.darkGrey),
                                     ),
                                   ),
                                 if ((record?.record3 ?? '').isNotEmpty)
@@ -379,19 +354,16 @@ class CalendarPageState extends State<CalendarPage> {
                                     decoration: BoxDecoration(
                                       border: Border.all(
                                           color: AppColors.middleGrey,
-                                          width: 1.8), // Optional: Add border
-                                      borderRadius: BorderRadius.circular(
-                                          10.0), // Optional: Add border radius
+                                          width: 1.8),
+                                      borderRadius: BorderRadius.circular(10.0),
                                     ),
-                                    padding: const EdgeInsets.all(
-                                        8.0), // Optional: Add padding
-                                    margin: const EdgeInsets.all(
-                                        4.0), // Optional: Add margin
+                                    padding: const EdgeInsets.all(8.0),
+                                    margin: const EdgeInsets.all(4.0),
                                     child: Text(
                                       record?.record3 ?? '',
                                       maxLines: 2,
                                       style: const TextStyle(
-                                          color: AppColors.darkGrey), // Set text color
+                                          color: AppColors.darkGrey),
                                     ),
                                   ),
                               ],
@@ -411,27 +383,34 @@ class CalendarPageState extends State<CalendarPage> {
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.home,
-                  color: widget._selectedIndex == 0 ? AppColors.red : AppColors.middleGrey),
+                  color: widget._selectedIndex == 0
+                      ? AppColors.red
+                      : AppColors.middleGrey),
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.search,
-                  color: widget._selectedIndex == 1 ? AppColors.red : AppColors.middleGrey),
+                  color: widget._selectedIndex == 1
+                      ? AppColors.red
+                      : AppColors.middleGrey),
               onPressed: () => _onItemTapped(1),
             ),
-            const SizedBox(
-                width: 48), // The empty space in middle of the BottomAppBar
+            const SizedBox(width: 48),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.message,
-                  color: widget._selectedIndex == 2 ? AppColors.red : AppColors.middleGrey),
+                  color: widget._selectedIndex == 2
+                      ? AppColors.red
+                      : AppColors.middleGrey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.person_outline,
-                  color: widget._selectedIndex == 3 ? AppColors.red : AppColors.middleGrey),
+                  color: widget._selectedIndex == 3
+                      ? AppColors.red
+                      : AppColors.middleGrey),
               onPressed: () => _onItemTapped(3),
             ),
           ],
@@ -441,7 +420,6 @@ class CalendarPageState extends State<CalendarPage> {
         backgroundColor: AppColors.red,
         child: const Icon(size: 35, Icons.add),
         onPressed: () {
-          // Akce pro FloatingActionButton
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => NewEntryPage(selectedDay: _selectedDay),

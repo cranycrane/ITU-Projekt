@@ -1,3 +1,7 @@
+/// Aplikace Flow-List
+/// FIT VUT, ITU - Tvorba uzivatelskych rozhrani
+/// Autor: Jakub Jerabek (xjerab28)
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'storage_service.dart';
@@ -80,22 +84,18 @@ class PsychoController {
   Future<File?> getUserPhoto(UserProfile user) async {
     if (user.profileImage == null || user.profileImage!.isEmpty) return null;
 
-    // Získání URL obrázku (předpokládá se, že profileImagePath je URL)
     final response =
         await http.get(Uri.parse("$baseUrl/uploads/${user.profileImage!}"));
 
-    // Získání dočasného adresáře
     if (response.statusCode == 200) {
       final directory = await getTemporaryDirectory();
       final filePath = '${directory.path}/user_${user.userId}.png';
 
-      // Uložení souboru
       final file = File(filePath);
       await file.writeAsBytes(response.bodyBytes);
 
       return file;
     } else {
-      // Pokud se obrázek nepodaří stáhnout, můžete vrátit null nebo zobrazit chybu
       throw Exception('Failed to download user photo: ${response.body}');
     }
   }

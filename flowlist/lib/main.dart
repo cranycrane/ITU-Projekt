@@ -1,3 +1,6 @@
+/// Aplikace Flow-List
+/// FIT VUT, ITU - Tvorba uzivatelskych rozhrani
+/// Autor: Jakub Jerabek (xjerab28), Vojtech Teichmann (xteich02), Doubravka Simunkova (xsimun05)
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -32,9 +35,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (firstLogin) {
-      return const MaterialApp(
+      return MaterialApp(
         title: 'FlowList',
-        home: WelcomePage(),
+        home: WelcomePage(onlyLooking: false),
       );
     } else {
       return const MaterialApp(

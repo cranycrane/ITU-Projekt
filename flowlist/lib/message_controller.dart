@@ -1,3 +1,6 @@
+/// Aplikace Flow-List
+/// FIT VUT, ITU - Tvorba uzivatelskych rozhrani
+/// Autor: Jakub Jerabek (xjerab28), Doubravka Šimůnková (xsimun05)
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
@@ -15,6 +18,7 @@ class MessageController {
     _messagesStreamController.close();
   }
 
+  //načtení zpráv uživatele
   void getMessages() async {
     String? userId = await StorageService().getUserId();
 
@@ -46,6 +50,7 @@ class MessageController {
     }
   }
 
+  //poslání zprávy
   Future<void> sendMessage(String toUserId, String messageText) async {
     String? fromUserId = await StorageService().getUserId();
 

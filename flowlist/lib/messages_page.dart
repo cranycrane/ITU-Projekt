@@ -1,3 +1,7 @@
+/// Aplikace Flow-list
+/// FIT VUT, ITU - Tvorba uživatelských rozhraní
+/// Autor: Doubravka Šimůnková (xsimun05)
+
 import 'package:flowlist/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'message_controller.dart';
@@ -45,23 +49,23 @@ class MessagesPageState extends State<MessagesPage> {
   void _loadUserData() async {
     try {
       contactedUser = await userController.getUserData(widget
-          .toUserId); // Předpokládáme, že getUserName je ve vašem controlleru
+          .toUserId); 
 
       setState(() {
         isLoading = false;
       });
     } catch (e) {
-      // Zpracování případných chyb při získávání jména
       const Scaffold(
         body: Center(child: Text('Nepodařilo se načíst data uživatele')),
       );
     }
   }
 
+  //načtení zpráv každách 5 sekund
   void _startPolling() {
     _pollingTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
       setState(() {
-        isFirstLoad = false; // Po prvním načtení již není první načtení
+        isFirstLoad = false;
       });
       messageController.getMessages();
     });
@@ -77,16 +81,18 @@ class MessagesPageState extends State<MessagesPage> {
         timestamp.day == now.day) {
       formatter = DateFormat('HH:mm'); // Pouze hodiny a minuty pro dnešní datum
     } else if (timestamp.year == now.year) {
-      formatter = DateFormat('dd.MM. HH:mm');
+      formatter = DateFormat('dd.MM. HH:mm'); //Datum bez roku, pokud je rok stejný
     } else {
-      formatter = DateFormat('dd.MM. yyyy HH:mm'); // Celé datum, pokud se liší
+      formatter = DateFormat('dd.MM. yyyy HH:mm'); // Celé datum, pokud se rok liší
     }
 
     return formatter.format(timestamp);
   }
 
+  //odeslání zprávy
   void _sendMessage() async {
     final String messageText = _messageController.text;
+    //pokud je text zprávy prázdný nic se nestane
     if (messageText.isEmpty) {
       return;
     }
@@ -107,7 +113,6 @@ class MessagesPageState extends State<MessagesPage> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Odstranění fokusu z jakéhokoli aktuálně zaměřeného widgetu
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
@@ -117,16 +122,17 @@ class MessagesPageState extends State<MessagesPage> {
           title: Container(
             height: 70,
             padding: const EdgeInsets.symmetric(
-                horizontal: 3.0, vertical: 3.0), // Vnější odsazení pro obdélník
+                horizontal: 3.0, vertical: 3.0),
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius:
-                  BorderRadius.all(Radius.circular(20.0)), // Zaoblené rohy
+                  BorderRadius.all(Radius.circular(20.0)), 
             ),
+            //zobrazení profilové fotky a jména toho s kým si píši
             child: Row(
               children: <Widget>[
                 CircleAvatar(
-                  radius: 60, // Zvětšení velikosti CircleAvatar
+                  radius: 60, 
                   backgroundColor: Colors.grey[200],
                   child: ClipOval(
                     child: isLoading
@@ -142,20 +148,26 @@ class MessagesPageState extends State<MessagesPage> {
                   ),
                 ),
                 Expanded(
-                    child: isLoading
-                        ? const Text("Načítání...")
-                        : Text(
-                            "${contactedUser.firstName} ${contactedUser.lastName}", // Jméno uživatele
-                            style: const TextStyle(
-                                color: Colors.black, fontSize: 20),
-                          )),
+                  child: isLoading
+                    ? const Text(
+                      "Načítání...",
+                      style: const TextStyle(
+                              color: Colors.black, fontSize: 20)
+                      )
+                    : Text(
+                        "${contactedUser.firstName} ${contactedUser.lastName}",
+                        style: const TextStyle(
+                            color: Colors.black, fontSize: 20),
+                      )
+                ),
               ],
             ),
           ),
+          //šipka pro návrat zpět
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             color: AppColors.darkGrey,
-            iconSize: 40, // Zvětšení velikosti ikony
+            iconSize: 40, 
             onPressed: () {
               Navigator.pop(context);
             },
@@ -164,6 +176,7 @@ class MessagesPageState extends State<MessagesPage> {
         body: Column(
           children: <Widget>[
             Expanded(
+              //zobrazení zpráv
               child: StreamBuilder<List<Message>>(
                   stream: messageController.messagesStream,
                   builder: (BuildContext context,
@@ -182,6 +195,7 @@ class MessagesPageState extends State<MessagesPage> {
                         reverse: true,
                         itemBuilder: (context, index) {
                           final message = messages[index];
+                          //je správa odeslána mnou?
                           bool isSentByMe =
                               message.fromUserId.toString() != widget.toUserId;
                           String formattedTime =
@@ -189,19 +203,19 @@ class MessagesPageState extends State<MessagesPage> {
 
                           return Align(
                               alignment: isSentByMe
-                                  ? Alignment.centerRight
-                                  : Alignment.centerLeft,
+                                  ? Alignment.centerRight //správy odeslané mnou
+                                  : Alignment.centerLeft, //přijaté zprávy
                               child: Column(
                                   crossAxisAlignment: isSentByMe
-                                      ? CrossAxisAlignment.end
-                                      : CrossAxisAlignment.start,
+                                      ? CrossAxisAlignment.end //správy odeslané mnou
+                                      : CrossAxisAlignment.start, //přijaté zprávy
                                   children: <Widget>[
                                     Container(
                                       margin: const EdgeInsets.symmetric(
                                           horizontal:
-                                              15), // Stejné horizontální odsazení jako u kontejneru zprávy
+                                              15), 
                                       child: Text(
-                                        formattedTime,
+                                        formattedTime, //čas odeslání/přijetí zprávy
                                         style: const TextStyle(
                                             fontSize: 12,
                                             color: AppColors.middleGrey),
@@ -210,13 +224,13 @@ class MessagesPageState extends State<MessagesPage> {
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        if (!isSentByMe) // Zobrazujeme avatara pouze pro přijaté zprávy
+                                        if (!isSentByMe) // Zobrazení avatara odesílatele, pouze pro přijaté zprávy
                                           Padding(
                                             padding: const EdgeInsets.only(
                                                 right: 3.0, left: 15.0),
                                             child: CircleAvatar(
                                               radius:
-                                                  15, // Zvětšení velikosti CircleAvatar
+                                                  15, 
                                               backgroundColor: Colors.grey[200],
                                               child: ClipOval(
                                                 child: isLoading
@@ -237,6 +251,7 @@ class MessagesPageState extends State<MessagesPage> {
                                               ),
                                             ),
                                           ),
+                                        //vzhled zprávy
                                         Container(
                                           constraints: const BoxConstraints(
                                               maxWidth: 330.0),
@@ -246,8 +261,8 @@ class MessagesPageState extends State<MessagesPage> {
                                               vertical: 10, horizontal: 15),
                                           decoration: BoxDecoration(
                                             color: isSentByMe
-                                                ? AppColors.red
-                                                : AppColors.middleGrey,
+                                                ? AppColors.red //odeslané
+                                                : AppColors.middleGrey, //přijaté
                                             borderRadius:
                                                 BorderRadius.circular(20),
                                           ),
@@ -258,7 +273,7 @@ class MessagesPageState extends State<MessagesPage> {
                                                   ? Colors.white
                                                   : Colors.black,
                                               fontSize:
-                                                  16, // Nastavení velikosti písma
+                                                  16, 
                                             ),
                                           ),
                                         ),
@@ -278,6 +293,7 @@ class MessagesPageState extends State<MessagesPage> {
     );
   }
 
+  //okno pro psaní zpráv
   Widget _buildMessageInputField() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
@@ -291,7 +307,7 @@ class MessagesPageState extends State<MessagesPage> {
                 hintText: "Napište zprávu...",
                 contentPadding: const EdgeInsets.symmetric(
                     horizontal: 15,
-                    vertical: 10.0), // Úprava vertikálního paddingu
+                    vertical: 10.0), 
                 border: OutlineInputBorder(
                   borderSide: const BorderSide(width: 3.0),
                   borderRadius: BorderRadius.circular(20.0),
@@ -299,7 +315,7 @@ class MessagesPageState extends State<MessagesPage> {
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20.0),
                   borderSide: const BorderSide(
-                      width: 2.0, color: AppColors.red), // Barva zvýraznění
+                      width: 2.0, color: AppColors.red), 
                 ),
                 filled: true,
                 fillColor: Colors.white,

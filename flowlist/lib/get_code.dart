@@ -1,3 +1,6 @@
+/// Aplikace Flow-List
+/// FIT VUT, ITU - Tvorba uzivatelskych rozhrani
+/// Autor: Jakub Jerabek (xjerab28)
 import 'package:flowlist/calendar_screen.dart';
 import 'package:flutter/material.dart';
 import 'search_page.dart';
@@ -27,17 +30,14 @@ class PsychoUserPageState extends State<PsychoUserPage> {
   }
 
   void _getPairingCode() async {
-    var userInfo = await psychoController
-        .getPairingCode(); // Předpokládáme, že máte tuto funkci
+    var userInfo = await psychoController.getPairingCode();
     if (userInfo['hasPsychologist'] == true) {
-      // Pokud má uživatel přiděleného psychologa, přesměrujte ho na stránku zpráv
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext newContext) =>
                 MessagesPage(toUserId: userInfo['psychoId'].toString())));
       });
     } else {
-      // Uložte kód a aktualizujte UI
       setState(() {
         hasPsychologist = userInfo['hasPsychologist'];
         pairingCode = userInfo['pairingCode'];
@@ -47,13 +47,12 @@ class PsychoUserPageState extends State<PsychoUserPage> {
   }
 
   void _onItemTapped(int index) {
-    // Logika pro navigaci na různé stránky
     switch (index) {
       case 0:
         Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => const CalendarPage()));
         break;
-      // Zde můžete přidat další navigaci pro Search, Notifications atd.
+
       case 1:
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => const SearchPage()));
@@ -72,7 +71,7 @@ class PsychoUserPageState extends State<PsychoUserPage> {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisSize: MainAxisSize.min, // Zajišťuje, že obsah je ve středu
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             const Text(
               'Váš párovací kód:',
@@ -81,20 +80,19 @@ class PsychoUserPageState extends State<PsychoUserPage> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 8.0), // Vytváří vertikální mezeru
+            const SizedBox(height: 8.0),
             Text(
-              code ??
-                  "N/A", // Zobrazuje kód nebo "N/A", pokud kód není dostupný
+              code ?? "N/A",
               style: const TextStyle(
                 fontSize: 24.0,
                 color: AppColors.red,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 16.0), // Další vertikální mezera
+            const SizedBox(height: 16.0),
             const Text(
               'Tento kód slouží ke spárování se svým psychologem. Jeho sdílením souhlasíte s tím, že osoba, se kterou kód sdílíte, bude moci sledovat vaše záznamy a psát vám zprávy.',
-              textAlign: TextAlign.center, // Zarovnává text na střed
+              textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16.0),
             ),
           ],
@@ -125,26 +123,34 @@ class PsychoUserPageState extends State<PsychoUserPage> {
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.home,
-                  color: widget._selectedIndex == 0 ? AppColors.red : AppColors.middleGrey),
+                  color: widget._selectedIndex == 0
+                      ? AppColors.red
+                      : AppColors.middleGrey),
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.search,
-                  color: widget._selectedIndex == 1 ? AppColors.red : AppColors.middleGrey),
+                  color: widget._selectedIndex == 1
+                      ? AppColors.red
+                      : AppColors.middleGrey),
               onPressed: () => _onItemTapped(1),
             ),
-            const SizedBox(width: 48), // Prostor pro Floating Action Button
+            const SizedBox(width: 48),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.message,
-                  color: widget._selectedIndex == 2 ? AppColors.red : AppColors.middleGrey),
+                  color: widget._selectedIndex == 2
+                      ? AppColors.red
+                      : AppColors.middleGrey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.person_outline,
-                  color: widget._selectedIndex == 3 ? AppColors.red : AppColors.middleGrey),
+                  color: widget._selectedIndex == 3
+                      ? AppColors.red
+                      : AppColors.middleGrey),
               onPressed: () => _onItemTapped(3),
             ),
           ],
@@ -156,7 +162,6 @@ class PsychoUserPageState extends State<PsychoUserPage> {
         onPressed: () {
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const NewEntryPage()));
-          // Implementace akce pro Floating Action Button
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
