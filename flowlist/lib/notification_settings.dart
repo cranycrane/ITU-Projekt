@@ -117,9 +117,9 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
       );
     } catch (e) {
       if (!context.mounted) return;
-      String errorMessage = e.toString().split('Exception: ')[1];
+
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Chyba: $errorMessage')));
+          .showSnackBar(SnackBar(content: Text('Chyba: ${e.toString()}')));
     }
   }
 
