@@ -7,6 +7,7 @@ import 'diary_entries_loader.dart';
 import 'diary_controller.dart';
 import 'package:intl/intl.dart'; // Přidání pro formátování data
 import 'get_code.dart';
+import 'app_colors.dart';
 
 class NewEntryPage extends StatefulWidget {
   final DateTime? selectedDay;
@@ -86,7 +87,7 @@ class NewEntryPageState extends State<NewEntryPage> {
             ),
           ),
           duration: Duration(seconds: 3), // Duration of the SnackBar display
-          backgroundColor: Color(0xFFEAEAEA),
+          backgroundColor: AppColors.lightGrey,
         ),
       );
       return; // Do nothing if trying to go into the future from a non-today date
@@ -198,7 +199,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                         const SizedBox(height: 10),
                         TextField(
                           controller: _firstController,
-                          cursorColor: const Color(0xFFE50E2B),
+                          cursorColor: AppColors.red,
                           cursorWidth: 2,
                           decoration: InputDecoration(
                             floatingLabelStyle: const TextStyle(color: Colors.black),
@@ -210,8 +211,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                               borderSide: const BorderSide(
-                                color: Color(
-                                    0xFFE50E2B), // Barva ohraničení při psaní
+                                color: AppColors.red, // Barva ohraničení při psaní
                                 width: 2.0, // Šířka ohraničení
                               ),
                             ),
@@ -223,7 +223,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                         const SizedBox(height: 8),
                         TextField(
                           controller: _secondController,
-                          cursorColor: const Color(0xFFE50E2B),
+                          cursorColor: AppColors.red,
                           cursorWidth: 2,
                           decoration: InputDecoration(
                             floatingLabelStyle: const TextStyle(color: Colors.black),
@@ -233,8 +233,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                               borderSide: const BorderSide(
-                                color: Color(
-                                    0xFFE50E2B), // Barva ohraničení při psaní
+                                color: AppColors.red, // Barva ohraničení při psaní
                                 width: 2.0, // Šířka ohraničení
                               ),
                             ),
@@ -246,7 +245,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                         const SizedBox(height: 8),
                         TextField(
                           controller: _thirdController,
-                          cursorColor: const Color(0xFFE50E2B),
+                          cursorColor: AppColors.red,
                           cursorWidth: 2,
                           decoration: InputDecoration(
                             floatingLabelStyle: const TextStyle(color: Colors.black),
@@ -257,8 +256,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                               borderSide: const BorderSide(
-                                color: Color(
-                                    0xFFE50E2B), // Barva ohraničení při psaní
+                                color: AppColors.red, // Barva ohraničení při psaní
                                 width: 2.0, // Šířka ohraničení
                               ),
                             ),
@@ -284,7 +282,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                               child: TextField(
                                 textAlign: TextAlign.center,
                                 controller: _ratingController,
-                                cursorColor: const Color(0xFFE50E2B),
+                                cursorColor: AppColors.red,
                                 cursorWidth: 2,
                                 decoration: InputDecoration(
                                   floatingLabelStyle:
@@ -292,8 +290,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                     borderSide: const BorderSide(
-                                      color: Color(
-                                          0xFFE50E2B), // Barva ohraničení při psaní
+                                      color: AppColors.red, // Barva ohraničení při psaní
                                       width: 2.0, // Šířka ohraničení
                                     ),
                                   ),
@@ -328,7 +325,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                                         duration: Duration(
                                             seconds:
                                                 3), // Duration of the SnackBar display
-                                        backgroundColor: Color(0xFFEAEAEA),
+                                        backgroundColor: AppColors.lightGrey,
                                       ),
                                     );
                                     return;
@@ -384,7 +381,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                                           duration: const Duration(
                                               seconds:
                                                   3), // Duration of the SnackBar display
-                                          backgroundColor: const Color(0xFFEAEAEA),
+                                          backgroundColor: AppColors.lightGrey,
                                         ),
                                       );
                                     }
@@ -396,7 +393,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
-                                      const Color(0xFF6E6E6E), // Barva tlačítka SMAZAT
+                                      AppColors.darkGrey, // Barva tlačítka SMAZAT
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(
                                         5), // Bez zaoblení
@@ -439,7 +436,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                                           duration: Duration(
                                               seconds:
                                                   3), // Duration of the SnackBar display
-                                          backgroundColor: Color(0xFFEAEAEA),
+                                          backgroundColor: AppColors.lightGrey,
                                         ),
                                       );
                                     }
@@ -460,7 +457,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                                           duration: const Duration(
                                               seconds:
                                                   3), // Duration of the SnackBar display
-                                          backgroundColor: const Color(0xFFEAEAEA),
+                                          backgroundColor: AppColors.lightGrey,
                                         ),
                                       );
                                     }
@@ -468,7 +465,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
-                                      const Color(0xFFE50E2B), // Barva tlačítka ULOŽIT
+                                      AppColors.red, // Barva tlačítka ULOŽIT
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 16),
                                 ),
@@ -496,31 +493,41 @@ class NewEntryPageState extends State<NewEntryPage> {
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.home,
-                  color: _selectedIndex == 0 ? const Color(0xFFE50E2B) : Colors.grey),
+                  color: _selectedIndex == 0 ? AppColors.red : AppColors.middleGrey),
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.search,
-                  color: _selectedIndex == 1 ? const Color(0xFFE50E2B) : Colors.grey),
+                  color: _selectedIndex == 1 ? AppColors.red : AppColors.middleGrey),
               onPressed: () => _onItemTapped(1),
             ),
             const SizedBox(width: 48), // Prostor pro Floating Action Button
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.message,
-                  color: _selectedIndex == 2 ? const Color(0xFFE50E2B) : Colors.grey),
+                  color: _selectedIndex == 2 ? AppColors.red : AppColors.middleGrey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.settings,
-                  color: _selectedIndex == 3 ? const Color(0xFFE50E2B) : Colors.grey),
+                  color: _selectedIndex == 3 ? AppColors.red : AppColors.middleGrey),
               onPressed: () => _onItemTapped(3),
             ),
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.red,
+        child: const Icon(size: 35, Icons.add),
+        onPressed: () {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const NewEntryPage()));
+          // Implementace akce pro Floating Action Button
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

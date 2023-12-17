@@ -6,6 +6,7 @@ import 'flow.dart';
 import 'diary_controller.dart';
 import 'package:intl/intl.dart';
 import 'get_code.dart';
+import 'app_colors.dart';
 
 class SearchPage extends StatefulWidget {
   final int _selectedIndex = 1;
@@ -97,10 +98,10 @@ class SearchPageState extends State<SearchPage> {
                     borderSide: BorderSide.none),
                 filled: true,
                 fillColor: Colors.white,
-                prefixIcon: const Icon(Icons.search, color: Color(0xFFE50E2B)),
+                prefixIcon: const Icon(Icons.search, color: AppColors.red),
                 suffixIcon: _searchController.text.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.clear, color: Color(0xFFE50E2B)),
+                        icon: const Icon(Icons.clear, color: AppColors.red),
                         onPressed: () {
                           setState(() {
                             _searchController.clear();
@@ -128,18 +129,18 @@ class SearchPageState extends State<SearchPage> {
           children: <Widget>[
             IconButton(
               iconSize: 35,
-              icon: Icon(Icons.home, // color: Color(0xFFE50E2B)
+              icon: Icon(Icons.home, // color: AppColors.red
                   color: widget._selectedIndex == 0
-                      ? const Color(0xFFE50E2B)
-                      : Colors.grey),
+                      ? AppColors.red
+                      :  AppColors.middleGrey),
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.search,
                   color: widget._selectedIndex == 1
-                      ? const Color(0xFFE50E2B)
-                      : Colors.grey),
+                      ? AppColors.red
+                      :  AppColors.middleGrey),
               onPressed: () => _onItemTapped(1),
             ),
             const SizedBox(width: 48), // Prostor pro Floating Action Button
@@ -147,24 +148,24 @@ class SearchPageState extends State<SearchPage> {
               iconSize: 35,
               icon: Icon(Icons.message,
                   color: widget._selectedIndex == 2
-                      ? const Color(0xFFE50E2B)
-                      : Colors.grey),
+                      ? AppColors.red
+                      :  AppColors.middleGrey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.person_outline,
                   color: widget._selectedIndex == 3
-                      ? const Color(0xFFE50E2B)
-                      : Colors.grey),
+                      ? AppColors.red
+                      :  AppColors.middleGrey),
               onPressed: () => _onItemTapped(3),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFFE50E2B),
-        child: const Icon(Icons.add),
+        backgroundColor: AppColors.red,
+        child: const Icon(size: 35, Icons.add),
         onPressed: () {
           // Získání aktuálního data
           DateTime currentDate = DateTime.now();
@@ -267,8 +268,7 @@ class SearchPageState extends State<SearchPage> {
         text: text.substring(
             indexOfHighlight, indexOfHighlight + searchTerm.length),
         style: const TextStyle(
-            color: Color(
-                0xFFE50E2B)), // Změna barvy textu na červenou color: Color(0xFFE50E2B)
+            color: AppColors.red), // Změna barvy textu na červenou
       ));
       start = indexOfHighlight + searchTerm.length;
     } while (start < text.length);

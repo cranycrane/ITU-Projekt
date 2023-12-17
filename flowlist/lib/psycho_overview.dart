@@ -1,17 +1,13 @@
 //import 'package:flowlist/calendar_screen.dart';
 import 'package:flowlist/psycho_controller.dart';
 import 'package:flutter/material.dart';
-//import 'search_page.dart';
-//import 'add_note.dart';
-//import 'user_controller.dart';
-//import 'package:image_picker/image_picker.dart';
-//import 'package:image_cropper/image_cropper.dart';
 import 'dart:io';
 //import 'package:permission_handler/permission_handler.dart';
 import 'user_profile.dart';
 import 'calendar_client.dart';
 import 'settings_page.dart';
 import 'package:intl/intl.dart';
+import 'app_colors.dart';
 
 class PsychoOverviewPage extends StatefulWidget {
   const PsychoOverviewPage({super.key});
@@ -61,18 +57,18 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Odebrat uživatele',
-              style: TextStyle(color: Color(0xFFE50E2B))),
+              style: TextStyle(color: AppColors.red)),
           content: Text(
               'Chcete opravdu odebrat uživatele ${user.firstName} ${user.lastName}?'),
           actions: <Widget>[
             TextButton(
-              child: const Text('Zrušit', style: TextStyle(color: Colors.grey)),
+              child: const Text('Zrušit', style: TextStyle(color: AppColors.middleGrey)),
               onPressed: () =>
                   Navigator.of(context).pop(), // Zavře dialogové okno
             ),
             TextButton(
               child: const Text('Odebrat',
-                  style: TextStyle(color: Color(0xFFE50E2B))),
+                  style: TextStyle(color: AppColors.red)),
               onPressed: () async {
                 try {
                   await psychoController.unPairWithClient(user);
@@ -129,12 +125,12 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                 filled: true,
                 fillColor: Colors.white,
                 prefixIcon: const Icon(Icons.search,
-                    color: Color(0xFFE50E2B)), // Červená barva pro lupu
+                    color: AppColors.red), // Červená barva pro lupu
                 suffixIcon: _searchController.text.isNotEmpty
                     ? IconButton(
                         icon: const Icon(Icons.clear,
                             color:
-                                Color(0xFFE50E2B)), // Červená barva pro křížek
+                                AppColors.red), // Červená barva pro křížek
                         onPressed: () {
                           _searchController.clear();
                           _performSearch('');
@@ -169,12 +165,12 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                     child: Container(
                       padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFEAEAEA),
+                        color: AppColors.lightGrey,
                         //color: Colors.white, // Barva pozadí karty
                         borderRadius:
                             BorderRadius.circular(10), // Zaoblené rohy karty
                         border: Border.all(
-                            color: Colors.grey.shade300), // Šedý rámeček
+                            color: AppColors.middleGrey), // Šedý rámeček
                       ),
                       child: Row(
                         children: <Widget>[
@@ -238,7 +234,7 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete,
-                                color: Color(0xFF6E6E6E)),
+                                color: AppColors.darkGrey),
                             onPressed: () =>
                                 _showDeleteConfirmationDialog(user),
                             // Přidat logiku pro smazání uživatele
@@ -270,11 +266,11 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                   builder: (context) => const SettingsPage()));
             },
             style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.red,
+              foregroundColor: AppColors.red,
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18.0),
-                side: const BorderSide(color: Colors.red),
+                side: const BorderSide(color: AppColors.red),
               ),
             ),
             child: const Padding(
@@ -282,7 +278,7 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
               child: Text(
                 'MÓD BĚŽNÝ UŽIVATEL',
                 style: TextStyle(
-                  color: Colors.red,
+                  color: AppColors.red,
                   fontSize: 19.0,
                 ),
               ),
@@ -352,7 +348,7 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                 }
               }
             },
-            backgroundColor: const Color(0xFFE50E2B),
+            backgroundColor: AppColors.red,
             child: const Icon(Icons.add),
           ),
         ],

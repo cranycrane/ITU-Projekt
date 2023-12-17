@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'set_name.dart';
+import 'app_colors.dart';
 
 class WelcomePage2 extends StatefulWidget {
   const WelcomePage2({super.key});
@@ -70,7 +71,7 @@ class _WelcomePageState2 extends State<WelcomePage2> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white, 
-                      backgroundColor: const Color(0xFFE50E2B),
+                      backgroundColor: AppColors.red,
                       padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 12.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(40.0),

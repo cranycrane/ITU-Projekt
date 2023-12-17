@@ -5,6 +5,7 @@ import 'add_note.dart';
 import 'psycho_controller.dart';
 import 'messages_page.dart';
 import 'settings_page.dart';
+import 'app_colors.dart';
 
 class PsychoUserPage extends StatefulWidget {
   final int _selectedIndex = 2;
@@ -86,7 +87,7 @@ class PsychoUserPageState extends State<PsychoUserPage> {
                   "N/A", // Zobrazuje kód nebo "N/A", pokud kód není dostupný
               style: const TextStyle(
                 fontSize: 24.0,
-                color: Color(0xFFE50E2B),
+                color: AppColors.red,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -124,34 +125,34 @@ class PsychoUserPageState extends State<PsychoUserPage> {
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.home,
-                  color: widget._selectedIndex == 0 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 0 ? AppColors.red : AppColors.middleGrey),
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.search,
-                  color: widget._selectedIndex == 1 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 1 ? AppColors.red : AppColors.middleGrey),
               onPressed: () => _onItemTapped(1),
             ),
             const SizedBox(width: 48), // Prostor pro Floating Action Button
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.message,
-                  color: widget._selectedIndex == 2 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 2 ? AppColors.red : AppColors.middleGrey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.person_outline,
-                  color: widget._selectedIndex == 3 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 3 ? AppColors.red : AppColors.middleGrey),
               onPressed: () => _onItemTapped(3),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red,
-        child: const Icon(Icons.add),
+        backgroundColor: AppColors.red,
+        child: const Icon(size: 35, Icons.add),
         onPressed: () {
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const NewEntryPage()));

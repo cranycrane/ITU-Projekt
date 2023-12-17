@@ -7,6 +7,7 @@ import 'diary_controller.dart';
 //import 'diary_entries_loader.dart';
 import 'flow.dart';
 import 'get_code.dart';
+import 'app_colors.dart';
 
 class CalendarPage extends StatefulWidget {
   final int _selectedIndex = 0;
@@ -116,8 +117,7 @@ class CalendarPageState extends State<CalendarPage> {
                         margin:
                             const EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
                         decoration: BoxDecoration(
-                          color: const Color(
-                              0xFFE2AFB6), // Zde změňte barvu na požadovanou
+                          color: AppColors.lightRed, // Zde změňte barvu na požadovanou
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Center(
@@ -136,15 +136,14 @@ class CalendarPageState extends State<CalendarPage> {
                         margin:
                             const EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
                         decoration: BoxDecoration(
-                          color: const Color(
-                              0xFFBBBBBB), // Zde změňte barvu na požadovanou
+                          color: AppColors.middleGrey, // Zde změňte barvu na požadovanou
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Center(
                           child: Text(
                             '${day.day}',
                             style: const TextStyle(
-                                color: Color(0xFF6E6E6E),
+                                color: AppColors.darkGrey,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15),
                           ),
@@ -156,8 +155,7 @@ class CalendarPageState extends State<CalendarPage> {
                         margin: const EdgeInsets.symmetric(
                             horizontal: 6.0, vertical: 6.0),
                         decoration: BoxDecoration(
-                          color: const Color(
-                              0xFFEAEAEA), // Zde změňte barvu na požadovanou
+                          color: AppColors.lightGrey, // Zde změňte barvu na požadovanou
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Center(
@@ -176,8 +174,7 @@ class CalendarPageState extends State<CalendarPage> {
                         margin: const EdgeInsets.symmetric(
                             horizontal: 6.0, vertical: 6.0),
                         decoration: BoxDecoration(
-                          color: const Color(
-                              0xFFE50E2B), // Zde změňte barvu na požadovanou
+                          color: AppColors.red, // Zde změňte barvu na požadovanou
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Center(
@@ -212,7 +209,7 @@ class CalendarPageState extends State<CalendarPage> {
                         } else if (isSameDay(date, DateTime.now())) {
                           textColor = Colors.black;
                         } else if (_focusedDay.month != date.month) {
-                          textColor = Color(0xFF6E6E6E);
+                          textColor = AppColors.darkGrey;
                         } else {
                           textColor = Colors.black;
                         }
@@ -335,7 +332,7 @@ class CalendarPageState extends State<CalendarPage> {
                                         const BoxConstraints(minHeight: 50.0),
                                     decoration: BoxDecoration(
                                       border: Border.all(
-                                          color: const Color(0xFFBCBCBC),
+                                          color: AppColors.middleGrey,
                                           width: 1.8), // Optional: Add border
                                       borderRadius: BorderRadius.circular(
                                           10.0), // Optional: Add border radius
@@ -348,8 +345,7 @@ class CalendarPageState extends State<CalendarPage> {
                                       record?.record1 ?? '',
                                       maxLines: 2,
                                       style: const TextStyle(
-                                          color: Color(
-                                              0xFF5b5b5b)), // Set text color
+                                          color: AppColors.darkGrey), // Set text color
                                     ),
                                   ),
                                 if ((record?.record2 ?? '').isNotEmpty)
@@ -359,7 +355,7 @@ class CalendarPageState extends State<CalendarPage> {
                                         const BoxConstraints(minHeight: 50.0),
                                     decoration: BoxDecoration(
                                       border: Border.all(
-                                          color: const Color(0xFFBCBCBC),
+                                          color: AppColors.middleGrey,
                                           width: 1.8), // Optional: Add border
                                       borderRadius: BorderRadius.circular(
                                           10.0), // Optional: Add border radius
@@ -372,8 +368,7 @@ class CalendarPageState extends State<CalendarPage> {
                                       record?.record2 ?? '',
                                       maxLines: 2,
                                       style: const TextStyle(
-                                          color: Color(
-                                              0xFF5b5b5b)), // Set text color
+                                          color: AppColors.darkGrey), // Set text color
                                     ),
                                   ),
                                 if ((record?.record3 ?? '').isNotEmpty)
@@ -383,7 +378,7 @@ class CalendarPageState extends State<CalendarPage> {
                                         const BoxConstraints(minHeight: 50.0),
                                     decoration: BoxDecoration(
                                       border: Border.all(
-                                          color: const Color(0xFFBCBCBC),
+                                          color: AppColors.middleGrey,
                                           width: 1.8), // Optional: Add border
                                       borderRadius: BorderRadius.circular(
                                           10.0), // Optional: Add border radius
@@ -396,8 +391,7 @@ class CalendarPageState extends State<CalendarPage> {
                                       record?.record3 ?? '',
                                       maxLines: 2,
                                       style: const TextStyle(
-                                          color: Color(
-                                              0xFF5b5b5b)), // Set text color
+                                          color: AppColors.darkGrey), // Set text color
                                     ),
                                   ),
                               ],
@@ -417,13 +411,13 @@ class CalendarPageState extends State<CalendarPage> {
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.home,
-                  color: widget._selectedIndex == 0 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 0 ? AppColors.red : AppColors.middleGrey),
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.search,
-                  color: widget._selectedIndex == 1 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 1 ? AppColors.red : AppColors.middleGrey),
               onPressed: () => _onItemTapped(1),
             ),
             const SizedBox(
@@ -431,20 +425,20 @@ class CalendarPageState extends State<CalendarPage> {
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.message,
-                  color: widget._selectedIndex == 2 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 2 ? AppColors.red : AppColors.middleGrey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.person_outline,
-                  color: widget._selectedIndex == 3 ? Colors.red : Colors.grey),
+                  color: widget._selectedIndex == 3 ? AppColors.red : AppColors.middleGrey),
               onPressed: () => _onItemTapped(3),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red,
+        backgroundColor: AppColors.red,
         child: const Icon(size: 35, Icons.add),
         onPressed: () {
           // Akce pro FloatingActionButton

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'app_colors.dart';
 
 class NotificationSettingsPage extends StatefulWidget {
   @override
@@ -85,7 +86,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
           ),
         ),
         duration: Duration(seconds: 3), // Duration of the SnackBar display
-        backgroundColor: Color(0xFFEAEAEA),
+        backgroundColor: AppColors.lightGrey,
       ),
     );
   }
@@ -103,7 +104,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
         return Theme(
           data: Theme.of(context).copyWith(
               colorScheme: const ColorScheme.light(
-              primary: Colors.red,
+              primary: AppColors.red,
               )
           ),
           child: MediaQuery(
@@ -132,13 +133,13 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
          appBar: AppBar(
         title: const Text(
           'Nastavení upozornění',
-          style: TextStyle(fontSize: 22, color: Color(0xFF61646B)),
+          style: TextStyle(fontSize: 22, color:  AppColors.darkGrey),
         ),
         backgroundColor: Colors.white,
         toolbarHeight: 60,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          color: const Color(0xFF61646B),
+          color:  AppColors.darkGrey,
           iconSize: 40, // Zvětšení velikosti ikony
           onPressed: () {
             Navigator.pop(context);
@@ -158,7 +159,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                     const SizedBox(width: 30),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
+                        backgroundColor: AppColors.red,
                         // Zmenšení šířky tlačítka na 40% šířky obrazovky a výšky na 50
                       ),
                       onPressed: () => _selectTime(context),
@@ -211,7 +212,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                   // Zobrazit TextField pouze pokud je vybrána možnost "Vlastní"
                   if (isCustomOption)
                     TextField(
-                      cursorColor: const Color(0xFFE50E2B),
+                      cursorColor:  AppColors.red,
                       cursorWidth: 2,
                       controller: _ownNotificationController,
                       textAlign: TextAlign.center,
@@ -221,15 +222,14 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           borderSide: const BorderSide(
-                            color:
-                                Color(0xFFE50E2B), // Barva ohraničení při psaní
+                            color:AppColors.red, // Barva ohraničení při psaní
                             width: 2.0, // Šířka ohraničení
                           ),
                         ),
                         hintText: 'Text upozornění',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
-                            borderSide: const BorderSide(color: Color(0xFFBCBCBC))),
+                            borderSide: const BorderSide(color: AppColors.lightGrey)),
                         filled: true,
                         fillColor: Colors.white,
                       ),
@@ -254,7 +254,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
+                      backgroundColor: AppColors.red,
                       // Zmenšení šířky tlačítka na 40% šířky obrazovky a výšky na 50
                     ),
                     onPressed: _scheduleNotification,
