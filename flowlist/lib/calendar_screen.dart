@@ -68,16 +68,16 @@ class CalendarPageState extends State<CalendarPage> {
       case 0:
         break;
       case 1:
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => const SearchPage()));
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const SearchPage()));
         break;
       case 2:
-        Navigator.of(context).push(
+        Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => const PsychoUserPage()));
 
         break;
       case 3:
-        Navigator.of(context).push(
+        Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => const SettingsPage()));
         break;
       default:
@@ -286,7 +286,7 @@ class CalendarPageState extends State<CalendarPage> {
             Expanded(
                 child: GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(
+                      Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (context) =>
                               NewEntryPage(selectedDay: _selectedDay),
@@ -420,7 +420,7 @@ class CalendarPageState extends State<CalendarPage> {
         backgroundColor: AppColors.red,
         child: const Icon(size: 35, Icons.add),
         onPressed: () {
-          Navigator.of(context).push(
+          Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) => NewEntryPage(selectedDay: _selectedDay),
             ),

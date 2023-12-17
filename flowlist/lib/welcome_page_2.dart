@@ -2,18 +2,20 @@
 /// FIT VUT, ITU - Tvorba uzivatelskych rozhrani
 /// Autor: Jakub Jerabek (xjerab28)
 ///
+import 'package:flowlist/calendar_screen.dart';
 import 'package:flutter/material.dart';
 import 'set_name.dart';
 import 'app_colors.dart';
 
 class WelcomePage2 extends StatefulWidget {
-  const WelcomePage2({super.key});
+  bool onlyLooking;
+  WelcomePage2({super.key, required this.onlyLooking});
 
   @override
-  _WelcomePageState2 createState() => _WelcomePageState2();
+  WelcomePageState2 createState() => WelcomePageState2();
 }
 
-class _WelcomePageState2 extends State<WelcomePage2> {
+class WelcomePageState2 extends State<WelcomePage2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,12 +24,12 @@ class _WelcomePageState2 extends State<WelcomePage2> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Image.asset(
             'assets/whyFlowlist.png',
             width: MediaQuery.of(context).size.width * 0.6,
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           const Padding(
             padding: EdgeInsets.all(16.0),
             child: FittedBox(
@@ -81,8 +83,11 @@ class _WelcomePageState2 extends State<WelcomePage2> {
                 ),
               ),
               onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const setNamePage()));
+                widget.onlyLooking
+                    ? Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const setNamePage()))
+                    : Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const CalendarPage()));
               },
               child: const Text(
                 'JDU DO TOHO',

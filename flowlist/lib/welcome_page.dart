@@ -67,7 +67,8 @@ class _WelcomePageState extends State<WelcomePage> {
               ),
               onPressed: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => const WelcomePage2()));
+                    builder: (context) =>
+                        WelcomePage2(onlyLooking: widget.onlyLooking)));
               },
               child: const Text(
                 'POKRAČOVAT',
