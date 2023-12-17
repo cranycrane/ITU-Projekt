@@ -1,14 +1,14 @@
-//import 'package:flowlist/calendar_screen.dart';
+
 import 'package:flowlist/psycho_controller.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
-//import 'package:permission_handler/permission_handler.dart';
 import 'user_profile.dart';
 import 'calendar_client.dart';
 import 'settings_page.dart';
 import 'package:intl/intl.dart';
 import 'app_colors.dart';
 
+// Definice třídy stavového widgetu pro stránku přehledu
 class PsychoOverviewPage extends StatefulWidget {
   const PsychoOverviewPage({super.key});
 
@@ -16,12 +16,14 @@ class PsychoOverviewPage extends StatefulWidget {
   PsychoOverviewPageState createState() => PsychoOverviewPageState();
 }
 
+// Třída stavu pro stránku přehledu
 class PsychoOverviewPageState extends State<PsychoOverviewPage> {
+  // Deklarace proměnných pro uchování dat uživatelů
   late Future<List<UserProfile>> pairedUsers;
   final TextEditingController _searchController =
-      TextEditingController(); // Přidáno
-  List<UserProfile> _allUsers = []; // Přidáno
-  List<UserProfile> _filteredUsers = []; // Přidáno
+      TextEditingController(); 
+  List<UserProfile> _allUsers = [];  
+  List<UserProfile> _filteredUsers = []; 
 
   @override
   void initState() {
@@ -29,18 +31,19 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
     _initializeUsers();
   }
 
+// Načtení párovaných uživatelů a jejich nastavení do stavu
   void _initializeUsers() async {
     _allUsers = await psychoController
-        .getPairedUsers(); // Předpokládá se, že psychoController má tuto funkci
+        .getPairedUsers(); 
     setState(() {
       _filteredUsers = _allUsers;
     });
   }
 
+// Funkce pro vyhledávání uživatelů na základě zadaného dotazu
   void _performSearch(String query) {
     query = query.toLowerCase();
     List<UserProfile> filteredList = _allUsers.where((user) {
-      // Předpokládá, že UserProfile má vlastnosti firstName a lastName
       String userName =
           '${user.firstName.toLowerCase()} ${user.lastName.toLowerCase()}';
       return userName.contains(query);
@@ -51,6 +54,7 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
     });
   }
 
+  // Dialogové okno pro potvrzení odstranění uživatele
   void _showDeleteConfirmationDialog(UserProfile user) {
     showDialog(
       context: context,
@@ -100,12 +104,14 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
     );
   }
 
+  // Formátování data a času
   String formatDateTime(DateTime dateTime) {
     final DateFormat formatter =
-        DateFormat('d. M. yyyy'); // Formát d. MMMM yyyy, jazyk čeština
+        DateFormat('d. M. yyyy'); 
     return formatter.format(dateTime);
   }
 
+// Zde je vybudována celé uživatelské rozhraní stránky
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,12 +131,12 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                 filled: true,
                 fillColor: Colors.white,
                 prefixIcon: const Icon(Icons.search,
-                    color: AppColors.red), // Červená barva pro lupu
+                    color: AppColors.red), 
                 suffixIcon: _searchController.text.isNotEmpty
                     ? IconButton(
                         icon: const Icon(Icons.clear,
                             color:
-                                AppColors.red), // Červená barva pro křížek
+                                AppColors.red), 
                         onPressed: () {
                           _searchController.clear();
                           _performSearch('');
@@ -158,7 +164,7 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                   child: Card(
                     shape: RoundedRectangleBorder(
                       borderRadius:
-                          BorderRadius.circular(10), // Zaoblené rohy karty
+                          BorderRadius.circular(10), 
                     ),
                     margin:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -166,11 +172,11 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                       padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
                         color: AppColors.lightGrey,
-                        //color: Colors.white, // Barva pozadí karty
+                        
                         borderRadius:
-                            BorderRadius.circular(10), // Zaoblené rohy karty
+                            BorderRadius.circular(10), 
                         border: Border.all(
-                            color: AppColors.middleGrey), // Šedý rámeček
+                            color: AppColors.middleGrey), 
                       ),
                       child: Row(
                         children: <Widget>[
@@ -183,16 +189,16 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                                 return CircleAvatar(
                                   radius: 30.0,
                                   backgroundColor: Colors
-                                      .grey[200], // Upravte podle vaší potřeby
+                                      .grey[200], 
                                   child: const CircularProgressIndicator(),
                                 );
                               } else if (snapshot.hasError ||
                                   snapshot.data == null) {
                                 return CircleAvatar(
                                   radius:
-                                      30.0, // Upravte velikost podle vaší potřeby
+                                      30.0, 
                                   backgroundColor: Colors
-                                      .grey[200], // Upravte podle vaší potřeby
+                                      .grey[200], 
                                   child: const Icon(Icons.person, size: 50.0),
                                 );
                               } else {
@@ -200,9 +206,9 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                                   child: Image.file(
                                     snapshot.data!,
                                     width:
-                                        60.0, // Upravte šířku podle vaší potřeby
+                                        60.0, 
                                     height:
-                                        60.0, // Upravte výšku podle vaší potřeby
+                                        60.0, 
                                     fit: BoxFit.cover,
                                   ),
                                 );
@@ -218,7 +224,7 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                                   "${user.firstName} ${user.lastName}",
                                   style: const TextStyle(
                                       fontSize:
-                                          18), // Upravte velikost písma podle vaší potřeby
+                                          18), 
                                 ),
                                 Text(
                                   user.lastRecordDate != null
@@ -237,7 +243,7 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                                 color: AppColors.darkGrey),
                             onPressed: () =>
                                 _showDeleteConfirmationDialog(user),
-                            // Přidat logiku pro smazání uživatele
+                           
                           ),
                         ],
                       ),
@@ -246,9 +252,9 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                 );
               },
               padding: const EdgeInsets.only(
-                // Přidání paddingu na spodní část
+                
                 bottom: kBottomNavigationBarHeight +
-                    16, // Výška spodní navigace plus další prostor
+                    16, 
               ),
             ),
           ),
@@ -257,11 +263,11 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
       floatingActionButton: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment:
-            MainAxisAlignment.center, // Zarovnání tlačítek do prava
+            MainAxisAlignment.center, 
         children: <Widget>[
           ElevatedButton(
             onPressed: () {
-              // Akce pro normální tlačítko
+              
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const SettingsPage()));
             },
@@ -349,12 +355,11 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
               }
             },
             backgroundColor: AppColors.red,
-            child: const Icon(Icons.add),
+            child: const Icon(size: 35 , Icons.add),
           ),
         ],
       ),
     );
   }
 
-  // Zde můžete přidat funkce getPairedUsers a getUserPhoto...
 }

@@ -5,10 +5,11 @@ import 'settings_page.dart';
 import 'flow.dart';
 import 'diary_entries_loader.dart';
 import 'diary_controller.dart';
-import 'package:intl/intl.dart'; // Přidání pro formátování data
+import 'package:intl/intl.dart';
 import 'get_code.dart';
 import 'app_colors.dart';
 
+// Definice třídy stavového widgetu pro stránku nového záznamu
 class NewEntryPage extends StatefulWidget {
   final DateTime? selectedDay;
 
@@ -18,6 +19,7 @@ class NewEntryPage extends StatefulWidget {
   NewEntryPageState createState() => NewEntryPageState();
 }
 
+// Třída stavu pro stránku nového záznamu
 class NewEntryPageState extends State<NewEntryPage> {
   late DateTime selectedDate; // Přidáno pro sledování vybraného data
   final TextEditingController _firstController = TextEditingController();
@@ -34,6 +36,7 @@ class NewEntryPageState extends State<NewEntryPage> {
   @override
   void initState() {
     super.initState();
+    // Inicializace a načtení dat při vytvoření stránky
     selectedDate = widget.selectedDay ?? DateTime.now();
     _recordFuture = _loadData(selectedDate);
   }
@@ -53,21 +56,21 @@ class NewEntryPageState extends State<NewEntryPage> {
     return await loader.loadDiaryEntries(selectedDay);
   }
 
+  // Funkce pro vytvoření záznamu
   Future<bool> createEntry(FlowData record) async {
     try {
-      // Zde předpokládáme, že `diaryController.createEntry(record)` vrací budoucnost (Future)
       await diaryController.createEntry(record);
-      return true; // Úspěch
+      return true;
     } catch (e) {
       throw Exception('Chyba: $e');
     }
   }
 
+  // Funkce pro vymazání záznamu
   Future<bool> deleteEntry() async {
     try {
-      // Zde předpokládáme, že `diaryController.createEntry(record)` vrací budoucnost (Future)
       await diaryController.deleteEntry(selectedDate);
-      return true; // Úspěch
+      return true;
     } catch (e) {
       throw Exception('Chyba při mazání záznamu: $e');
     }
@@ -76,21 +79,20 @@ class NewEntryPageState extends State<NewEntryPage> {
   void _changeDay(int days) {
     final DateTime newDate = selectedDate.add(Duration(days: days));
 
-    // Check if the new date is in the future and if the selected date is not today
     if (newDate.isAfter(DateTime.now()) && selectedDate != DateTime.now()) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
             "Nelze pracovat se dny v budoucnosti",
             style: TextStyle(
-              color: Colors.black, // Text color
+              color: Colors.black, 
             ),
           ),
-          duration: Duration(seconds: 3), // Duration of the SnackBar display
+          duration: Duration(seconds: 3), 
           backgroundColor: AppColors.lightGrey,
         ),
       );
-      return; // Do nothing if trying to go into the future from a non-today date
+      return;
     }
     setState(() {
       selectedDate = selectedDate.add(Duration(days: days));
@@ -99,6 +101,7 @@ class NewEntryPageState extends State<NewEntryPage> {
     });
   }
 
+ // Implementace navigace na základě vybrané položky v navigační liště
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -126,13 +129,14 @@ class NewEntryPageState extends State<NewEntryPage> {
 
   @override
   Widget build(BuildContext context) {
-    //final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+     // Tělo widgetu s konstrukcí uživatelského rozhraní
     final double screenHeight = MediaQuery.of(context).size.height;
 
     String formattedDate =
         DateFormat('EEEE d.M.yyyy', 'cs_CZ').format(selectedDate).toUpperCase();
 
     return Scaffold(
+      // Nastavení vzhledu a funkcí AppBar, těla stránky a navigační lišty
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Row(
@@ -211,8 +215,8 @@ class NewEntryPageState extends State<NewEntryPage> {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                               borderSide: const BorderSide(
-                                color: AppColors.red, // Barva ohraničení při psaní
-                                width: 2.0, // Šířka ohraničení
+                                color: AppColors.red, 
+                                width: 2.0,
                               ),
                             ),
                             fillColor: Colors.white,
@@ -233,8 +237,8 @@ class NewEntryPageState extends State<NewEntryPage> {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                               borderSide: const BorderSide(
-                                color: AppColors.red, // Barva ohraničení při psaní
-                                width: 2.0, // Šířka ohraničení
+                                color: AppColors.red, 
+                                width: 2.0, 
                               ),
                             ),
                             fillColor: Colors.white,
@@ -256,8 +260,8 @@ class NewEntryPageState extends State<NewEntryPage> {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                               borderSide: const BorderSide(
-                                color: AppColors.red, // Barva ohraničení při psaní
-                                width: 2.0, // Šířka ohraničení
+                                color: AppColors.red, 
+                                width: 2.0, 
                               ),
                             ),
                             fillColor: Colors.white,
@@ -290,8 +294,8 @@ class NewEntryPageState extends State<NewEntryPage> {
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                     borderSide: const BorderSide(
-                                      color: AppColors.red, // Barva ohraničení při psaní
-                                      width: 2.0, // Šířka ohraničení
+                                      color: AppColors.red, 
+                                      width: 2.0, 
                                     ),
                                   ),
                                   hintText: '/10',
@@ -319,12 +323,12 @@ class NewEntryPageState extends State<NewEntryPage> {
                                         content: Text(
                                           "Nelze smazat záznam, který nebyl uložen!",
                                           style: TextStyle(
-                                            color: Colors.black, // Text color
+                                            color: Colors.black, 
                                           ),
                                         ),
                                         duration: Duration(
                                             seconds:
-                                                3), // Duration of the SnackBar display
+                                                3), 
                                         backgroundColor: AppColors.lightGrey,
                                       ),
                                     );
@@ -375,12 +379,12 @@ class NewEntryPageState extends State<NewEntryPage> {
                                           content: Text(
                                             message,
                                             style: const TextStyle(
-                                              color: Colors.black, // Text color
+                                              color: Colors.black,
                                             ),
                                           ),
                                           duration: const Duration(
                                               seconds:
-                                                  3), // Duration of the SnackBar display
+                                                  3), 
                                           backgroundColor: AppColors.lightGrey,
                                         ),
                                       );
@@ -393,10 +397,10 @@ class NewEntryPageState extends State<NewEntryPage> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
-                                      AppColors.darkGrey, // Barva tlačítka SMAZAT
+                                      AppColors.darkGrey, 
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(
-                                        5), // Bez zaoblení
+                                        5), 
                                   ),
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 16),
@@ -421,7 +425,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                                       day: selectedDate);
 
                                   try {
-                                    // Zde předpokládáme, že `diaryController.createEntry(record)` vrací budoucnost (Future)
+                                    
                                     await diaryController.createEntry(record);
                                     if (mounted) {
                                       ScaffoldMessenger.of(savedContext)
@@ -430,12 +434,12 @@ class NewEntryPageState extends State<NewEntryPage> {
                                           content: Text(
                                             "Záznam byl úspěšně přidán",
                                             style: TextStyle(
-                                              color: Colors.black, // Text color
+                                              color: Colors.black,
                                             ),
                                           ),
                                           duration: Duration(
                                               seconds:
-                                                  3), // Duration of the SnackBar display
+                                                  3), 
                                           backgroundColor: AppColors.lightGrey,
                                         ),
                                       );
@@ -451,12 +455,12 @@ class NewEntryPageState extends State<NewEntryPage> {
                                           content: Text(
                                             'Chyba: $errorMessage',
                                             style: const TextStyle(
-                                              color: Colors.black, // Text color
+                                              color: Colors.black, 
                                             ),
                                           ),
                                           duration: const Duration(
                                               seconds:
-                                                  3), // Duration of the SnackBar display
+                                                  3), 
                                           backgroundColor: AppColors.lightGrey,
                                         ),
                                       );
@@ -465,7 +469,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
-                                      AppColors.red, // Barva tlačítka ULOŽIT
+                                      AppColors.red, 
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 16),
                                 ),
@@ -502,7 +506,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                   color: _selectedIndex == 1 ? AppColors.red : AppColors.middleGrey),
               onPressed: () => _onItemTapped(1),
             ),
-            const SizedBox(width: 48), // Prostor pro Floating Action Button
+            const SizedBox(width: 48), 
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.message,
@@ -524,7 +528,6 @@ class NewEntryPageState extends State<NewEntryPage> {
         onPressed: () {
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const NewEntryPage()));
-          // Implementace akce pro Floating Action Button
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

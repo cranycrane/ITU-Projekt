@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'get_code.dart';
 import 'app_colors.dart';
 
+// Definice třídy stavového widgetu pro vyhledávací stránku
 class SearchPage extends StatefulWidget {
   final int _selectedIndex = 1;
 
@@ -17,6 +18,7 @@ class SearchPage extends StatefulWidget {
   SearchPageState createState() => SearchPageState();
 }
 
+// Třída stavu pro vyhledávací stránku
 class SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
   List<FlowData> _allRecords = []; // List pro uložení všech záznamů
@@ -26,20 +28,21 @@ class SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     super.initState();
-    _fetchAllRecords();
+    _fetchAllRecords(); // Načtení všech záznamů při inicializaci
   }
 
   void _fetchAllRecords() async {
+    // Asynchronní načtení všech záznamů
     List<FlowData> records = await diaryController.readEntries();
     setState(() {
-      _allRecords = records;
+      _allRecords = records; // Uložení záznamů do stavu
     });
   }
 
   void _performSearch(String query) async {
     List<FlowData> filteredRecords = await _filterEntries(query);
     setState(() {
-      _filteredRecords = filteredRecords;
+      _filteredRecords = filteredRecords; // Aktualizace stavu s filtrovanými záznamy
     });
   }
 
@@ -61,6 +64,7 @@ class SearchPageState extends State<SearchPage> {
     }).toList();
   }
 
+ // Implementace navigace na základě vybrané položky v navigační liště
   void _onItemTapped(int index) {
     switch (index) {
       case 0:
@@ -68,7 +72,7 @@ class SearchPageState extends State<SearchPage> {
             MaterialPageRoute(builder: (context) => const CalendarPage()));
         break;
       case 1:
-        // Již jsme na vyhledávací stránce, není potřeba akce
+
         break;
       case 2:
         Navigator.of(context)
@@ -84,6 +88,7 @@ class SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Zde je vybudováné celé uživatelské rozhraní stránky
       resizeToAvoidBottomInset: false,
       body: ListView(
         children: <Widget>[
@@ -111,7 +116,6 @@ class SearchPageState extends State<SearchPage> {
                     : null,
               ),
               onChanged: (value) {
-                // Implementace pro vyhledávání záznamů
                 _performSearch(value);
               },
               onSubmitted: (value) {},
@@ -129,7 +133,7 @@ class SearchPageState extends State<SearchPage> {
           children: <Widget>[
             IconButton(
               iconSize: 35,
-              icon: Icon(Icons.home, // color: AppColors.red
+              icon: Icon(Icons.home, 
                   color: widget._selectedIndex == 0
                       ? AppColors.red
                       :  AppColors.middleGrey),
@@ -143,7 +147,7 @@ class SearchPageState extends State<SearchPage> {
                       :  AppColors.middleGrey),
               onPressed: () => _onItemTapped(1),
             ),
-            const SizedBox(width: 48), // Prostor pro Floating Action Button
+            const SizedBox(width: 48),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.message,
@@ -176,13 +180,13 @@ class SearchPageState extends State<SearchPage> {
               builder: (context) => NewEntryPage(selectedDay: currentDate),
             ),
           );
-          // Implementace akce pro Floating Action Button
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
+// Vytvoření widgetu pro zobrazení výsledků vyhledávání
   Widget _buildSearchResults() {
     if (_searchController.text.isEmpty) {
       return const Center(child: Text("Zadejte hledaný výraz."));
@@ -242,7 +246,7 @@ class SearchPageState extends State<SearchPage> {
     );
   }
 
-// Helper method to highlight search term
+// Funkce pro zvýraznění vyhledávaného termínu ve výsledcích
   Widget _highlightSearchTerm(String text, String searchTerm) {
     if (searchTerm.isEmpty) {
       return Text(text);
@@ -268,7 +272,7 @@ class SearchPageState extends State<SearchPage> {
         text: text.substring(
             indexOfHighlight, indexOfHighlight + searchTerm.length),
         style: const TextStyle(
-            color: AppColors.red), // Změna barvy textu na červenou
+            color: AppColors.red),
       ));
       start = indexOfHighlight + searchTerm.length;
     } while (start < text.length);
