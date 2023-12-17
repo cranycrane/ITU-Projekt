@@ -90,6 +90,10 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
           NotificationDetails(
               android: AndroidNotificationDetails('0', 'Flow-lístek',
                   icon: 'flowlist',
+                  styleInformation: BigTextStyleInformation(
+                      selectedOption == 'Vlastní'
+                          ? _ownNotificationController.text
+                          : selectedOption),
                   importance: Importance.max,
                   priority: Priority.high,
                   playSound: notificationType == 'Zvukové' ? true : false,
