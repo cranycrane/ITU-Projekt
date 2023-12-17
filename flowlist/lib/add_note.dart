@@ -298,7 +298,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                                     ),
                                   ),
                                   hintText: '/10',
-                                  border: OutlineInputBorder(),
+                                  border: const OutlineInputBorder(),
                                   contentPadding:
                                       const EdgeInsets.symmetric(vertical: 8.0),
                                 ),

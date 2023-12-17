@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'calendar_screen.dart';
@@ -7,8 +6,6 @@ import 'diary_controller.dart';
 import 'device_utils.dart';
 import 'storage_service.dart';
 import 'welcome_page.dart';
-
-import 'set_name.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

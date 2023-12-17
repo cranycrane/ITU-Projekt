@@ -71,7 +71,7 @@ class SearchPageState extends State<SearchPage> {
         break;
       case 2:
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => PsychoUserPage()));
+            .push(MaterialPageRoute(builder: (context) => const PsychoUserPage()));
         break;
       case 3:
         Navigator.of(context).pushReplacement(

@@ -42,16 +42,18 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     final scheduledTime = tz.TZDateTime(tz.local, now.year, now.month, now.day,
         selectedTime.hour, selectedTime.minute);
 
+    /*
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       '0',
       'Flow-lístek',
       importance: Importance.max,
       priority: Priority.high,
     );
+    */
 
-    var platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-    );
+    //var platformChannelSpecifics = NotificationDetails(
+    //  android: androidPlatformChannelSpecifics,
+    //);
 
     await localNotificationsPlugin.zonedSchedule(
         0,
@@ -146,24 +148,24 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
         body: Center(
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     Text('Čas Upozornění: ${formatTime24H(selectedTime)}',
-                        style: TextStyle(fontSize: 18)),
-                    SizedBox(width: 30),
+                        style: const TextStyle(fontSize: 18)),
+                    const SizedBox(width: 30),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
                         // Zmenšení šířky tlačítka na 40% šířky obrazovky a výšky na 50
                       ),
                       onPressed: () => _selectTime(context),
-                      child: Text('Vybrat Čas'),
+                      child: const Text('Vybrat Čas'),
                     ),
                   ]),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   FractionallySizedBox(
                     widthFactor: 0.8, // 80% šířky obrazovky
                     child: DropdownButton<String>(
@@ -186,9 +188,9 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                           value: value,
                           child: Container(
                             alignment: Alignment.center,
-                            padding: EdgeInsets.all(
+                            padding: const EdgeInsets.all(
                                 2), // Přidáváme padding pro lepší rozložení textu
-                            constraints: BoxConstraints(
+                            constraints: const BoxConstraints(
                               // Nastavíme minimální výšku pro každou položku
                               minHeight:
                                   80, // Minimální výška, upravte podle potřeby
@@ -209,16 +211,16 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                   // Zobrazit TextField pouze pokud je vybrána možnost "Vlastní"
                   if (isCustomOption)
                     TextField(
-                      cursorColor: Color(0xFFE50E2B),
+                      cursorColor: const Color(0xFFE50E2B),
                       cursorWidth: 2,
                       controller: _ownNotificationController,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(12),
+                        contentPadding: const EdgeInsets.all(12),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color:
                                 Color(0xFFE50E2B), // Barva ohraničení při psaní
                             width: 2.0, // Šířka ohraničení
@@ -227,13 +229,13 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                         hintText: 'Text upozornění',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(color: Color(0xFFBCBCBC))),
+                            borderSide: const BorderSide(color: Color(0xFFBCBCBC))),
                         filled: true,
                         fillColor: Colors.white,
                       ),
                       onSubmitted: (value) {},
                     ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   DropdownButton<String>(
                     value: notificationType,
                     onChanged: (String? newValue) {
@@ -249,14 +251,14 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                       );
                     }).toList(),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       // Zmenšení šířky tlačítka na 40% šířky obrazovky a výšky na 50
                     ),
                     onPressed: _scheduleNotification,
-                    child: Text('ULOŽIT NASTAVENÍ'),
+                    child: const Text('ULOŽIT NASTAVENÍ'),
                   ),
                 ],
               ),

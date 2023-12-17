@@ -13,18 +13,6 @@ class setNamePageState extends State<setNamePage> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
 
-  void _updateName(String firstName, String lastName) async {
-    // Tato funkce by měla zahrnovat logiku pro aktualizaci jména na serveru
-
-    try {
-      await userController.updateUserName('$firstName $lastName');
-      // Další akce po úspěšné aktualizaci (např. zobrazení zprávy)
-    } catch (e) {
-      // Zpracování chyby
-      throw Exception("Chyba pri ziskavani dat: $e");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,24 +29,24 @@ class setNamePageState extends State<setNamePage> {
               width: 200, // Šířka obrázku
               height: 200, // Výška obrázku
             ),
-            SizedBox(height: 20), // Mezera mezi obrázkem a textem
-            Text(
+            const SizedBox(height: 20), // Mezera mezi obrázkem a textem
+            const Text(
               "Jak se jmenuješ?",
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
             ),
-            SizedBox(height: 40), // Mezera mezi obrázkem a textem
+            const SizedBox(height: 40), // Mezera mezi obrázkem a textem
             TextField(
-              cursorColor: Color(0xFFE50E2B),
+              cursorColor: const Color(0xFFE50E2B),
               cursorWidth: 2,
               controller: _firstNameController,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(12),
+                contentPadding: const EdgeInsets.all(12),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Color(0xFFE50E2B), // Barva ohraničení při psaní
                     width: 2.0, // Šířka ohraničení
                   ),
@@ -66,7 +54,7 @@ class setNamePageState extends State<setNamePage> {
                 hintText: 'Křestní jméno',
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Color(0xFFBCBCBC))),
+                    borderSide: const BorderSide(color: Color(0xFFBCBCBC))),
                 filled: true,
                 fillColor: Colors.white,
               ),
@@ -74,16 +62,16 @@ class setNamePageState extends State<setNamePage> {
             ),
             const SizedBox(height: 40.0),
             TextField(
-              cursorColor: Color(0xFFE50E2B),
+              cursorColor: const Color(0xFFE50E2B),
               cursorWidth: 2,
               controller: _lastNameController,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(12),
+                contentPadding: const EdgeInsets.all(12),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Color(0xFFE50E2B), // Barva ohraničení při psaní
                     width: 2.0, // Šířka ohraničení
                   ),
@@ -91,7 +79,7 @@ class setNamePageState extends State<setNamePage> {
                 hintText: 'Příjmení',
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Color(0xFFBCBCBC), width: 4)),
+                    borderSide: const BorderSide(color: Color(0xFFBCBCBC), width: 4)),
                 filled: true,
                 fillColor: Colors.white,
               ),
@@ -101,7 +89,7 @@ class setNamePageState extends State<setNamePage> {
 
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 12.0),
-              child: Container(
+              child: SizedBox(
                 width: 160,
                 height: 52,
                 child: ElevatedButton(
@@ -127,7 +115,7 @@ class setNamePageState extends State<setNamePage> {
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25)),
-                    backgroundColor: Color(0xFFE50E2B),
+                    backgroundColor: const Color(0xFFE50E2B),
                   ),
                   child: const Text(
                     'DO APLIKACE',

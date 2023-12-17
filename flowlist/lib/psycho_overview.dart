@@ -104,11 +104,6 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
     );
   }
 
-  Future<List<UserProfile>> _getPairedUsers() async {
-    List<UserProfile> records = await psychoController.getPairedUsers();
-    return records;
-  }
-
   String formatDateTime(DateTime dateTime) {
     final DateFormat formatter =
         DateFormat('d. M. yyyy'); // Formát d. MMMM yyyy, jazyk čeština

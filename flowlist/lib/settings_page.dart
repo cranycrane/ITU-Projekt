@@ -372,7 +372,7 @@ class SettingsPageState extends State<SettingsPage> {
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                    builder: (context) => PsychoOverviewPage()),
+                                    builder: (context) => const PsychoOverviewPage()),
                               );
                             },
                             style: ElevatedButton.styleFrom(
@@ -425,10 +425,10 @@ class SettingsPageState extends State<SettingsPage> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       // Zmenšení šířky tlačítka na 40% šířky obrazovky a výšky na 50
-                      minimumSize: Size(100, 50),
+                      minimumSize: const Size(100, 50),
                       // Přidání vnitřního odsazení pro změnu rozměrů tlačítka
                       padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     ),
                     child: const Text(
                       'SMAZAT ÚČET',
@@ -514,7 +514,7 @@ class SettingsPageState extends State<SettingsPage> {
             top: 30, // Nastavte podle potřeby pro umístění od horního okraje
             right: 10, // Nastavte podle potřeby pro umístění od pravého okraje
             child: IconButton(
-              icon: Icon(Icons.settings, size: 35), // Velikost ikony nastavení
+              icon: const Icon(Icons.settings, size: 35), // Velikost ikony nastavení
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(

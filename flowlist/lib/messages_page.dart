@@ -143,10 +143,17 @@ class MessagesPageState extends State<MessagesPage> {
                         AsyncSnapshot<UserProfile?> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting &&
                           isFirstLoad) {
-                        return const Text("Načítání..."); // Zobrazit při načítání
+                        return const Text(
+                          "Načítání...",
+                          style: TextStyle(
+                              color: Colors.black, fontSize: 20),
+                        ); // Zobrazit při načítání
                       } else if (snapshot.hasError || snapshot.data == null) {
                         return const Text(
-                            "Uživatel"); // Záložní text, pokud dojde k chybě nebo data nejsou dostupná
+                            "Uživatel",
+                            style: TextStyle(
+                              color: Colors.black, fontSize: 20),
+                        ); // Záložní text, pokud dojde k chybě nebo data nejsou dostupná
                       } else {
                         UserProfile userProfile = snapshot.data!;
                         return Text(

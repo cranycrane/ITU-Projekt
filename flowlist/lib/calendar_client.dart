@@ -219,19 +219,15 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                       //bool isFocused = isSameDay(_selectedDay, date);
 
                       if (dayRecord != null && dayRecord.score != null) {
-                        Color scoreColor;
                         Color textColor = Colors.white;
 
                         if (isSameDay(_selectedDay, date)) {
-                          scoreColor = Color(0xFFE50E2B);
+                          textColor = Colors.white;
                         } else if (isSameDay(date, DateTime.now())) {
-                          scoreColor = Color(0xFFE2AFB6);
                           textColor = Colors.black;
                         } else if (_focusedDay.month != date.month) {
-                          scoreColor = Color(0xFFBBBBBB);
                           textColor = Color(0xFF6E6E6E);
                         } else {
-                          scoreColor = Color(0xFFEAEAEA);
                           textColor = Colors.black;
                         }
 
@@ -515,7 +511,7 @@ class UserDetailsWidget extends StatelessWidget {
   final String userName;
   final String userPhotoUrl;
 
-  UserDetailsWidget({required this.userName, required this.userPhotoUrl});
+  const UserDetailsWidget({required this.userName, required this.userPhotoUrl});
 
   @override
   Widget build(BuildContext context) {

@@ -205,19 +205,15 @@ class CalendarPageState extends State<CalendarPage> {
                       //bool isFocused = isSameDay(_selectedDay, date);
 
                       if (dayRecord != null && dayRecord.score != null) {
-                        Color scoreColor;
                         Color textColor = Colors.white;
 
                         if (isSameDay(_selectedDay, date)) {
-                          scoreColor = Color(0xFFE50E2B);
+                          textColor = Colors.white;
                         } else if (isSameDay(date, DateTime.now())) {
-                          scoreColor = Color(0xFFE2AFB6);
                           textColor = Colors.black;
                         } else if (_focusedDay.month != date.month) {
-                          scoreColor = Color(0xFFBBBBBB);
-                          textColor = const Color(0xFF6E6E6E);
+                          textColor = Color(0xFF6E6E6E);
                         } else {
-                          scoreColor = Color(0xFFEAEAEA);
                           textColor = Colors.black;
                         }
 
