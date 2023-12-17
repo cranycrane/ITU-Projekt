@@ -343,7 +343,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                                         context: context,
                                         builder: (BuildContext context) {
                                           return AlertDialog(
-                                            title: const Text('Potvrzení'),
+                                            title: const Text('Potvrzení', style: TextStyle(color: AppColors.red)),
                                             content: const Text(
                                                 'Opravdu chcete záznam smazat?'),
                                             actions: <Widget>[
@@ -351,13 +351,13 @@ class NewEntryPageState extends State<NewEntryPage> {
                                                 onPressed: () =>
                                                     Navigator.of(context)
                                                         .pop(false),
-                                                child: const Text('NE'),
+                                                child: const Text('NE', style: TextStyle(color: AppColors.darkGrey)),
                                               ),
                                               TextButton(
                                                 onPressed: () =>
                                                     Navigator.of(context)
                                                         .pop(true),
-                                                child: const Text('ANO'),
+                                                child: const Text('ANO', style: TextStyle(color: AppColors.red)),
                                               ),
                                             ],
                                           );
