@@ -25,10 +25,11 @@ class setNamePageState extends State<setNamePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.network(
-              'https://jakub-jerabek.cz/flowlist/assets/setNamePage.png', // URL obrázku
-              width: 200, // Šířka obrázku
-              height: 200, // Výška obrázku
+            Image.asset(
+              'assets/setNamePage.png',
+              width: MediaQuery.of(context).size.width * 0.6,
+
+              // URL obrázku
             ),
             const SizedBox(height: 20), // Mezera mezi obrázkem a textem
             const Text(
@@ -80,7 +81,8 @@ class setNamePageState extends State<setNamePage> {
                 hintText: 'Příjmení',
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(color: AppColors.middleGrey, width: 4)),
+                    borderSide: const BorderSide(
+                        color: AppColors.middleGrey, width: 4)),
                 filled: true,
                 fillColor: Colors.white,
               ),
@@ -90,14 +92,14 @@ class setNamePageState extends State<setNamePage> {
 
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 12.0),
-              child: SizedBox(
-                width: 160,
+              child: Container(
+                width: MediaQuery.of(context).size.height * 0.4,
                 height: 52,
                 child: ElevatedButton(
                   onPressed: () async {
                     try {
                       await userController.updateUserName(
-                          '${_firstNameController.text} ${_lastNameController.text}');
+                          _firstNameController.text, _lastNameController.text);
                       if (!context.mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
