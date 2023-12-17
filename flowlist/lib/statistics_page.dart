@@ -15,7 +15,8 @@ class StatisticsPage extends StatefulWidget {
 }
 
 class StatisticsPageState extends State<StatisticsPage> {
-  List<FlowData?> _allRecords = [];
+  List<FlowData> _allRecords = [];
+  List<FlowData> _monthRecords = [];
   List<FlSpot> _lineChartSpots = []; // Initialized as an empty list
   bool _isLoading = true;
   DateTime _selectedMonth = DateTime.now();
@@ -42,7 +43,29 @@ class StatisticsPageState extends State<StatisticsPage> {
       _lineChartSpots = _generateChartData(filteredRecords);
 
       setState(() {
-        _allRecords = filteredRecords;
+        _allRecords = allRecords;
+        _monthRecords = filteredRecords;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() => _isLoading = false);
+    }
+  }
+
+  void _getMonthRecords() async {
+    try {
+      List<FlowData> filteredRecords = _allRecords.where((record) {
+        return record.day.year == _selectedMonth.year &&
+            record.day.month == _selectedMonth.month;
+      }).toList();
+
+      // Sort the records from oldest to newest
+      filteredRecords.sort((a, b) => a.day.compareTo(b.day));
+
+      _lineChartSpots = _generateChartData(filteredRecords);
+
+      setState(() {
+        _monthRecords = filteredRecords;
         _isLoading = false;
       });
     } catch (e) {
@@ -75,7 +98,7 @@ class StatisticsPageState extends State<StatisticsPage> {
     setState(() {
       _selectedMonth =
           DateTime(_selectedMonth.year, _selectedMonth.month + 1, 1);
-      _fetchAllRecords(); // Re-fetch or update your data for the new month
+      _getMonthRecords(); // Re-fetch or update your data for the new month
     });
   }
 
@@ -83,7 +106,7 @@ class StatisticsPageState extends State<StatisticsPage> {
     setState(() {
       _selectedMonth =
           DateTime(_selectedMonth.year, _selectedMonth.month - 1, 1);
-      _fetchAllRecords(); // Re-fetch or update your data for the new month
+      _getMonthRecords(); // Re-fetch or update your data for the new month
     });
   }
 
@@ -107,8 +130,7 @@ class StatisticsPageState extends State<StatisticsPage> {
     List<FlSpot> spots = [];
     for (var record in records) {
       double xValue = _dateToAxisValue(record.day);
-      double yValue =
-          record.score?.toDouble() ?? 0; // Default to 0 if score is null
+      double yValue = record.score?.toDouble() ?? 0; // Default to 0 if score is null
       spots.add(FlSpot(xValue, yValue));
     }
     return spots;
@@ -123,10 +145,10 @@ class StatisticsPageState extends State<StatisticsPage> {
   @override
   Widget build(BuildContext context) {
     String meanScoreText;
-    if (_allRecords.isEmpty) {
+    if (_monthRecords.isEmpty) {
       meanScoreText = '-';
     } else {
-      double meanScore = _calculateMeanScore(_allRecords);
+      double meanScore = _calculateMeanScore(_monthRecords);
       meanScoreText = meanScore.toStringAsFixed(2);
     }
 
