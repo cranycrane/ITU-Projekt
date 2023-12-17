@@ -114,7 +114,7 @@ class SettingsPageState extends State<SettingsPage> {
                 bool success = await userController.deleteAccount();
                 if (mounted && success) {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const WelcomePage()));
+                      builder: (context) => WelcomePage(onlyLooking: false)));
                 }
               },
             ),
@@ -352,15 +352,17 @@ class SettingsPageState extends State<SettingsPage> {
                                     _updateName, // Volání funkce pro aktualizaci jména
                               ),
                             )
-                          : Container(
-                              width: MediaQuery.of(context).size.width * 0.7,
+                          : FittedBox(
+                              fit: BoxFit
+                                  .scaleDown, // Zajišťuje, že text se změstí do rodiče a zmenší se, pokud je to potřeba
                               child: Text(
                                 _nameController.text,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 2,
                                 style: const TextStyle(
                                     fontSize: 24, fontWeight: FontWeight.bold),
-                              )),
+                              ),
+                            ),
                       _isEditingName
                           ? ElevatedButton(
                               onPressed: () =>
@@ -542,8 +544,10 @@ class SettingsPageState extends State<SettingsPage> {
             ),
           ),
           Positioned(
-            top: 30, // Nastavte podle potřeby pro umístění od horního okraje
-            right: 10, // Nastavte podle potřeby pro umístění od pravého okraje
+            top: MediaQuery.of(context).size.height *
+                0.045, // Nastavte podle potřeby pro umístění od horního okraje
+            right: MediaQuery.of(context).size.width *
+                0.05, // Nastavte podle potřeby pro umístění od pravého okraje
             child: IconButton(
               icon: const Icon(Icons.settings,
                   size: 35), // Velikost ikony nastavení
@@ -551,6 +555,21 @@ class SettingsPageState extends State<SettingsPage> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                       builder: (context) => NotificationSettingsPage()),
+                );
+              },
+            ),
+          ),
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.045,
+            right: MediaQuery.of(context).size.width *
+                0.85, // Nastavte podle potřeby pro umístění od pravého okraje
+            child: IconButton(
+              icon: const Icon(Icons.question_mark,
+                  size: 35), // Velikost ikony nastavení
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => WelcomePage(onlyLooking: true)),
                 );
               },
             ),

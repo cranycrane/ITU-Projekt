@@ -32,9 +32,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (firstLogin) {
-      return const MaterialApp(
+      return MaterialApp(
         title: 'FlowList',
-        home: WelcomePage(),
+        home: WelcomePage(onlyLooking: false),
       );
     } else {
       return const MaterialApp(

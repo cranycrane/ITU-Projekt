@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'welcome_page_2.dart';
 import 'app_colors.dart';
 
 class WelcomePage extends StatefulWidget {
-  const WelcomePage({super.key});
+  bool onlyLooking;
+  WelcomePage({super.key, required this.onlyLooking});
 
   @override
   _WelcomePageState createState() => _WelcomePageState();
