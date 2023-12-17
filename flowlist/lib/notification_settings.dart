@@ -18,6 +18,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
       'Jaký byl tvůj dnešní den? Vzpomeneš si na 3 věci, které ti dnes vytvořily úsměv na tváři? Otevři svůj Flow-lístek!';
   bool isCustomOption = false;
   bool isLoading = true;
+  bool wantsNotifications = true;
 
   late List<String> parts;
   late String? notificationTime;
@@ -38,8 +39,9 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     super.initState();
     _getUserNotificationTime();
 
-    var initializationSettingsAndroid = const AndroidInitializationSettings(
-        'flowlist'); // Nastavte ikonu aplikace
+    // ikona aplikace
+    var initializationSettingsAndroid =
+        const AndroidInitializationSettings('flowlist');
     var initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);
     localNotificationsPlugin.initialize(initializationSettings);
@@ -63,12 +65,32 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     } catch (e) {
       String errorMessage = e.toString().split('Exception: ')[1];
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Chyba: ${e.toString()}')));
+          .showSnackBar(SnackBar(content: Text('Chyba: $errorMessage')));
     }
   }
 
   void _scheduleNotification() async {
     if (selectedTime.hour == 0 && selectedTime.minute == 0) {
+      return;
+    }
+    if (!wantsNotifications) {
+      // Zrušení všech plánovaných notifikací
+      await localNotificationsPlugin.cancelAll();
+      await userController.updateNotificationTime(null);
+      if (!context.mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Notifikace úspešně zrušeny",
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+          duration: Duration(seconds: 3),
+          backgroundColor: AppColors.lightGrey,
+        ),
+      );
       return;
     }
     final now = tz.TZDateTime.now(tz.local);
@@ -115,8 +137,8 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
               color: Colors.black, // Text color
             ),
           ),
-          duration: Duration(seconds: 3), // Duration of the SnackBar display
-          backgroundColor: Color(0xFFEAEAEA),
+          duration: Duration(seconds: 3),
+          backgroundColor: AppColors.lightGrey,
         ),
       );
     } catch (e) {
@@ -140,7 +162,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
         return Theme(
             data: Theme.of(context).copyWith(
                 colorScheme: const ColorScheme.light(
-              primary: Colors.red,
+              primary: AppColors.red,
             )),
             child: MediaQuery(
               data: MediaQuery.of(context)
@@ -171,14 +193,14 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
         appBar: AppBar(
           title: const Text(
             'Nastavení upozornění',
-            style: TextStyle(fontSize: 22, color: Color(0xFF61646B)),
+            style: TextStyle(fontSize: 22, color: AppColors.darkGrey),
           ),
           backgroundColor: Colors.white,
           toolbarHeight: 60,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            color: const Color(0xFF61646B),
-            iconSize: 40, // Zvětšení velikosti ikony
+            color: AppColors.darkGrey,
+            iconSize: 40,
             onPressed: () {
               Navigator.pop(context);
             },
@@ -193,6 +215,16 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
+                        SwitchListTile(
+                          title: const Text('Povolit upozornění'),
+                          value: wantsNotifications,
+                          onChanged: (bool value) {
+                            setState(() {
+                              wantsNotifications = value;
+                            });
+                          },
+                        ),
+                        SizedBox(height: 20),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -202,8 +234,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                               const SizedBox(width: 30),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red,
-                                  // Zmenšení šířky tlačítka na 40% šířky obrazovky a výšky na 50
+                                  backgroundColor: AppColors.red,
                                 ),
                                 onPressed: () => _selectTime(context),
                                 child: const Text('Vybrat Čas'),
@@ -220,8 +251,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                           widthFactor: 0.8, // 80% šířky obrazovky
                           child: DropdownButton<String>(
                             itemHeight: 80,
-                            isExpanded:
-                                true, // Zajistí, že DropdownButton se rozšíří na maximální možnou šířku
+                            isExpanded: true,
                             value: selectedOption,
                             onChanged: (String? newValue) {
                               setState(() {
@@ -238,31 +268,24 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                                 value: value,
                                 child: Container(
                                   alignment: Alignment.center,
-                                  padding: const EdgeInsets.all(
-                                      2), // Přidáváme padding pro lepší rozložení textu
+                                  padding: const EdgeInsets.all(2),
                                   constraints: const BoxConstraints(
-                                    // Nastavíme minimální výšku pro každou položku
-                                    minHeight:
-                                        80, // Minimální výška, upravte podle potřeby
+                                    minHeight: 80,
                                   ),
                                   child: Text(
                                     value,
-                                    maxLines: 3, // Povolíme až 3 řádky textu
-                                    overflow: TextOverflow
-                                        .ellipsis, // Přidá "..." na konec, pokud text přetéká
-                                    softWrap:
-                                        true, // Umožní textu zalomit řádky
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                    softWrap: true,
                                   ),
                                 ),
                               );
                             }).toList(),
                           ),
                         ),
-
-                        // Zobrazit TextField pouze pokud je vybrána možnost "Vlastní"
                         if (isCustomOption)
                           TextField(
-                            cursorColor: const Color(0xFFE50E2B),
+                            cursorColor: AppColors.red,
                             cursorWidth: 2,
                             controller: _ownNotificationController,
                             textAlign: TextAlign.center,
@@ -272,9 +295,8 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                                 borderSide: const BorderSide(
-                                  color: Color(
-                                      0xFFE50E2B), // Barva ohraničení při psaní
-                                  width: 2.0, // Šířka ohraničení
+                                  color: AppColors.red,
+                                  width: 2.0,
                                 ),
                               ),
                               hintText: 'Text upozornění',
@@ -312,8 +334,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                         const SizedBox(height: 20),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                            // Zmenšení šířky tlačítka na 40% šířky obrazovky a výšky na 50
+                            backgroundColor: AppColors.red,
                           ),
                           onPressed: _scheduleNotification,
                           child: const Text('ULOŽIT NASTAVENÍ'),

@@ -24,8 +24,6 @@ class _WelcomePageState extends State<WelcomePage> {
           Image.asset(
             'assets/whatIsFlowlist.png',
             width: MediaQuery.of(context).size.width * 0.7,
-
-            // URL obrázku
           ),
           SizedBox(height: 20),
           const Padding(
@@ -56,7 +54,7 @@ class _WelcomePageState extends State<WelcomePage> {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
-                backgroundColor: const Color(0xFFE50E2B),
+                backgroundColor: AppColors.red,
                 padding: const EdgeInsets.symmetric(
                     horizontal: 32.0, vertical: 12.0),
                 shape: RoundedRectangleBorder(

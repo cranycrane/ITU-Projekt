@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'flow.dart';
 import 'diary_entries_loader.dart';
 import 'diary_controller.dart';
-import 'package:intl/intl.dart'; // Přidání pro formátování data
+import 'package:intl/intl.dart';
 import 'messages_page.dart';
 import 'user_profile.dart';
 import 'psycho_overview.dart';
@@ -13,7 +13,7 @@ class PsychoEntryPage extends StatefulWidget {
   final UserProfile client;
   final DateTime? selectedDay;
 
-  final int _selectedIndex = -1; // Index pro navigaci v BottomAppBar
+  final int _selectedIndex = -1;
 
   const PsychoEntryPage({Key? key, this.selectedDay, required this.client})
       : super(key: key);
@@ -23,7 +23,7 @@ class PsychoEntryPage extends StatefulWidget {
 }
 
 class PsychoEntryPageState extends State<PsychoEntryPage> {
-  late DateTime selectedDate; // Přidáno pro sledování vybraného data
+  late DateTime selectedDate;
   final TextEditingController _firstController = TextEditingController();
   final TextEditingController _secondController = TextEditingController();
   final TextEditingController _thirdController = TextEditingController();
@@ -49,7 +49,6 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
     super.dispose();
   }
 
-  // Funkce pro načtení záznamů z deníku
   Future<FlowData?> _loadData(DateTime selectedDay) async {
     DiaryEntriesLoader loader = DiaryEntriesLoader(diaryController);
     return await loader.loadDiaryEntries(
@@ -58,9 +57,8 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
 
   Future<bool> createEntry(FlowData record) async {
     try {
-      // Zde předpokládáme, že `diaryController.createEntry(record)` vrací budoucnost (Future)
       await diaryController.createEntry(record);
-      return true; // Úspěch
+      return true;
     } catch (e) {
       throw Exception('Chyba při vytváření záznamu: $e');
     }
@@ -68,9 +66,8 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
 
   Future<bool> deleteEntry() async {
     try {
-      // Zde předpokládáme, že `diaryController.createEntry(record)` vrací budoucnost (Future)
       await diaryController.deleteEntry(selectedDate);
-      return true; // Úspěch
+      return true;
     } catch (e) {
       throw Exception('Chyba při mazání záznamu: $e');
     }
@@ -79,9 +76,8 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
   void _changeDay(int days) {
     final DateTime newDate = selectedDate.add(Duration(days: days));
 
-    // Check if the new date is in the future and if the selected date is not today
     if (newDate.isAfter(DateTime.now()) && selectedDate != DateTime.now()) {
-      return; // Do nothing if trying to go into the future from a non-today date
+      return;
     }
     setState(() {
       selectedDate = selectedDate.add(Duration(days: days));
@@ -93,23 +89,17 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
   void _onItemTapped(int index) {
     switch (index) {
       case 0:
-        // Kdyby byla domovská stránka na indexu 0
-        // Navigator.of(context).pushReplacementNamed('/home');
         break;
       case 1:
-        // Přechod na stránku pro vyhledávání
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => const PsychoOverviewPage()));
         break;
       case 2:
-        // PsychoUserPage
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => CalendarClientPage(client: widget.client)));
-        // Tady byste mohli implementovat přechod na stránku oznámení
+
         break;
       case 3:
-        // Navigace na SettingsPage, pokud uživatel není již na této stránce
-
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => MessagesPage(
                   toUserId: widget.client.userId.toString(),
@@ -167,7 +157,6 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: IntrinsicHeight(
-              // Tento widget zajistí, že obsah bude mít minimální výšku
               child: FutureBuilder<FlowData?>(
                 future: _recordFuture,
                 builder: (context, snapshot) {
@@ -176,7 +165,6 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                   } else if (snapshot.hasError) {
                     return const Text('Došlo k chybě při načítání dat');
                   } else {
-                    // Aktualizace textových polí podle načtených dat
                     if (!_isDataLoaded && snapshot.data != null) {
                       final data = snapshot.data;
                       _firstController.text = data?.record1 ?? '';
@@ -194,8 +182,7 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                     }
                     return Column(
                       mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment:
-                          CrossAxisAlignment.stretch, // Přidáno pro zarovnání
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         const SizedBox(height: 10),
                         TextField(
@@ -214,9 +201,8 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                               borderSide: const BorderSide(
-                                color: Color(
-                                    0xFFE50E2B), // Barva ohraničení při psaní
-                                width: 2.0, // Šířka ohraničení
+                                color: Color(0xFFE50E2B),
+                                width: 2.0,
                               ),
                             ),
                             fillColor: Colors.white,
@@ -239,9 +225,8 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                               borderSide: const BorderSide(
-                                color: Color(
-                                    0xFFE50E2B), // Barva ohraničení při psaní
-                                width: 2.0, // Šířka ohraničení
+                                color: Color(0xFFE50E2B),
+                                width: 2.0,
                               ),
                             ),
                             fillColor: Colors.white,
@@ -265,9 +250,8 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                               borderSide: const BorderSide(
-                                color: Color(
-                                    0xFFE50E2B), // Barva ohraničení při psaní
-                                width: 2.0, // Šířka ohraničení
+                                color: Color(0xFFE50E2B),
+                                width: 2.0,
                               ),
                             ),
                             fillColor: Colors.white,
@@ -287,8 +271,7 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                             ),
                             SizedBox(
                               height: 40,
-                              width:
-                                  80, // Nastavení pevné šířky pro textové pole
+                              width: 80,
                               child: TextField(
                                 readOnly: true,
                                 textAlign: TextAlign.center,
@@ -301,9 +284,8 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                     borderSide: const BorderSide(
-                                      color: Color(
-                                          0xFFE50E2B), // Barva ohraničení při psaní
-                                      width: 2.0, // Šířka ohraničení
+                                      color: Color(0xFFE50E2B),
+                                      width: 2.0,
                                     ),
                                   ),
                                   hintText: '/10',
@@ -347,12 +329,11 @@ class PsychoEntryPageState extends State<PsychoEntryPage> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      // Přidání akce, která se provede po kliknutí
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                             builder: (context) => CalendarClientPage(
                                   client: widget.client,
-                                )), // Změňte na cílovou stránku
+                                )),
                       );
                     },
                     child: Container(

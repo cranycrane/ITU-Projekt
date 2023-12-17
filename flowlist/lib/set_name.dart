@@ -19,7 +19,6 @@ class setNamePageState extends State<setNamePage> {
     return Scaffold(
         body: Center(
       child: SingleChildScrollView(
-        // Přidáno SingleChildScrollView
         padding: const EdgeInsets.all(60.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -28,16 +27,14 @@ class setNamePageState extends State<setNamePage> {
             Image.asset(
               'assets/setNamePage.png',
               width: MediaQuery.of(context).size.width * 0.6,
-
-              // URL obrázku
             ),
-            const SizedBox(height: 20), // Mezera mezi obrázkem a textem
+            const SizedBox(height: 20),
             const Text(
               "Jak se jmenuješ?",
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
             ),
-            const SizedBox(height: 40), // Mezera mezi obrázkem a textem
+            const SizedBox(height: 40),
             TextField(
               cursorColor: AppColors.red,
               cursorWidth: 2,
@@ -49,8 +46,8 @@ class setNamePageState extends State<setNamePage> {
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                   borderSide: const BorderSide(
-                    color: AppColors.red, // Barva ohraničení při psaní
-                    width: 2.0, // Šířka ohraničení
+                    color: AppColors.red,
+                    width: 2.0,
                   ),
                 ),
                 hintText: 'Křestní jméno',
@@ -74,8 +71,8 @@ class setNamePageState extends State<setNamePage> {
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                   borderSide: const BorderSide(
-                    color: AppColors.red, // Barva ohraničení při psaní
-                    width: 2.0, // Šířka ohraničení
+                    color: AppColors.red,
+                    width: 2.0,
                   ),
                 ),
                 hintText: 'Příjmení',
@@ -89,7 +86,6 @@ class setNamePageState extends State<setNamePage> {
               onSubmitted: (value) {},
             ),
             const SizedBox(height: 85.0),
-
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 12.0),
               child: Container(
@@ -132,23 +128,4 @@ class setNamePageState extends State<setNamePage> {
       ),
     ));
   }
-/*
-  void _handleSignIn() async {
-    final scaffold = ScaffoldMessenger.of(context);
-    try {
-      await widget.controller
-          .signIn(_emailController.text, _passwordController.text);
-      scaffold
-          .showSnackBar(const SnackBar(content: Text('Úspěšně přihlášen!')));
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CalendarPage()),
-      );
-    } catch (e) {
-      // TODO: zobrazit chybovou zprávu
-      scaffold
-          .showSnackBar(SnackBar(content: Text('Chyba při přihlášení: $e')));
-    }
-  }
-  */
 }

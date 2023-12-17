@@ -21,6 +21,10 @@ try {
     if ($updateStmt === false) {
         throw new \Exception('Chyba při přípravě SQL dotazu: ' . $conn->error);
     }
+    if (empty($notificationTime)) {
+        $notificationTime = NULL;
+    }
+
     
     $updateStmt->bind_param("ss", $notificationTime, $userId);
     $updateStmt->execute();

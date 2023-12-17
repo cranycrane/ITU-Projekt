@@ -3,11 +3,8 @@ import 'package:flowlist/psycho_overview.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'diary_controller.dart';
-//import 'diary_entries_loader.dart';
 import 'flow.dart';
 import 'user_profile.dart';
-//import 'user_controller.dart';
-//import 'dart:io';
 import 'psycho_note_read.dart';
 import 'statistics_page.dart';
 import 'app_colors.dart';
@@ -45,7 +42,6 @@ class CalendarClientPageState extends State<CalendarClientPage> {
     _record = _loadDay(_focusedDay);
   }
 
-  // Funkce pro načtení záznamů z deníku
   void _fetchAllRecords() async {
     List<FlowData> records =
         await diaryController.readEntries(widget.client.userId.toString());
@@ -70,23 +66,16 @@ class CalendarClientPageState extends State<CalendarClientPage> {
   void _onItemTapped(int index) {
     switch (index) {
       case 0:
-        // Kdyby byla domovská stránka na indexu 0
-        // Navigator.of(context).pushReplacementNamed('/home');
         break;
       case 1:
-        // Přechod na stránku pro vyhledávání
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const PsychoOverviewPage()));
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => const PsychoOverviewPage()));
         break;
       case 2:
-        // PsychoUserPage
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => CalendarClientPage(client: widget.client)));
-        // Tady byste mohli implementovat přechod na stránku oznámení
         break;
       case 3:
-        // Navigace na SettingsPage, pokud uživatel není již na této stránce
-
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => MessagesPage(
                   toUserId: widget.client.userId.toString(),
@@ -128,10 +117,10 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                   calendarBuilders: CalendarBuilders(
                     todayBuilder: (context, day, focusedDay) {
                       return Container(
-                        margin:
-                            const EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 6.0, vertical: 6),
                         decoration: BoxDecoration(
-                          color: AppColors.lightRed, // Zde změňte barvu na požadovanou
+                          color: AppColors.lightRed,
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Center(
@@ -147,10 +136,10 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                     },
                     outsideBuilder: (context, day, focusedDay) {
                       return Container(
-                        margin:
-                            const EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 6.0, vertical: 6),
                         decoration: BoxDecoration(
-                          color: AppColors.middleGrey, // Zde změňte barvu na požadovanou
+                          color: AppColors.middleGrey,
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Center(
@@ -169,7 +158,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                         margin: const EdgeInsets.symmetric(
                             horizontal: 6.0, vertical: 6.0),
                         decoration: BoxDecoration(
-                          color: AppColors.lightGrey, // Zde změňte barvu na požadovanou
+                          color: AppColors.lightGrey,
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Center(
@@ -188,7 +177,7 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                         margin: const EdgeInsets.symmetric(
                             horizontal: 6.0, vertical: 6.0),
                         decoration: BoxDecoration(
-                          color: AppColors.red, // Zde změňte barvu na požadovanou
+                          color: AppColors.red,
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Center(
@@ -212,9 +201,6 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                       var dayRecord =
                           dayRecords.isNotEmpty ? dayRecords.first : null;
 
-                      // Kontrola, zda je den vybraný a zároveň ve stejném měsíci jako _focusedDay
-                      //bool isFocused = isSameDay(_selectedDay, date);
-
                       if (dayRecord != null && dayRecord.score != null) {
                         Color textColor = Colors.white;
 
@@ -230,20 +216,16 @@ class CalendarClientPageState extends State<CalendarClientPage> {
 
                         FontWeight fontWeight = FontWeight.bold;
 
-                        // Získání šířky obrazovky
                         double screenWidth =
                             (MediaQuery.of(context).size.width * 0.95);
-                        // Vypočítání šířky jednoho dne
                         double dayWidth = screenWidth / 7 - 12;
 
-                        // Zobrazit skóre pod dnem
                         return Positioned(
                           bottom: 2.0,
                           child: Container(
                             width: dayWidth,
                             padding: const EdgeInsets.all(5.0),
                             decoration: const BoxDecoration(
-                              //color: scoreColor,
                               borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(8),
                                   bottomRight: Radius.circular(8)),
@@ -268,17 +250,15 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                   },
                   onDaySelected: (selectedDay, focusedDay) {
                     if (selectedDay.isAfter(DateTime.now())) {
-                      // Pokud je vybraný den v budoucnosti, nedělejte nic (nebo zobrazte chybovou zprávu)
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text(
                             "Nelze vybrat budoucí datum!",
                             style: TextStyle(
-                              color: Colors.white, // Text color
+                              color: Colors.white,
                             ),
                           ),
-                          duration: Duration(
-                              seconds: 3), // Duration of the SnackBar display
+                          duration: Duration(seconds: 3),
                         ),
                       );
                       return;
@@ -290,11 +270,6 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                       _record = _loadDay(selectedDay);
                     });
                   },
-
-                  //onPageChanged: (focusedDay) {
-                  //  _focusedDay = focusedDay;
-                  //},
-
                   onPageChanged: (focusedDay) {
                     setState(() {
                       _focusedDay = focusedDay;
@@ -308,7 +283,6 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                     leftChevronIcon: Icon(Icons.chevron_left, size: 40),
                     rightChevronIcon: Icon(Icons.chevron_right, size: 40),
                   ),
-                  // Další přizpůsobení vzhledu, pokud je to potřeba
                 ),
               ),
             ),
@@ -334,20 +308,15 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                             constraints: const BoxConstraints(minHeight: 50.0),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                  color: AppColors.middleGrey,
-                                  width: 1.8), // Optional: Add border
-                              borderRadius: BorderRadius.circular(
-                                  10.0), // Optional: Add border radius
+                                  color: AppColors.middleGrey, width: 1.8),
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
-                            padding: const EdgeInsets.all(
-                                8.0), // Optional: Add padding
-                            margin: const EdgeInsets.all(
-                                4.0), // Optional: Add margin
+                            padding: const EdgeInsets.all(8.0),
+                            margin: const EdgeInsets.all(4.0),
                             child: Text(
                               _record?.record1 ?? '',
                               maxLines: 2,
-                              style: const TextStyle(
-                                  color: AppColors.darkGrey), // Set text color
+                              style: const TextStyle(color: AppColors.darkGrey),
                             ),
                           ),
                         if ((_record?.record2 ?? '').isNotEmpty)
@@ -356,20 +325,15 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                             constraints: const BoxConstraints(minHeight: 50.0),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                  color: AppColors.middleGrey,
-                                  width: 1.8), // Optional: Add border
-                              borderRadius: BorderRadius.circular(
-                                  10.0), // Optional: Add border radius
+                                  color: AppColors.middleGrey, width: 1.8),
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
-                            padding: const EdgeInsets.all(
-                                8.0), // Optional: Add padding
-                            margin: const EdgeInsets.all(
-                                4.0), // Optional: Add margin
+                            padding: const EdgeInsets.all(8.0),
+                            margin: const EdgeInsets.all(4.0),
                             child: Text(
                               _record?.record2 ?? '',
                               maxLines: 2,
-                              style: const TextStyle(
-                                  color: AppColors.darkGrey), // Set text color
+                              style: const TextStyle(color: AppColors.darkGrey),
                             ),
                           ),
                         if ((_record?.record3 ?? '').isNotEmpty)
@@ -378,20 +342,15 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                             constraints: const BoxConstraints(minHeight: 50.0),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                  color: AppColors.middleGrey,
-                                  width: 1.8), // Optional: Add border
-                              borderRadius: BorderRadius.circular(
-                                  10.0), // Optional: Add border radius
+                                  color: AppColors.middleGrey, width: 1.8),
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
-                            padding: const EdgeInsets.all(
-                                8.0), // Optional: Add padding
-                            margin: const EdgeInsets.all(
-                                4.0), // Optional: Add margin
+                            padding: const EdgeInsets.all(8.0),
+                            margin: const EdgeInsets.all(4.0),
                             child: Text(
                               _record?.record3 ?? '',
                               maxLines: 2,
-                              style: const TextStyle(
-                                  color: AppColors.darkGrey), // Set text color
+                              style: const TextStyle(color: AppColors.darkGrey),
                             ),
                           ),
                       ],
@@ -418,16 +377,16 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      // Přidání akce, která se provede po kliknutí
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                             builder: (context) => CalendarClientPage(
                                   client: widget.client,
-                                )), // Změňte na cílovou stránku
+                                )),
                       );
                     },
                     child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 0),
                       padding: const EdgeInsets.all(0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
@@ -517,7 +476,6 @@ class UserDetailsWidget extends StatelessWidget {
       children: <Widget>[
         CircleAvatar(
           backgroundImage: NetworkImage(userPhotoUrl),
-          // případně můžete použít AssetImage pro lokální obrázky
         ),
         const SizedBox(width: 8),
         Text(userName, style: const TextStyle(color: AppColors.middleGrey)),

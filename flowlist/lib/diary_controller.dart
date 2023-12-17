@@ -18,12 +18,11 @@ class DiaryController {
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: data, // Odesílání dat jako Map
+      body: data,
     );
 
     if (response.statusCode == 200) {
       Map<String, dynamic> result = json.decode(response.body);
-      // Předpokládáme, že userId je String. Pokud je int, použijte toString().
       return result;
     } else {
       throw Exception('Pri identifikaci uzivatele doslo k chybe');
@@ -32,8 +31,6 @@ class DiaryController {
 
   Future<void> createEntry(FlowData record) async {
     String? userId = await StorageService().getUserId();
-
-    // Regulární výraz pro povolené znaky - upravte podle potřeby
 
     if (record.score == null || (record.score! < 0 || record.score! > 10)) {
       throw Exception('Skore dne musi byt v intervalu 0-10');
