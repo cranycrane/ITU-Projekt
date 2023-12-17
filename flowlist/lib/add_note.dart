@@ -396,7 +396,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
-                                      Colors.grey, // Barva tlačítka SMAZAT
+                                      const Color(0xFF6E6E6E), // Barva tlačítka SMAZAT
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(
                                         5), // Bez zaoblení
@@ -468,7 +468,7 @@ class NewEntryPageState extends State<NewEntryPage> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
-                                      Colors.red, // Barva tlačítka ULOŽIT
+                                      const Color(0xFFE50E2B), // Barva tlačítka ULOŽIT
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 16),
                                 ),
@@ -496,26 +496,26 @@ class NewEntryPageState extends State<NewEntryPage> {
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.home,
-                  color: _selectedIndex == 0 ? Colors.red : Colors.grey),
+                  color: _selectedIndex == 0 ? const Color(0xFFE50E2B) : Colors.grey),
               onPressed: () => _onItemTapped(0),
             ),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.search,
-                  color: _selectedIndex == 1 ? Colors.red : Colors.grey),
+                  color: _selectedIndex == 1 ? const Color(0xFFE50E2B) : Colors.grey),
               onPressed: () => _onItemTapped(1),
             ),
             const SizedBox(width: 48), // Prostor pro Floating Action Button
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.message,
-                  color: _selectedIndex == 2 ? Colors.red : Colors.grey),
+                  color: _selectedIndex == 2 ? const Color(0xFFE50E2B) : Colors.grey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.settings,
-                  color: _selectedIndex == 3 ? Colors.red : Colors.grey),
+                  color: _selectedIndex == 3 ? const Color(0xFFE50E2B) : Colors.grey),
               onPressed: () => _onItemTapped(3),
             ),
           ],
