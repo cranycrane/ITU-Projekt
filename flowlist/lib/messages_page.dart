@@ -24,9 +24,12 @@ class MessagesPageState extends State<MessagesPage> {
   bool isLoading = true;
   bool isFirstLoad = true;
 
+  late UserProfile contactedUser;
+
   @override
   void initState() {
     super.initState();
+    _loadUserData();
     messageController.getMessages();
     _startPolling();
   }
@@ -36,6 +39,22 @@ class MessagesPageState extends State<MessagesPage> {
     _pollingTimer?.cancel();
     _messageController.dispose();
     super.dispose();
+  }
+
+  void _loadUserData() async {
+    try {
+      contactedUser = await userController.getUserData(widget
+          .toUserId); // Předpokládáme, že getUserName je ve vašem controlleru
+
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      // Zpracování případných chyb při získávání jména
+      const Scaffold(
+        body: Center(child: Text('Nepodařilo se načíst data uživatele')),
+      );
+    }
   }
 
   void _startPolling() {
@@ -95,7 +114,7 @@ class MessagesPageState extends State<MessagesPage> {
           backgroundColor: Colors.white,
           toolbarHeight: 85,
           title: Container(
-            height: 60,
+            height: 70,
             padding: const EdgeInsets.symmetric(
                 horizontal: 3.0, vertical: 3.0), // Vnější odsazení pro obdélník
             decoration: const BoxDecoration(
@@ -105,59 +124,30 @@ class MessagesPageState extends State<MessagesPage> {
             ),
             child: Row(
               children: <Widget>[
-                FutureBuilder<UserProfile?>(
-                  future: userController.getUserData(widget.toUserId),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<UserProfile?> snapshot) {
-                    Widget avatar;
-                    if (snapshot.connectionState == ConnectionState.waiting &&
-                        isFirstLoad) {
-                      avatar = const CircularProgressIndicator();
-                    } else if (snapshot.hasError || snapshot.data == null) {
-                      avatar = const Icon(Icons.person, size: 50);
-                    } else {
-                      UserProfile userProfile = snapshot.data!;
-                      avatar = userProfile.profileImage == null
-                          ? const Icon(Icons.person, size: 50)
-                          : Image.file(
-                              File(userProfile.profileImage!),
-                              width: 50,
-                              height: 50,
-                              fit: BoxFit.cover,
-                            );
-                    }
-                    return CircleAvatar(
-                      radius: 50, // Zvětšení velikosti CircleAvatar
-                      backgroundColor: Colors.grey[200],
-                      child: ClipOval(
-                        child: avatar,
-                      ),
-                    );
-                  },
-                ),
-                Expanded(
-                  child: FutureBuilder<UserProfile?>(
-                    future: userController
-                        .getUserData(widget.toUserId), // Získání dat uživatele
-                    builder: (BuildContext context,
-                        AsyncSnapshot<UserProfile?> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting &&
-                          isFirstLoad) {
-                        return const Text("Načítání..."); // Zobrazit při načítání
-                      } else if (snapshot.hasError || snapshot.data == null) {
-                        return const Text(
-                            "Uživatel"); // Záložní text, pokud dojde k chybě nebo data nejsou dostupná
-                      } else {
-                        UserProfile userProfile = snapshot.data!;
-                        return Text(
-                          "${userProfile.firstName} ${userProfile.lastName}", // Jméno uživatele
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 20),
-                        );
-                      }
-                    },
+                CircleAvatar(
+                  radius: 60, // Zvětšení velikosti CircleAvatar
+                  backgroundColor: Colors.grey[200],
+                  child: ClipOval(
+                    child: isLoading
+                        ? const CircularProgressIndicator()
+                        : contactedUser.profileImage == null
+                            ? const Icon(Icons.person, size: 60)
+                            : Image.file(
+                                File(contactedUser.profileImage!),
+                                width: 60,
+                                height: 60,
+                                fit: BoxFit.cover,
+                              ),
                   ),
                 ),
+                Expanded(
+                    child: isLoading
+                        ? const Text("Načítání...")
+                        : Text(
+                            "${contactedUser.firstName} ${contactedUser.lastName}", // Jméno uživatele
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 20),
+                          )),
               ],
             ),
           ),
@@ -180,7 +170,8 @@ class MessagesPageState extends State<MessagesPage> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
-                      return const Center(child: Text("Chyba při načítání zpráv"));
+                      return const Center(
+                          child: Text("Chyba při načítání zpráv"));
                     } else if (!snapshot.hasData) {
                       return const Center(child: Text("Žádné zprávy"));
                     } else {
@@ -221,45 +212,27 @@ class MessagesPageState extends State<MessagesPage> {
                                           Padding(
                                             padding: const EdgeInsets.only(
                                                 right: 3.0, left: 15.0),
-                                            child: FutureBuilder<UserProfile?>(
-                                              future:
-                                                  userController.getUserData(
-                                                      message.fromUserId
-                                                          .toString()),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.connectionState ==
-                                                        ConnectionState
-                                                            .waiting &&
-                                                    isFirstLoad) {
-                                                  return const CircularProgressIndicator(); // Při načítání
-                                                } else if (snapshot.hasError ||
-                                                    snapshot.data == null) {
-                                                  return const Icon(Icons.person,
-                                                      size:
-                                                          30); // Výchozí ikona
-                                                } else {
-                                                  UserProfile userProfile =
-                                                      snapshot.data!;
-                                                  return CircleAvatar(
-                                                    radius: 15,
-                                                    backgroundColor:
-                                                        Colors.grey[200],
-                                                    backgroundImage: userProfile
-                                                                .profileImage !=
-                                                            null
-                                                        ? FileImage(File(
-                                                            userProfile
-                                                                .profileImage!))
-                                                        : null,
-                                                    child: userProfile
+                                            child: CircleAvatar(
+                                              radius:
+                                                  15, // Zvětšení velikosti CircleAvatar
+                                              backgroundColor: Colors.grey[200],
+                                              child: ClipOval(
+                                                child: isLoading
+                                                    ? const CircularProgressIndicator()
+                                                    : contactedUser
                                                                 .profileImage ==
                                                             null
-                                                        ? const Icon(Icons.person,
+                                                        ? const Icon(
+                                                            Icons.person,
                                                             size: 30)
-                                                        : null,
-                                                  );
-                                                }
-                                              },
+                                                        : Image.file(
+                                                            File(contactedUser
+                                                                .profileImage!),
+                                                            width: 30,
+                                                            height: 30,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                              ),
                                             ),
                                           ),
                                         Container(

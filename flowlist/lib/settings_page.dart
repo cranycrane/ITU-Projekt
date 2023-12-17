@@ -218,21 +218,28 @@ class SettingsPageState extends State<SettingsPage> {
       });
     } catch (e) {
       // Zpracování případných chyb při získávání jména
-      throw Exception("Chyba pri ziskavani dat: $e");
+      const Scaffold(
+        body: Center(child: Text('Nepodařilo se načíst data uživatele')),
+      );
     }
   }
 
   void _updateName(String name) async {
     // Tato funkce by měla zahrnovat logiku pro aktualizaci jména na serveru
     try {
-      await userController.updateUserName(name);
+      List<String> nameParts = name.split(' ');
+      String firstName = nameParts[0];
+      String lastName = nameParts[1].length > 1 ? nameParts[1] : nameParts[2];
+      await userController.updateUserName(firstName, lastName);
       setState(() {
         _isEditingName = false;
       });
       // Další akce po úspěšné aktualizaci (např. zobrazení zprávy)
     } catch (e) {
       // Zpracování chyby
-      throw Exception("Chyba pri ziskavani dat: $e");
+      const Scaffold(
+        body: Center(child: Text('Nepodařilo se aktualizovat jméno uživatele')),
+      );
     }
   }
 

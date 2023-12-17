@@ -4,6 +4,7 @@ import 'storage_service.dart';
 import 'user_profile.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter/material.dart';
 
 class UserController {
   final String baseUrl = "https://jakub-jerabek.cz/flowlist";
@@ -32,32 +33,31 @@ class UserController {
         Directory tempDir = await getTemporaryDirectory();
         String filePath = '${tempDir.path}/$fileName';
         profileImageFile = File(filePath);
+
         await profileImageFile.writeAsBytes(imageBytes);
         return UserProfile(
             userId: int.parse(userId!),
             firstName: firstName,
             lastName: lastName,
             profileImage: filePath,
-            hasPsychologist: user['hasPsychologist']);
+            hasPsychologist: user['hasPsychologist'],
+            notificationTime: user['notificationTime']);
       } else {
         return UserProfile(
             userId: int.parse(userId!),
             firstName: firstName,
             lastName: lastName,
             profileImage: null,
-            hasPsychologist: user['hasPsychologist']);
+            hasPsychologist: user['hasPsychologist'],
+            notificationTime: user['notificationTime']);
       }
     } else {
       throw Exception('Failed to get user name: ${response.body}');
     }
   }
 
-  Future<void> updateUserName(String name) async {
+  Future<void> updateUserName(String firstName, String lastName) async {
     String? userId = await StorageService().getUserId();
-
-    List<String> nameParts = name.split(' ');
-    String firstName = nameParts[0];
-    String lastName = nameParts[1].length > 1 ? nameParts[1] : nameParts[2];
 
     if (firstName.isEmpty || lastName.isEmpty) {
       throw Exception('Jméno nemůže být prázdné');
@@ -108,7 +108,7 @@ class UserController {
   Future<Map<String, dynamic>> getStatistics() async {
     String? userId = await StorageService().getUserId();
 
-    final response = await http.delete(
+    final response = await http.get(
       Uri.parse('$baseUrl/getStatistics.php?userId=$userId'),
     );
 
@@ -130,6 +130,45 @@ class UserController {
       return true;
     } else {
       throw Exception('Pri mazani zaznamu doslo k chybe ${response.body}');
+    }
+  }
+
+  Future<String?> getNotificationTime() async {
+    String? userId = await StorageService().getUserId();
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/getNotificationTime.php?userId=$userId'),
+    );
+
+    if (response.statusCode == 200) {
+      var body = json.decode(response.body);
+      return body['notificationTime'];
+    } else {
+      throw Exception('Pri mazani zaznamu doslo k chybe');
+    }
+  }
+
+  Future<void> updateNotificationTime(TimeOfDay time) async {
+    String? userId = await StorageService().getUserId();
+
+    final hours = time.hour.toString().padLeft(2, '0');
+    final minutes = time.minute.toString().padLeft(2, '0');
+
+    Uri apiUrl = Uri.parse(
+        '$baseUrl/updateNotificationTime.php'); // Nahraďte správnou URL vašeho API
+
+    // Předpokládáme, že 'imagePath' je cesta k obrázku na zařízení
+    var request = http.MultipartRequest('POST', apiUrl)
+      ..fields['userId'] = userId ?? ''
+      ..fields['notificationTime'] = '$hours:$minutes';
+
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      print(await response.stream.bytesToString());
+      throw Exception('Pri aktualizaci casu notifikace doslo k chybe');
     }
   }
 }

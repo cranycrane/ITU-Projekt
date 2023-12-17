@@ -13,18 +13,6 @@ class setNamePageState extends State<setNamePage> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
 
-  void _updateName(String firstName, String lastName) async {
-    // Tato funkce by měla zahrnovat logiku pro aktualizaci jména na serveru
-
-    try {
-      await userController.updateUserName('$firstName $lastName');
-      // Další akce po úspěšné aktualizaci (např. zobrazení zprávy)
-    } catch (e) {
-      // Zpracování chyby
-      throw Exception("Chyba pri ziskavani dat: $e");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,10 +24,11 @@ class setNamePageState extends State<setNamePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.network(
-              'https://jakub-jerabek.cz/flowlist/assets/setNamePage.png', // URL obrázku
-              width: 200, // Šířka obrázku
-              height: 200, // Výška obrázku
+            Image.asset(
+              'assets/setNamePage.png',
+              width: MediaQuery.of(context).size.width * 0.6,
+
+              // URL obrázku
             ),
             SizedBox(height: 20), // Mezera mezi obrázkem a textem
             Text(
@@ -102,13 +91,13 @@ class setNamePageState extends State<setNamePage> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 12.0),
               child: Container(
-                width: 160,
+                width: MediaQuery.of(context).size.height * 0.4,
                 height: 52,
                 child: ElevatedButton(
                   onPressed: () async {
                     try {
                       await userController.updateUserName(
-                          '${_firstNameController.text} ${_lastNameController.text}');
+                          _firstNameController.text, _lastNameController.text);
                       if (!context.mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

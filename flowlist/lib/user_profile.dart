@@ -8,6 +8,7 @@ class UserProfile {
   File? imageFile;
   bool? hasPsychologist;
   DateTime? lastRecordDate;
+  String? notificationTime;
 
   UserProfile(
       {required this.userId,
@@ -15,7 +16,8 @@ class UserProfile {
       this.lastName = '',
       this.profileImage,
       this.hasPsychologist,
-      this.lastRecordDate});
+      this.lastRecordDate,
+      this.notificationTime});
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
@@ -26,7 +28,8 @@ class UserProfile {
         hasPsychologist: json['hasPsychologist'],
         lastRecordDate: json['lastRecordDate'] != null
             ? DateTime.parse(json['lastRecordDate'])
-            : null);
+            : null,
+        notificationTime: json['notificationTime']);
   }
 
   Map<String, dynamic> toJson() => {
