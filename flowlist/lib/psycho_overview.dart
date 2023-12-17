@@ -1,3 +1,7 @@
+/// Aplikace Flow-List
+/// FIT VUT, ITU - Tvorba uzivatelskych rozhrani
+/// Autor: Vojtech Teichmann (xteich02)
+
 
 import 'package:flowlist/psycho_controller.dart';
 import 'package:flutter/material.dart';

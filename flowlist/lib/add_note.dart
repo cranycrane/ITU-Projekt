@@ -1,3 +1,7 @@
+/// Aplikace Flow-List
+/// FIT VUT, ITU - Tvorba uzivatelskych rozhrani
+/// Autor: Vojtech Teichmann (xteich02)
+
 import 'package:flutter/material.dart';
 import 'calendar_screen.dart';
 import 'search_page.dart';
@@ -516,7 +520,7 @@ class NewEntryPageState extends State<NewEntryPage> {
             ),
             IconButton(
               iconSize: 35,
-              icon: Icon(Icons.settings,
+              icon: Icon(Icons.person_outline,
                   color: _selectedIndex == 3 ? AppColors.red : AppColors.middleGrey),
               onPressed: () => _onItemTapped(3),
             ),

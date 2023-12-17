@@ -1,3 +1,7 @@
+/// Aplikace Flow-List
+/// FIT VUT, ITU - Tvorba uzivatelskych rozhrani
+/// Autor: Vojtech Teichmann (xteich02)
+
 import 'package:flutter/material.dart';
 import 'calendar_screen.dart';
 import 'settings_page.dart';
