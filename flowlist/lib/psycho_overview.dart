@@ -155,7 +155,7 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
                 UserProfile user = _filteredUsers[index];
                 return GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(
+                    Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) => CalendarClientPage(client: user),
                       ),
@@ -268,7 +268,7 @@ class PsychoOverviewPageState extends State<PsychoOverviewPage> {
           ElevatedButton(
             onPressed: () {
               
-              Navigator.of(context).push(MaterialPageRoute(
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) => const SettingsPage()));
             },
             style: ElevatedButton.styleFrom(

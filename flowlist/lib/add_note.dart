@@ -109,19 +109,19 @@ class NewEntryPageState extends State<NewEntryPage> {
 
     switch (index) {
       case 0:
-        Navigator.of(context).push(
+        Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => const CalendarPage()));
         break;
       case 1:
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => const SearchPage()));
+            .pushReplacement(MaterialPageRoute(builder: (context) => const SearchPage()));
         break;
       case 2:
         Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => const PsychoUserPage()));
         break;
       case 3:
-        Navigator.of(context).push(
+        Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => const SettingsPage()));
         break;
     }
@@ -131,6 +131,7 @@ class NewEntryPageState extends State<NewEntryPage> {
   Widget build(BuildContext context) {
      // Tělo widgetu s konstrukcí uživatelského rozhraní
     final double screenHeight = MediaQuery.of(context).size.height;
+    final bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
     String formattedDate =
         DateFormat('EEEE d.M.yyyy', 'cs_CZ').format(selectedDate).toUpperCase();
@@ -509,8 +510,8 @@ class NewEntryPageState extends State<NewEntryPage> {
             const SizedBox(width: 48), 
             IconButton(
               iconSize: 35,
-              icon: Icon(Icons.message,
-                  color: _selectedIndex == 2 ? AppColors.red : AppColors.middleGrey),
+              icon: const Icon(Icons.message,
+                  color: AppColors.middleGrey),
               onPressed: () => _onItemTapped(2),
             ),
             IconButton(
@@ -522,14 +523,16 @@ class NewEntryPageState extends State<NewEntryPage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.red,
-        child: const Icon(size: 35, Icons.add),
-        onPressed: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const NewEntryPage()));
-        },
-      ),
+      floatingActionButton: isKeyboardOpen
+        ? Container() // Pokud je klávesnice otevřená, nezobrazujeme FAB
+        : FloatingActionButton(
+            backgroundColor: AppColors.red,
+            child: const Icon(size: 35, Icons.add),
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const NewEntryPage()));
+            },
+          ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
