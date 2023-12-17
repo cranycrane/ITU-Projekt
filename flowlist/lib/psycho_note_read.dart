@@ -1,3 +1,7 @@
+/// Aplikace Flow-List
+/// FIT VUT, ITU - Tvorba uzivatelskych rozhrani
+/// Autor: Jakub Jerabek (xjerab28), Vojtech Teichmann (xteich02)
+
 import 'package:flutter/material.dart';
 import 'flow.dart';
 import 'diary_entries_loader.dart';

@@ -1,3 +1,6 @@
+/// Aplikace Flow-List
+/// FIT VUT, ITU - Tvorba uzivatelskych rozhrani
+/// Autor: Jakub Jerabek (xjerab28)
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'storage_service.dart';

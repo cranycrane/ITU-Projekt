@@ -1,3 +1,6 @@
+/// Aplikace Flow-List
+/// FIT VUT, ITU - Tvorba uzivatelskych rozhrani
+/// Autor: Jakub Jerabek (xjerab28)
 import 'package:flowlist/messages_page.dart';
 import 'package:flowlist/psycho_overview.dart';
 import 'package:flutter/material.dart';

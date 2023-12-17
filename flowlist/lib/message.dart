@@ -1,4 +1,6 @@
-//třída pro zprávy
+/// Aplikace Flow-List
+/// FIT VUT, ITU - Tvorba uzivatelskych rozhrani
+/// Autor: Jakub Jerabek (xjerab28)
 class Message {
   final int messageId;
   final int fromUserId;

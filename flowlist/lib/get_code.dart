@@ -1,3 +1,6 @@
+/// Aplikace Flow-List
+/// FIT VUT, ITU - Tvorba uzivatelskych rozhrani
+/// Autor: Jakub Jerabek (xjerab28)
 import 'package:flowlist/calendar_screen.dart';
 import 'package:flutter/material.dart';
 import 'search_page.dart';

@@ -18,7 +18,7 @@ class StatisticsPage extends StatefulWidget {
 class StatisticsPageState extends State<StatisticsPage> {
   List<FlowData> _allRecords = [];
   List<FlowData> _monthRecords = [];
-  List<FlSpot> _lineChartSpots = []; 
+  List<FlSpot> _lineChartSpots = [];
   bool _isLoading = true;
   DateTime _selectedMonth = DateTime.now();
 
@@ -94,7 +94,7 @@ class StatisticsPageState extends State<StatisticsPage> {
             ),
           ),
           duration: Duration(seconds: 3),
-          backgroundColor:  AppColors.lightGrey,
+          backgroundColor: AppColors.lightGrey,
         ),
       );
       return;
@@ -102,7 +102,7 @@ class StatisticsPageState extends State<StatisticsPage> {
     setState(() {
       _selectedMonth =
           DateTime(_selectedMonth.year, _selectedMonth.month + 1, 1);
-      _getMonthRecords(); 
+      _getMonthRecords();
     });
   }
 
@@ -111,7 +111,7 @@ class StatisticsPageState extends State<StatisticsPage> {
     setState(() {
       _selectedMonth =
           DateTime(_selectedMonth.year, _selectedMonth.month - 1, 1);
-      _getMonthRecords(); 
+      _getMonthRecords();
     });
   }
 
@@ -136,7 +136,7 @@ class StatisticsPageState extends State<StatisticsPage> {
     List<FlSpot> spots = [];
     for (var record in records) {
       double xValue = _dateToAxisValue(record.day);
-      double yValue = record.score?.toDouble() ?? 0; 
+      double yValue = record.score?.toDouble() ?? 0;
       spots.add(FlSpot(xValue, yValue));
     }
     return spots;
@@ -144,12 +144,11 @@ class StatisticsPageState extends State<StatisticsPage> {
 
   double _dateToAxisValue(DateTime? date) {
     if (date == null) return 0;
-    return date.day.toDouble(); 
+    return date.day.toDouble();
   }
 
   @override
   Widget build(BuildContext context) {
-
     //průměrné měsíční hodnocení
     String meanScoreText;
     if (_monthRecords.isEmpty) {
@@ -170,7 +169,7 @@ class StatisticsPageState extends State<StatisticsPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           color: AppColors.darkGrey,
-          iconSize: 40, 
+          iconSize: 40,
           onPressed: () {
             Navigator.pop(context);
           },
@@ -211,8 +210,8 @@ class StatisticsPageState extends State<StatisticsPage> {
                     //zobrazení průměrného hodnocení za měsíc
                     child: RichText(
                       text: TextSpan(
-                        style: const TextStyle(
-                            fontSize: 25, color: Colors.black),
+                        style:
+                            const TextStyle(fontSize: 25, color: Colors.black),
                         children: <TextSpan>[
                           const TextSpan(text: 'Průměrné hodnocení dne: '),
                           TextSpan(
@@ -220,8 +219,7 @@ class StatisticsPageState extends State<StatisticsPage> {
                             style: const TextStyle(
                                 fontSize: 28,
                                 color: AppColors.red,
-                                fontWeight: FontWeight.bold
-                            ),
+                                fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
