@@ -111,7 +111,7 @@ class CalendarPageState extends State<CalendarPage> {
                     todayBuilder: (context, day, focusedDay) {
                       return Container(
                         margin: const EdgeInsets.symmetric(
-                            horizontal: 4.0, vertical: 6),
+                            horizontal: 3.0, vertical: 6),
                         decoration: BoxDecoration(
                           color: AppColors.lightRed,
                           borderRadius: BorderRadius.circular(8.0),
@@ -130,7 +130,7 @@ class CalendarPageState extends State<CalendarPage> {
                     outsideBuilder: (context, day, focusedDay) {
                       return Container(
                         margin: const EdgeInsets.symmetric(
-                            horizontal: 4.0, vertical: 6),
+                            horizontal: 3.0, vertical: 6),
                         decoration: BoxDecoration(
                           color: AppColors.middleGrey,
                           borderRadius: BorderRadius.circular(8.0),
@@ -149,7 +149,7 @@ class CalendarPageState extends State<CalendarPage> {
                     defaultBuilder: (context, day, focusedDay) {
                       return Container(
                         margin: const EdgeInsets.symmetric(
-                            horizontal: 4.0, vertical: 6.0),
+                            horizontal: 3.0, vertical: 6.0),
                         decoration: BoxDecoration(
                           color: AppColors.lightGrey,
                           borderRadius: BorderRadius.circular(8.0),
@@ -168,7 +168,7 @@ class CalendarPageState extends State<CalendarPage> {
                     selectedBuilder: (context, date, events) {
                       return Container(
                         margin: const EdgeInsets.symmetric(
-                            horizontal: 4.0, vertical: 6.0),
+                            horizontal: 3.0, vertical: 6.0),
                         decoration: BoxDecoration(
                           color: AppColors.red,
                           borderRadius: BorderRadius.circular(8.0),
@@ -215,10 +215,10 @@ class CalendarPageState extends State<CalendarPage> {
                         double dayWidth = screenWidth / 7 - 12;
 
                         return Positioned(
-                          bottom: 2.0,
+                          bottom: 4.0,
                           child: Container(
                             width: dayWidth,
-                            padding: const EdgeInsets.all(5.0),
+                            padding: const EdgeInsets.symmetric(vertical: 2),
                             decoration: const BoxDecoration(
                               borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(8),

@@ -224,10 +224,10 @@ class CalendarClientPageState extends State<CalendarClientPage> {
                         double dayWidth = screenWidth / 7 - 12;
 
                         return Positioned(
-                          bottom: 2.0,
+                          bottom: 4.0,
                           child: Container(
                             width: dayWidth,
-                            padding: const EdgeInsets.all(5.0),
+                            padding: const EdgeInsets.symmetric(vertical: 2),
                             decoration: const BoxDecoration(
                               borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(8),
