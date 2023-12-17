@@ -1,3 +1,4 @@
+//třída pro zprávy
 class Message {
   final int messageId;
   final int fromUserId;

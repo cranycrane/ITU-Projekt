@@ -78,12 +78,12 @@ class SettingsPageState extends State<SettingsPage> {
     return showDialog<void>(
       context: context,
       barrierDismissible:
-          false, // Uživatel musí stisknout tlačítko pro zavření dialogu
+          false, 
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text(
             'Potvrzení',
-            style: TextStyle(color: AppColors.red), // Nastavení barvy nadpisu
+            style: TextStyle(color: AppColors.red),
           ),
           content: const SingleChildScrollView(
             child: ListBody(
@@ -97,7 +97,7 @@ class SettingsPageState extends State<SettingsPage> {
             TextButton(
               child: const Text(
                 'Zrušit',
-                style: TextStyle(color: Colors.black), // Nastavení barvy textu
+                style: TextStyle(color: Colors.black), 
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -108,7 +108,7 @@ class SettingsPageState extends State<SettingsPage> {
                 'Smazat',
                 style: TextStyle(
                     color: AppColors
-                        .red), // Nastavení barvy textu pro akci smazání
+                        .red), 
               ),
               onPressed: () async {
                 bool success = await userController.deleteAccount();
@@ -131,10 +131,10 @@ class SettingsPageState extends State<SettingsPage> {
           content: Text(
             "Nemáte spárovaného žádného psychologa",
             style: TextStyle(
-              color: Colors.white, // Text color
+              color: Colors.white, 
             ),
           ),
-          duration: Duration(seconds: 3), // Duration of the SnackBar display
+          duration: Duration(seconds: 3),
         ),
       );
       return;
@@ -143,12 +143,12 @@ class SettingsPageState extends State<SettingsPage> {
     return showDialog<void>(
       context: context,
       barrierDismissible:
-          false, // Uživatel musí stisknout tlačítko pro zavření dialogu
+          false, 
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text(
             'Potvrzení',
-            style: TextStyle(color: AppColors.red), // Nastavení barvy nadpisu
+            style: TextStyle(color: AppColors.red),
           ),
           content: const SingleChildScrollView(
             child: ListBody(
@@ -162,7 +162,7 @@ class SettingsPageState extends State<SettingsPage> {
             TextButton(
               child: const Text(
                 'Nerušit',
-                style: TextStyle(color: Colors.black), // Nastavení barvy textu
+                style: TextStyle(color: Colors.black),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -173,7 +173,7 @@ class SettingsPageState extends State<SettingsPage> {
                 'Ano zrušit',
                 style: TextStyle(
                     color: AppColors
-                        .red), // Nastavení barvy textu pro akci smazání
+                        .red), 
               ),
               onPressed: () async {
                 try {
@@ -181,7 +181,7 @@ class SettingsPageState extends State<SettingsPage> {
                   if (!context.mounted) return;
 
                   Navigator.of(context)
-                      .pop(); // Zavře dialogové okno po potvrzení
+                      .pop(); 
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text('Párování bylo úspěšně zrušeno')));
                 } catch (e) {
@@ -190,7 +190,7 @@ class SettingsPageState extends State<SettingsPage> {
                   if (!context.mounted) return;
 
                   Navigator.of(context)
-                      .pop(); // Zavře dialogové okno po potvrzení
+                      .pop(); 
 
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Chyba: $errorMessage')));
@@ -211,22 +211,21 @@ class SettingsPageState extends State<SettingsPage> {
   void _loadUserData() async {
     try {
       user = await userController
-          .getUserData(); // Předpokládáme, že getUserName je ve vašem controlleru
+          .getUserData(); 
 
       setState(() {
         isLoading = false;
         _nameController.text = '${user?.firstName} ${user?.lastName}';
       });
     } catch (e) {
-      // Zpracování případných chyb při získávání jména
       const Scaffold(
         body: Center(child: Text('Nepodařilo se načíst data uživatele')),
       );
     }
   }
 
+  //změna uživatelského jména
   void _updateName(String name) async {
-    // Tato funkce by měla zahrnovat logiku pro aktualizaci jména na serveru
     try {
       List<String> nameParts = name.split(' ');
       String firstName = nameParts[0];
@@ -235,23 +234,20 @@ class SettingsPageState extends State<SettingsPage> {
       setState(() {
         _isEditingName = false;
       });
-      // Další akce po úspěšné aktualizaci (např. zobrazení zprávy)
     } catch (e) {
-      // Zpracování chyby
       const Scaffold(
         body: Center(child: Text('Nepodařilo se aktualizovat jméno uživatele')),
       );
     }
   }
 
+  //logika pro spodní navigační lištu
   void _onItemTapped(int index) {
-    // Logika pro navigaci na různé stránky
     switch (index) {
       case 0:
         Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => const CalendarPage()));
         break;
-      // Zde můžete přidat další navigaci pro Search, Notifications atd.
       case 1:
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => const SearchPage()));
@@ -261,11 +257,11 @@ class SettingsPageState extends State<SettingsPage> {
             MaterialPageRoute(builder: (context) => const PsychoUserPage()));
         break;
       case 3:
-        // Pro tyto indexy není třeba žádná akce, protože jsme již na stránce nastavení
         break;
     }
   }
 
+  //zobrazení statistik záznamů
   Widget _buildStatisticRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
@@ -311,12 +307,9 @@ class SettingsPageState extends State<SettingsPage> {
             padding: const EdgeInsets.all(16.0),
             child: ListView(
               children: <Widget>[
+                //profilový obrázek
                 CircleAvatar(
-                  // Předpokládáme, že radius není nutný, pokud používáte pevnou velikost 80x80
                   backgroundColor: AppColors.lightGrey,
-                  //backgroundImage: user?.profileImage != null
-                  //    ? FileImage(user.profileImage)
-                  //    : null,
                   radius: 50,
                   child: user?.profileImage == null
                       ? const Icon(Icons.person, size: 100)
@@ -335,10 +328,11 @@ class SettingsPageState extends State<SettingsPage> {
                     await _pickAndCropImage(); // Funkce pro výběr obrázku
                   },
                   child:
-                      const Icon(Icons.camera_alt), // Ikonka pro výběr obrázku
+                      const Icon(Icons.camera_alt), 
                 ),
                 const SizedBox(height: 8),
                 Center(
+                  //uživatelovo jméno
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -354,7 +348,7 @@ class SettingsPageState extends State<SettingsPage> {
                             )
                           : FittedBox(
                               fit: BoxFit
-                                  .scaleDown, // Zajišťuje, že text se změstí do rodiče a zmenší se, pokud je to potřeba
+                                  .scaleDown,
                               child: Text(
                                 _nameController.text,
                                 overflow: TextOverflow.ellipsis,
@@ -400,6 +394,7 @@ class SettingsPageState extends State<SettingsPage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 0.0, horizontal: 3),
+                          //tlačítko pro přepnutí do režimu psychologa
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).push(
@@ -424,11 +419,10 @@ class SettingsPageState extends State<SettingsPage> {
                             ),
                           ),
                         ),
-                        // Další prvky nastavení
-                        //if (hasPsychologist!=null && hasPsychologist==true)
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 5.0, horizontal: 6),
+                          //tlačítko pro zrušení spárování s psychologem
                           child: ElevatedButton(
                             onPressed: _showUnpairPsychologistDialog,
                             style: ElevatedButton.styleFrom(
@@ -453,13 +447,12 @@ class SettingsPageState extends State<SettingsPage> {
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 6.0, horizontal: 10),
+                  //tlačítko pro smazání účtu
                   child: ElevatedButton(
                     onPressed: _showDeleteAccountDialog,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.red,
-                      // Zmenšení šířky tlačítka na 40% šířky obrazovky a výšky na 50
                       minimumSize: const Size(100, 50),
-                      // Přidání vnitřního odsazení pro změnu rozměrů tlačítka
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 10),
                     ),
@@ -467,11 +460,12 @@ class SettingsPageState extends State<SettingsPage> {
                       'SMAZAT ÚČET',
                       style: TextStyle(
                         fontSize:
-                            16, // Můžete upravit velikost písma, pokud je potřeba
+                            16, 
                       ),
                     ),
                   ),
                 ),
+                //zobrazení statistik záznamů
                 FutureBuilder<Map<String, dynamic>>(
                   future: userController.getStatistics(),
                   builder: (context, snapshot) {
@@ -481,7 +475,7 @@ class SettingsPageState extends State<SettingsPage> {
                       return const Text(
                         'Chyba při načítání statistik',
                         style: TextStyle(
-                          fontSize: 18, // Adjust the font size as needed
+                          fontSize: 18, 
                           fontWeight: FontWeight.bold,
                         ),
                       );
@@ -489,7 +483,7 @@ class SettingsPageState extends State<SettingsPage> {
                       return const Text(
                         'Žádné statistiky k zobrazení',
                         style: TextStyle(
-                          fontSize: 18, // Adjust the font size as needed
+                          fontSize: 18, 
                           fontWeight: FontWeight.bold,
                         ),
                       );
@@ -499,6 +493,7 @@ class SettingsPageState extends State<SettingsPage> {
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          //jednotlivé statistiky
                           children: <Widget>[
                             _buildStatisticRow('Celkem dnů s Flow-lístkem:',
                                 statistics!['totalDays'].toString()),
@@ -512,9 +507,9 @@ class SettingsPageState extends State<SettingsPage> {
                                 statistics!['averageWordsPerEntry'].toString()),
                             _buildStatisticRow('Nejvíce slov v záznamu',
                                 statistics!['longestEntryLength'].toString()),
-                            // Add more statistics as needed
                             Align(
                               alignment: Alignment.center,
+                              //tlačítko pro ukázání dalších statistik
                               child: ElevatedButton(
                                 onPressed: () {
                                   Navigator.of(context).push(
@@ -545,12 +540,13 @@ class SettingsPageState extends State<SettingsPage> {
           ),
           Positioned(
             top: MediaQuery.of(context).size.height *
-                0.045, // Nastavte podle potřeby pro umístění od horního okraje
+                0.045, 
             right: MediaQuery.of(context).size.width *
-                0.05, // Nastavte podle potřeby pro umístění od pravého okraje
+                0.05, 
+            //tlačítko pro přepnutí do nastavení notifikací
             child: IconButton(
-              icon: const Icon(Icons.settings,
-                  size: 35), // Velikost ikony nastavení
+              icon: const Icon(Icons.edit_notifications,
+                  size: 35), 
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -562,10 +558,10 @@ class SettingsPageState extends State<SettingsPage> {
           Positioned(
             top: MediaQuery.of(context).size.height * 0.045,
             right: MediaQuery.of(context).size.width *
-                0.85, // Nastavte podle potřeby pro umístění od pravého okraje
+                0.85,
             child: IconButton(
               icon: const Icon(Icons.question_mark,
-                  size: 35), // Velikost ikony nastavení
+                  size: 35),
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -576,6 +572,7 @@ class SettingsPageState extends State<SettingsPage> {
           ),
         ],
       ),
+      //spodní lišta pro navigaci v aplikaci
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         notchMargin: 6.0,
@@ -599,7 +596,7 @@ class SettingsPageState extends State<SettingsPage> {
                       : AppColors.middleGrey),
               onPressed: () => _onItemTapped(1),
             ),
-            const SizedBox(width: 48), // Prostor pro Floating Action Button
+            const SizedBox(width: 48),
             IconButton(
               iconSize: 35,
               icon: Icon(Icons.message,
@@ -625,7 +622,6 @@ class SettingsPageState extends State<SettingsPage> {
         onPressed: () {
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const NewEntryPage()));
-          // Implementace akce pro Floating Action Button
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

@@ -18,7 +18,7 @@ class StatisticsPage extends StatefulWidget {
 class StatisticsPageState extends State<StatisticsPage> {
   List<FlowData> _allRecords = [];
   List<FlowData> _monthRecords = [];
-  List<FlSpot> _lineChartSpots = []; // Initialized as an empty list
+  List<FlSpot> _lineChartSpots = []; 
   bool _isLoading = true;
   DateTime _selectedMonth = DateTime.now();
 
@@ -29,6 +29,7 @@ class StatisticsPageState extends State<StatisticsPage> {
     _fetchAllRecords();
   }
 
+  //načte všechny záznamy a vyfiltruje záznamy pro současný měsíc
   void _fetchAllRecords() async {
     try {
       List<FlowData> allRecords =
@@ -38,7 +39,7 @@ class StatisticsPageState extends State<StatisticsPage> {
             record.day.month == _selectedMonth.month;
       }).toList();
 
-      // Sort the records from oldest to newest
+      // seřadí záznamy podle data
       filteredRecords.sort((a, b) => a.day.compareTo(b.day));
 
       _lineChartSpots = _generateChartData(filteredRecords);
@@ -53,6 +54,7 @@ class StatisticsPageState extends State<StatisticsPage> {
     }
   }
 
+  //vyfiltruje záznamy pro aktuální měsíc
   void _getMonthRecords() async {
     try {
       List<FlowData> filteredRecords = _allRecords.where((record) {
@@ -60,7 +62,7 @@ class StatisticsPageState extends State<StatisticsPage> {
             record.day.month == _selectedMonth.month;
       }).toList();
 
-      // Sort the records from oldest to newest
+      // seřadí záznamy podle data
       filteredRecords.sort((a, b) => a.day.compareTo(b.day));
 
       _lineChartSpots = _generateChartData(filteredRecords);
@@ -74,12 +76,13 @@ class StatisticsPageState extends State<StatisticsPage> {
     }
   }
 
+  //změní zobrazovaný měsíc a načte pro něj data
   void _goToNextMonth() {
     DateTime now = DateTime.now();
     DateTime nextMonth =
         DateTime(_selectedMonth.year, _selectedMonth.month + 1, 1);
 
-    // Check if the next month is in the future compared to the current month and year
+    // zkontroluje zda se uživatel nesnaží přistoupit k budoucímu měcíci
     if (nextMonth.year > now.year ||
         (nextMonth.year == now.year && nextMonth.month > now.month)) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -87,27 +90,28 @@ class StatisticsPageState extends State<StatisticsPage> {
           content: Text(
             "Nelze zobrazit budoucí měsíc!",
             style: TextStyle(
-              color: Colors.black, // Text color
+              color: Colors.black,
             ),
           ),
-          duration: Duration(seconds: 3), // Duration of the SnackBar display
+          duration: Duration(seconds: 3),
           backgroundColor:  AppColors.lightGrey,
         ),
       );
-      return; // Do nothing if trying to go into the future
+      return;
     }
     setState(() {
       _selectedMonth =
           DateTime(_selectedMonth.year, _selectedMonth.month + 1, 1);
-      _getMonthRecords(); // Re-fetch or update your data for the new month
+      _getMonthRecords(); 
     });
   }
 
+  //změní zobrazovaný měsíc a načte pro něj data
   void _goToPreviousMonth() {
     setState(() {
       _selectedMonth =
           DateTime(_selectedMonth.year, _selectedMonth.month - 1, 1);
-      _getMonthRecords(); // Re-fetch or update your data for the new month
+      _getMonthRecords(); 
     });
   }
 
@@ -127,11 +131,12 @@ class StatisticsPageState extends State<StatisticsPage> {
     return sum / records.length;
   }
 
+  //získání dat do grafu
   List<FlSpot> _generateChartData(List<FlowData> records) {
     List<FlSpot> spots = [];
     for (var record in records) {
       double xValue = _dateToAxisValue(record.day);
-      double yValue = record.score?.toDouble() ?? 0; // Default to 0 if score is null
+      double yValue = record.score?.toDouble() ?? 0; 
       spots.add(FlSpot(xValue, yValue));
     }
     return spots;
@@ -139,12 +144,13 @@ class StatisticsPageState extends State<StatisticsPage> {
 
   double _dateToAxisValue(DateTime? date) {
     if (date == null) return 0;
-    return date.day
-        .toDouble(); // Simple example, you may need more complex logic
+    return date.day.toDouble(); 
   }
 
   @override
   Widget build(BuildContext context) {
+
+    //průměrné měsíční hodnocení
     String meanScoreText;
     if (_monthRecords.isEmpty) {
       meanScoreText = '-';
@@ -164,7 +170,7 @@ class StatisticsPageState extends State<StatisticsPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           color: AppColors.darkGrey,
-          iconSize: 40, // Zvětšení velikosti ikony
+          iconSize: 40, 
           onPressed: () {
             Navigator.pop(context);
           },
@@ -177,6 +183,7 @@ class StatisticsPageState extends State<StatisticsPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(20.0),
+                  //zobrazovaný měsíc a šipky na jeho měnění
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -201,10 +208,11 @@ class StatisticsPageState extends State<StatisticsPage> {
                       left: 30.0, top: 10.0, bottom: 15.0),
                   child: Align(
                     alignment: Alignment.centerLeft,
+                    //zobrazení průměrného hodnocení za měsíc
                     child: RichText(
                       text: TextSpan(
                         style: const TextStyle(
-                            fontSize: 25, color: Colors.black), // Default style
+                            fontSize: 25, color: Colors.black),
                         children: <TextSpan>[
                           const TextSpan(text: 'Průměrné hodnocení dne: '),
                           TextSpan(
@@ -212,8 +220,8 @@ class StatisticsPageState extends State<StatisticsPage> {
                             style: const TextStyle(
                                 fontSize: 28,
                                 color: AppColors.red,
-                                fontWeight: FontWeight
-                                    .bold), // Specific style for the score
+                                fontWeight: FontWeight.bold
+                            ),
                           ),
                         ],
                       ),
@@ -223,6 +231,7 @@ class StatisticsPageState extends State<StatisticsPage> {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(right: 12, top: 5),
+                    //graf zobrazující hodnocení dnů pro zobrazený měsíc
                     child: LineChart(
                       LineChartData(
                         minX: 1,

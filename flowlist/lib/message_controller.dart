@@ -15,6 +15,7 @@ class MessageController {
     _messagesStreamController.close();
   }
 
+  //načtení zpráv uživatele
   void getMessages() async {
     String? userId = await StorageService().getUserId();
 
@@ -46,6 +47,7 @@ class MessageController {
     }
   }
 
+  //poslání zprávy
   Future<void> sendMessage(String toUserId, String messageText) async {
     String? fromUserId = await StorageService().getUserId();
 
