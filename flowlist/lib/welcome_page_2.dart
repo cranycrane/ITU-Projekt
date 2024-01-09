@@ -85,9 +85,9 @@ class WelcomePageState2 extends State<WelcomePage2> {
               onPressed: () {
                 widget.onlyLooking
                     ? Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => const setNamePage()))
+                        builder: (context) => const CalendarPage()))
                     : Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => const CalendarPage()));
+                        builder: (context) => const setNamePage()));
               },
               child: const Text(
                 'JDU DO TOHO',

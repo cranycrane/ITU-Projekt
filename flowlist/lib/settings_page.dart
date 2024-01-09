@@ -391,7 +391,7 @@ class SettingsPageState extends State<SettingsPage> {
                           //tlačítko pro přepnutí do režimu psychologa
                           child: ElevatedButton(
                             onPressed: () {
-                              Navigator.of(context).push(
+                              Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                     builder: (context) =>
                                         const PsychoOverviewPage()),

@@ -79,13 +79,13 @@ class CalendarClientPageState extends State<CalendarClientPage> {
             builder: (context) => CalendarClientPage(client: widget.client)));
         break;
       case 3:
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
+        Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => MessagesPage(
                   toUserId: widget.client.userId.toString(),
                 )));
         break;
       case 4:
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
+        Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => StatisticsPage(
                   userId: widget.client.userId.toString(),
                 )));
